@@ -11,7 +11,8 @@ import zipfile
 
 def verify(archive: Path, graphical: bool):
     with tempfile.TemporaryDirectory(prefix="Repository Builder relocated ") as temporary:
-        folder = Path(temporary)
+        # Hosted Windows runners can expose TEMP through an 8.3 short path.
+        folder = Path(temporary).resolve()
         with zipfile.ZipFile(archive) as zip_file:
             for entry in zip_file.infolist():
                 if not (folder / entry.filename).resolve().is_relative_to(folder.resolve()):
@@ -25,8 +26,9 @@ def verify(archive: Path, graphical: bool):
         report = folder / "self-test.json"
         subprocess.run([str(runtime), "--self-test", str(report)], env=environment, cwd=folder, check=True, timeout=120)
         result = json.loads(report.read_text())
-        if not result["success"] or not Path(result["resource_root"]).is_relative_to(bundle):
-            raise RuntimeError("Relocated package did not use its bundled playbook.")
+        expected_root = (bundle / "playbook").resolve()
+        if not result["success"] or Path(result["resource_root"]).resolve() != expected_root:
+            raise RuntimeError(f"Relocated package used {result['resource_root']!r}; expected {str(expected_root)!r}.")
         if graphical:
             screenshots = folder / "screenshots"
             subprocess.run([str(runtime), "--smoke-test", str(screenshots)], env=environment, cwd=folder, check=True, timeout=120)
