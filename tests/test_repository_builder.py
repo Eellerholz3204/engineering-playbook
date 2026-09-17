@@ -3,6 +3,7 @@
 from dataclasses import replace
 import json
 from pathlib import Path
+import shutil
 import subprocess
 import tempfile
 import unittest
@@ -50,6 +51,25 @@ class BuilderTests(unittest.TestCase):
         baseline = document_paths(self.catalog, "dbt-python")
         self.assertEqual(baseline, document_paths(self.catalog, "dbt-python", ("service-operations",)))
         self.assertGreater(len(document_paths(self.catalog, "dbt-python", ("ai-governance",))), len(baseline))
+
+    def test_json_schema_version_in_available_powershell_editions(self):
+        config = self.base / "configuration.json"
+        for shell in ("powershell", "pwsh"):
+            executable = shutil.which(shell)
+            if not executable:
+                continue
+            for version in (1, True, "1", 1.0, 2):
+                with self.subTest(shell=shell, version=repr(version)):
+                    config.write_text(json.dumps({**json.loads(self.plan.to_json()), "schema_version": version}), encoding="utf-8")
+                    result = subprocess.run([executable, "-NoProfile", "-NonInteractive", "-ExecutionPolicy", "RemoteSigned",
+                        "-File", str(ROOT / "scripts/create_repository_from_config.ps1"),
+                        "-ConfigurationPath", str(config), "-WhatIf"], capture_output=True, text=True, timeout=30)
+                    if type(version) is int and version == 1:
+                        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+                    else:
+                        self.assertNotEqual(0, result.returncode, result.stdout + result.stderr)
+                        self.assertIn("Unsupported configuration version", result.stderr)
+        self.assertFalse(Path(self.plan.repository_path).exists())
 
     def test_every_profile_and_multiple_capabilities(self):
         for profile in self.catalog["repository_profiles"]:

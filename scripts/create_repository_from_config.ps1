@@ -14,7 +14,8 @@ if ($null -eq $config -or $config -isnot [pscustomobject]) { throw 'Configuratio
 $names = @($config.PSObject.Properties.Name)
 foreach ($name in $required) { if ($name -notin $names) { throw "Missing configuration field: $name" } }
 foreach ($name in $names) { if ($name -notin $required) { throw "Unknown configuration field: $name" } }
-if ($config.schema_version -isnot [int] -or $config.schema_version -ne 1) { throw 'Unsupported configuration version.' }
+# Windows PowerShell parses JSON integers as Int32; PowerShell 7 uses Int64.
+if (($config.schema_version -isnot [int] -and $config.schema_version -isnot [long]) -or $config.schema_version -ne 1) { throw 'Unsupported configuration version.' }
 if ($config.playbook_version -ne $manifest.playbook_version) { throw "Configuration requires playbook $($config.playbook_version); this copy is $($manifest.playbook_version)." }
 foreach ($name in @('project_name','repository_path','project_type','playbook_version')) {
     if ($config.$name -isnot [string] -or [string]::IsNullOrWhiteSpace($config.$name)) { throw "Invalid configuration field: $name" }
