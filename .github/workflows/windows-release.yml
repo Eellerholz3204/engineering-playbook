@@ -1,0 +1,49 @@
+name: Build Windows release
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+          architecture: x64
+      - name: Install pinned build dependencies
+        run: python -m pip install -r packaging/requirements-windows.lock
+      - name: Run tests
+        run: python -m unittest discover -s tests -v
+      - name: Install Inno Setup compiler
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory .build-tools -Force | Out-Null
+          $setup = Join-Path $PWD '.build-tools\innosetup.exe'
+          Invoke-WebRequest 'https://github.com/jrsoftware/issrc/releases/download/is-7_1_0/innosetup-7.1.0-x64.exe' -OutFile $setup
+          $signature = Get-AuthenticodeSignature $setup
+          if ($signature.Status -ne 'Valid' -or $signature.SignerCertificate.Subject -notlike '*Pyrsys B.V.*') { throw 'Compiler installer signature is invalid.' }
+          $destination = Join-Path $PWD '.build-tools\InnoSetup'
+          $installer = Start-Process $setup -ArgumentList @('/VERYSILENT','/SUPPRESSMSGBOXES','/NORESTART','/SP-','/CURRENTUSER','/NOICONS','/TASKS=',('/DIR="' + $destination + '"')) -WindowStyle Hidden -Wait -PassThru
+          if ($installer.ExitCode -ne 0) { throw 'Compiler installation failed.' }
+      - name: Build portable ZIP and installer
+        run: python scripts/build_windows_release.py --iscc .build-tools/InnoSetup/ISCC.exe
+      - name: Verify relocated package without Python or Git on PATH
+        shell: pwsh
+        run: |
+          $archive = Get-ChildItem dist -Filter '*-windows-x64.zip' | Select-Object -First 1
+          python scripts/verify_windows_release.py $archive.FullName
+          if ($LASTEXITCODE -ne 0) { throw 'Portable package verification failed.' }
+      - uses: actions/upload-artifact@v7
+        with:
+          name: RepositoryBuilder-windows-x64
+          path: dist/*
+          if-no-files-found: error
+
+# Build artifacts are reviewed before publishing a GitHub release. This workflow
+# does not create repositories, tag commits, or publish downloads automatically.

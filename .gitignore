@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.builder-qa/
+.launcher/
+Repository Builder.lnk
+.build/
+.build-tools/
+dist/
+.vscode/
+.idea/
+.env
+.env.*

@@ -1,0 +1,169 @@
+{
+  "schema_version": 2,
+  "playbook_name": "Engineering Playbook",
+  "playbook_version": "3.2.1",
+  "install_directory": "engineering-playbook",
+  "immutable_framework_files": [
+    "ARCHITECTURE_PRINCIPLES.md",
+    "CODING_STANDARDS.md",
+    "DEVELOPMENT_WORKFLOW.md",
+    "DOCUMENTATION_REQUIREMENTS.md",
+    "ENGINEERING_PLAYBOOK.md",
+    "PROMPT_PATTERNS.md",
+    "README.md",
+    "CONTRIBUTING.md",
+    "packaging/README.md",
+    "QUICKSTART.md",
+    "RELEASE_PROCESS.md",
+    "REPOSITORY_CONTRACT.md",
+    "SECURITY_STANDARDS.md",
+    "SHA256SUMS.txt",
+    "TESTING_STANDARDS.md",
+    "VERSION",
+    "architecture/architecture_patterns.md",
+    "architecture/campaign_workspace.md",
+    "architecture/candidate_workspace.md",
+    "architecture/data_product.md",
+    "architecture/document_processing.md",
+    "architecture/domain_map.md",
+    "architecture/operator_console.md",
+    "architecture/organizational_knowledge.md",
+    "architecture/product_vision.md",
+    "architecture/python_service.md",
+    "playbook.json",
+    "scripts/README.md",
+    "scripts/install_engineering_playbook.ps1",
+    "scripts/install_engineering_playbook_profile.ps1",
+    "scripts/new_engineering_repository.ps1",
+    "scripts/create_repository_from_config.ps1",
+    "scripts/start_repository_builder.ps1",
+    "requirements-builder.txt",
+    "repository_builder/__init__.py",
+    "repository_builder/__main__.py",
+    "repository_builder/app.py",
+    "repository_builder/core.py",
+    "repository_builder/runtime.py",
+    "repository_builder/startup.py",
+    "repository_builder/version.py",
+    "repository_builder/README.md",
+    "repository_builder/windows/Launcher.cs",
+    "repository_builder/assets/repository-builder.svg",
+    "repository_builder/assets/repository-builder.png",
+    "repository_builder/assets/repository-builder.ico",
+    "scripts/build_repository_builder_icon.ps1",
+    "scripts/install_repository_builder_shortcut.ps1",
+    "templates/ai_governance.md",
+    "templates/architecture_decisions.md",
+    "templates/campaign_workspace.md",
+    "templates/candidate_workspace.md",
+    "templates/codex_start_prompt.md",
+    "templates/current_milestone.md",
+    "templates/data_product_contract.md",
+    "templates/data_quality.md",
+    "templates/deployment_and_operations.md",
+    "templates/document_processing.md",
+    "templates/domain_map.md",
+    "templates/lineage_and_provenance.md",
+    "templates/milestone_details.md",
+    "templates/model_and_prompt_governance.md",
+    "templates/operator_console.md",
+    "templates/product_vision.md",
+    "templates/project_status.md",
+    "templates/publication_and_compatibility.md",
+    "templates/roadmap.md",
+    "templates/security_and_privacy.md",
+    "templates/service_contract.md",
+    "templates/unreleased.md"
+  ],
+  "common_project_templates": [
+    { "source": "templates/product_vision.md", "target": "docs/product_vision.md" },
+    { "source": "templates/domain_map.md", "target": "docs/domain_map.md" },
+    { "source": "templates/project_status.md", "target": "docs/project_status.md" },
+    { "source": "templates/roadmap.md", "target": "docs/roadmap.md" },
+    { "source": "templates/architecture_decisions.md", "target": "docs/architecture_decisions.md" },
+    { "source": "templates/milestone_details.md", "target": "docs/milestone_details.md" },
+    { "source": "templates/unreleased.md", "target": "docs/releases/unreleased.md" }
+  ],
+  "repository_profiles": {
+    "generic": { "label": "General purpose", "description": "Core engineering guidance and project documents. No language-specific files.", "templates": [] },
+    "dbt": {
+      "label": "dbt",
+      "description": "A dbt project with model folders and data quality, lineage, and publication guidance.",
+      "templates": [
+        { "source": "templates/data_product_contract.md", "target": "docs/data_product_contract.md" },
+        { "source": "templates/data_quality.md", "target": "docs/data_quality.md" },
+        { "source": "templates/lineage_and_provenance.md", "target": "docs/lineage_and_provenance.md" },
+        { "source": "templates/publication_and_compatibility.md", "target": "docs/publication_and_compatibility.md" }
+      ]
+    },
+    "python": {
+      "label": "Python",
+      "description": "A Python package layout with service, operations, and security documents.",
+      "templates": [
+        { "source": "templates/service_contract.md", "target": "docs/service_contract.md" },
+        { "source": "templates/deployment_and_operations.md", "target": "docs/deployment_and_operations.md" },
+        { "source": "templates/security_and_privacy.md", "target": "docs/security_and_privacy.md" }
+      ]
+    },
+    "dbt-python": {
+      "label": "dbt + Python",
+      "description": "A dbt project and Python package with data product and service documentation.",
+      "templates": [
+        { "source": "templates/data_product_contract.md", "target": "docs/data_product_contract.md" },
+        { "source": "templates/data_quality.md", "target": "docs/data_quality.md" },
+        { "source": "templates/lineage_and_provenance.md", "target": "docs/lineage_and_provenance.md" },
+        { "source": "templates/publication_and_compatibility.md", "target": "docs/publication_and_compatibility.md" },
+        { "source": "templates/service_contract.md", "target": "docs/service_contract.md" },
+        { "source": "templates/deployment_and_operations.md", "target": "docs/deployment_and_operations.md" },
+        { "source": "templates/security_and_privacy.md", "target": "docs/security_and_privacy.md" }
+      ]
+    },
+    "powershell": { "label": "PowerShell", "description": "Core engineering guidance for PowerShell projects. No script scaffolding yet.", "templates": [] },
+    "dotnet": { "label": ".NET", "description": "Core engineering guidance for .NET projects. No solution scaffolding yet.", "templates": [] },
+    "node": { "label": "Node.js", "description": "Core engineering guidance for Node.js projects. No package scaffolding yet.", "templates": [] }
+  },
+  "capability_packs": {
+    "ai-governance": {
+      "label": "AI governance",
+      "description": "Document AI usage, model decisions, and prompt governance.",
+      "templates": [
+        { "source": "templates/ai_governance.md", "target": "docs/ai_governance.md" },
+        { "source": "templates/model_and_prompt_governance.md", "target": "docs/model_and_prompt_governance.md" }
+      ]
+    },
+    "service-operations": {
+      "label": "Service operations",
+      "description": "Define service contracts, deployment, operations, and security.",
+      "templates": [
+        { "source": "templates/service_contract.md", "target": "docs/service_contract.md" },
+        { "source": "templates/deployment_and_operations.md", "target": "docs/deployment_and_operations.md" },
+        { "source": "templates/security_and_privacy.md", "target": "docs/security_and_privacy.md" }
+      ]
+    },
+    "operator-application": {
+      "label": "Operator application",
+      "description": "Plan an operator console with campaign and candidate workspaces.",
+      "templates": [
+        { "source": "templates/operator_console.md", "target": "docs/operator_console.md" },
+        { "source": "templates/campaign_workspace.md", "target": "docs/campaign_workspace.md" },
+        { "source": "templates/candidate_workspace.md", "target": "docs/candidate_workspace.md" }
+      ]
+    },
+    "document-processing": {
+      "label": "Document processing",
+      "description": "Describe document ingestion, extraction, and processing workflows.",
+      "templates": [
+        { "source": "templates/document_processing.md", "target": "docs/document_processing.md" }
+      ]
+    }
+  },
+  "optional_project_templates": [
+    { "source": "templates/current_milestone.md", "target": "docs/current_milestone.md" }
+  ],
+  "preservation_rules": {
+    "project_owned_roots": ["docs", "scripts", "src", "models", "tests"],
+    "unknown_files": "preserve",
+    "obsolete_framework_files": "report_only",
+    "existing_project_documents": "preserve_and_report_review"
+  }
+}
