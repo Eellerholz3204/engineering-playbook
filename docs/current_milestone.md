@@ -6,3 +6,6 @@ structural verifier, regression coverage and additive adoption in existing Metis
 repositories. Preserve existing instructions and in-progress work. No business
 runtime, source schedule or measure activation is part of this milestone.
 Checkpoint: tested code, documented verification and focused pull requests.
+
+Delivery: IMPLEMENTED and locally verified. Source PR #1 and Metis adoption PRs
+are open. No merge or packaged release is represented as complete.
