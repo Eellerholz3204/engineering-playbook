@@ -1,5 +1,6 @@
 # Roadmap
 
-- GOV-001: governance context loading and Metis adoption â€” CURRENT.
-- Future packaged release: build and publish the verified candidate under the
-  existing release process; publication is not implied by source implementation.
+- GOV-001: governance context loading and adoption in the nine workspace Metis
+  repositories - IMPLEMENTED locally; source and adoption PRs are open.
+- Additional repositories outside that workspace: scope clarification pending.
+- Packaged release: follow the existing build/release process when authorized.
