@@ -128,3 +128,14 @@ The UI lives in `app.py`; catalog, validation, preview, and execution logic live
 `core.py`. Add catalog descriptions in `playbook.json`, and implement any new
 technical scaffolding in the PowerShell generator. The desktop interface and a
 future public catalog can share that catalog without duplicating it.
+
+## Governance startup
+
+Every new repository receives AGENTS.md and the installed GOVERNANCE_CONTEXT.md
+procedure. Select **Metis governance** under Optional capabilities for Metis repos.
+This adds the central Metis procedure and affected-repository reading requirements
+to AGENTS.md; it does not copy enterprise decisions into the generic framework.
+Saved configurations and copied PowerShell commands retain that selection.
+Existing AGENTS.md files are preserved, even with -Reconcile; merge the reported
+governance blocks into them explicitly. Run the installed
+`scripts/verify_governance_context.py` as described in GOVERNANCE_CONTEXT.md.

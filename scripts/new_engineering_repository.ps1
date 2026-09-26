@@ -11,7 +11,7 @@ param(
     [string]$ProjectType = 'generic',
 
     [Parameter()]
-    [ValidateSet('ai-governance','service-operations','operator-application','document-processing')]
+    [ValidateSet('ai-governance','service-operations','operator-application','document-processing','metis-governance')]
     [string[]]$Capabilities = @(),
 
     [Parameter()]

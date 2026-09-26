@@ -22,6 +22,7 @@ class BuilderUITests(unittest.IsolatedAsyncioTestCase):
     async def test_save_and_import_configuration(self):
         self.app.choose_profile("dbt-python")
         self.app.toggle_capability("ai-governance", True)
+        self.app.toggle_capability("metis-governance", True)
         self.app.reviewed_plan = self.app.plan()
         config = Path(self.temporary.name) / "project.json"
         self.app.picker = MagicMock()
@@ -34,7 +35,7 @@ class BuilderUITests(unittest.IsolatedAsyncioTestCase):
         self.app.picker.pick_files = AsyncMock(return_value=[MagicMock(path=str(config))])
         await self.app.import_configuration(None)
         self.assertEqual("dbt-python", self.app.selected_profile)
-        self.assertEqual({"ai-governance"}, self.app.selected_capabilities)
+        self.assertEqual({"ai-governance", "metis-governance"}, self.app.selected_capabilities)
 
     async def test_invalid_name_stays_on_project_screen(self):
         self.app.name.value = "../outside"
