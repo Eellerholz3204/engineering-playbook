@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "playbook_name": "Engineering Playbook",
-  "playbook_version": "3.2.1",
+  "playbook_version": "3.3.0",
   "install_directory": "engineering-playbook",
   "immutable_framework_files": [
     "ARCHITECTURE_PRINCIPLES.md",
@@ -73,97 +73,233 @@
     "templates/roadmap.md",
     "templates/security_and_privacy.md",
     "templates/service_contract.md",
-    "templates/unreleased.md"
+    "templates/unreleased.md",
+    "GOVERNANCE_CONTEXT.md",
+    "templates/agents.md",
+    "templates/metis_agents.md",
+    "scripts/verify_governance_context.py",
+    "governance-context.json",
+    "templates/governance-context.yml"
   ],
   "common_project_templates": [
-    { "source": "templates/product_vision.md", "target": "docs/product_vision.md" },
-    { "source": "templates/domain_map.md", "target": "docs/domain_map.md" },
-    { "source": "templates/project_status.md", "target": "docs/project_status.md" },
-    { "source": "templates/roadmap.md", "target": "docs/roadmap.md" },
-    { "source": "templates/architecture_decisions.md", "target": "docs/architecture_decisions.md" },
-    { "source": "templates/milestone_details.md", "target": "docs/milestone_details.md" },
-    { "source": "templates/unreleased.md", "target": "docs/releases/unreleased.md" }
+    {
+      "source": "templates/product_vision.md",
+      "target": "docs/product_vision.md"
+    },
+    {
+      "source": "templates/domain_map.md",
+      "target": "docs/domain_map.md"
+    },
+    {
+      "source": "templates/project_status.md",
+      "target": "docs/project_status.md"
+    },
+    {
+      "source": "templates/roadmap.md",
+      "target": "docs/roadmap.md"
+    },
+    {
+      "source": "templates/architecture_decisions.md",
+      "target": "docs/architecture_decisions.md"
+    },
+    {
+      "source": "templates/milestone_details.md",
+      "target": "docs/milestone_details.md"
+    },
+    {
+      "source": "templates/unreleased.md",
+      "target": "docs/releases/unreleased.md"
+    },
+    {
+      "source": "templates/governance-context.yml",
+      "target": ".github/workflows/governance-context.yml"
+    }
   ],
   "repository_profiles": {
-    "generic": { "label": "General purpose", "description": "Core engineering guidance and project documents. No language-specific files.", "templates": [] },
+    "generic": {
+      "label": "General purpose",
+      "description": "Core engineering guidance and project documents. No language-specific files.",
+      "templates": []
+    },
     "dbt": {
       "label": "dbt",
       "description": "A dbt project with model folders and data quality, lineage, and publication guidance.",
       "templates": [
-        { "source": "templates/data_product_contract.md", "target": "docs/data_product_contract.md" },
-        { "source": "templates/data_quality.md", "target": "docs/data_quality.md" },
-        { "source": "templates/lineage_and_provenance.md", "target": "docs/lineage_and_provenance.md" },
-        { "source": "templates/publication_and_compatibility.md", "target": "docs/publication_and_compatibility.md" }
+        {
+          "source": "templates/data_product_contract.md",
+          "target": "docs/data_product_contract.md"
+        },
+        {
+          "source": "templates/data_quality.md",
+          "target": "docs/data_quality.md"
+        },
+        {
+          "source": "templates/lineage_and_provenance.md",
+          "target": "docs/lineage_and_provenance.md"
+        },
+        {
+          "source": "templates/publication_and_compatibility.md",
+          "target": "docs/publication_and_compatibility.md"
+        }
       ]
     },
     "python": {
       "label": "Python",
       "description": "A Python package layout with service, operations, and security documents.",
       "templates": [
-        { "source": "templates/service_contract.md", "target": "docs/service_contract.md" },
-        { "source": "templates/deployment_and_operations.md", "target": "docs/deployment_and_operations.md" },
-        { "source": "templates/security_and_privacy.md", "target": "docs/security_and_privacy.md" }
+        {
+          "source": "templates/service_contract.md",
+          "target": "docs/service_contract.md"
+        },
+        {
+          "source": "templates/deployment_and_operations.md",
+          "target": "docs/deployment_and_operations.md"
+        },
+        {
+          "source": "templates/security_and_privacy.md",
+          "target": "docs/security_and_privacy.md"
+        }
       ]
     },
     "dbt-python": {
       "label": "dbt + Python",
       "description": "A dbt project and Python package with data product and service documentation.",
       "templates": [
-        { "source": "templates/data_product_contract.md", "target": "docs/data_product_contract.md" },
-        { "source": "templates/data_quality.md", "target": "docs/data_quality.md" },
-        { "source": "templates/lineage_and_provenance.md", "target": "docs/lineage_and_provenance.md" },
-        { "source": "templates/publication_and_compatibility.md", "target": "docs/publication_and_compatibility.md" },
-        { "source": "templates/service_contract.md", "target": "docs/service_contract.md" },
-        { "source": "templates/deployment_and_operations.md", "target": "docs/deployment_and_operations.md" },
-        { "source": "templates/security_and_privacy.md", "target": "docs/security_and_privacy.md" }
+        {
+          "source": "templates/data_product_contract.md",
+          "target": "docs/data_product_contract.md"
+        },
+        {
+          "source": "templates/data_quality.md",
+          "target": "docs/data_quality.md"
+        },
+        {
+          "source": "templates/lineage_and_provenance.md",
+          "target": "docs/lineage_and_provenance.md"
+        },
+        {
+          "source": "templates/publication_and_compatibility.md",
+          "target": "docs/publication_and_compatibility.md"
+        },
+        {
+          "source": "templates/service_contract.md",
+          "target": "docs/service_contract.md"
+        },
+        {
+          "source": "templates/deployment_and_operations.md",
+          "target": "docs/deployment_and_operations.md"
+        },
+        {
+          "source": "templates/security_and_privacy.md",
+          "target": "docs/security_and_privacy.md"
+        }
       ]
     },
-    "powershell": { "label": "PowerShell", "description": "Core engineering guidance for PowerShell projects. No script scaffolding yet.", "templates": [] },
-    "dotnet": { "label": ".NET", "description": "Core engineering guidance for .NET projects. No solution scaffolding yet.", "templates": [] },
-    "node": { "label": "Node.js", "description": "Core engineering guidance for Node.js projects. No package scaffolding yet.", "templates": [] }
+    "powershell": {
+      "label": "PowerShell",
+      "description": "Core engineering guidance for PowerShell projects. No script scaffolding yet.",
+      "templates": []
+    },
+    "dotnet": {
+      "label": ".NET",
+      "description": "Core engineering guidance for .NET projects. No solution scaffolding yet.",
+      "templates": []
+    },
+    "node": {
+      "label": "Node.js",
+      "description": "Core engineering guidance for Node.js projects. No package scaffolding yet.",
+      "templates": []
+    }
   },
   "capability_packs": {
     "ai-governance": {
       "label": "AI governance",
       "description": "Document AI usage, model decisions, and prompt governance.",
       "templates": [
-        { "source": "templates/ai_governance.md", "target": "docs/ai_governance.md" },
-        { "source": "templates/model_and_prompt_governance.md", "target": "docs/model_and_prompt_governance.md" }
+        {
+          "source": "templates/ai_governance.md",
+          "target": "docs/ai_governance.md"
+        },
+        {
+          "source": "templates/model_and_prompt_governance.md",
+          "target": "docs/model_and_prompt_governance.md"
+        }
       ]
     },
     "service-operations": {
       "label": "Service operations",
       "description": "Define service contracts, deployment, operations, and security.",
       "templates": [
-        { "source": "templates/service_contract.md", "target": "docs/service_contract.md" },
-        { "source": "templates/deployment_and_operations.md", "target": "docs/deployment_and_operations.md" },
-        { "source": "templates/security_and_privacy.md", "target": "docs/security_and_privacy.md" }
+        {
+          "source": "templates/service_contract.md",
+          "target": "docs/service_contract.md"
+        },
+        {
+          "source": "templates/deployment_and_operations.md",
+          "target": "docs/deployment_and_operations.md"
+        },
+        {
+          "source": "templates/security_and_privacy.md",
+          "target": "docs/security_and_privacy.md"
+        }
       ]
     },
     "operator-application": {
       "label": "Operator application",
       "description": "Plan an operator console with campaign and candidate workspaces.",
       "templates": [
-        { "source": "templates/operator_console.md", "target": "docs/operator_console.md" },
-        { "source": "templates/campaign_workspace.md", "target": "docs/campaign_workspace.md" },
-        { "source": "templates/candidate_workspace.md", "target": "docs/candidate_workspace.md" }
+        {
+          "source": "templates/operator_console.md",
+          "target": "docs/operator_console.md"
+        },
+        {
+          "source": "templates/campaign_workspace.md",
+          "target": "docs/campaign_workspace.md"
+        },
+        {
+          "source": "templates/candidate_workspace.md",
+          "target": "docs/candidate_workspace.md"
+        }
       ]
     },
     "document-processing": {
       "label": "Document processing",
       "description": "Describe document ingestion, extraction, and processing workflows.",
       "templates": [
-        { "source": "templates/document_processing.md", "target": "docs/document_processing.md" }
+        {
+          "source": "templates/document_processing.md",
+          "target": "docs/document_processing.md"
+        }
+      ]
+    },
+    "metis-governance": {
+      "label": "Metis governance",
+      "description": "Load Metis cross-repository ownership, accepted decisions, contracts and completed evidence before implementation.",
+      "templates": [],
+      "agent_instruction_templates": [
+        "templates/metis_agents.md"
       ]
     }
   },
   "optional_project_templates": [
-    { "source": "templates/current_milestone.md", "target": "docs/current_milestone.md" }
+    {
+      "source": "templates/current_milestone.md",
+      "target": "docs/current_milestone.md"
+    }
   ],
   "preservation_rules": {
-    "project_owned_roots": ["docs", "scripts", "src", "models", "tests"],
+    "project_owned_roots": [
+      "docs",
+      "scripts",
+      "src",
+      "models",
+      "tests"
+    ],
     "unknown_files": "preserve",
     "obsolete_framework_files": "report_only",
     "existing_project_documents": "preserve_and_report_review"
-  }
+  },
+  "agent_instruction_templates": [
+    "templates/agents.md"
+  ]
 }

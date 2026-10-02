@@ -34,7 +34,7 @@ class RepositoryBuilder:
         self.picker = ft.FilePicker()
         self.clipboard = ft.Clipboard()
         page.services.extend([self.picker, self.clipboard])
-        page.title = "Repository Builder · Engineering Playbook"
+        page.title = "Repository Builder Â· Engineering Playbook"
         page.window.icon = str(ROOT / "repository_builder" / "assets" / "repository-builder.ico")
         page.theme_mode = ft.ThemeMode.LIGHT
         page.theme = ft.Theme(color_scheme_seed=BLUE, font_family="Segoe UI", use_material3=True)
@@ -237,6 +237,8 @@ class RepositoryBuilder:
         for key, capability in self.catalog["capability_packs"].items():
             extra = {entry["target"] for entry in capability["templates"]} - base
             note = f"Adds {len(extra)} document{'s' if len(extra) != 1 else ''}" if extra else "Documents already included by this type"
+            if capability.get("agent_instruction_templates"):
+                note = "Adds organizational instructions to AGENTS.md"
             capability_rows.append(ft.Column([
                 ft.Checkbox(label=capability.get("label", key), value=key in self.selected_capabilities,
                             on_change=lambda e, k=key: self.toggle_capability(k, e.control.value)),
@@ -266,7 +268,7 @@ class RepositoryBuilder:
                 ft.Divider(color=LINE),
                 ft.Text(f"Type: {self.catalog['repository_profiles'][plan.project_type].get('label', plan.project_type)}", size=14),
                 ft.Text(f"Capabilities: {capabilities}", size=14),
-                ft.Text(f"Git: {'Yes' if plan.initialize_git else 'No'}    ·    Virtual environment: {'Yes' if plan.create_venv else 'No'}", size=13, color=MUTED),
+                ft.Text(f"Git: {'Yes' if plan.initialize_git else 'No'}    Â·    Virtual environment: {'Yes' if plan.create_venv else 'No'}", size=13, color=MUTED),
             ]),
             self.card([
                 ft.Text(f"{len(documents)} project documents", size=17, weight=ft.FontWeight.W_600),
@@ -352,7 +354,7 @@ class RepositoryBuilder:
         self.output.visible = True
         self.output.value = ""
         self.error.visible = False
-        self.status.value = "Creating your repository… This may take a few minutes with a virtual environment."
+        self.status.value = "Creating your repositoryâ€¦ This may take a few minutes with a virtual environment."
         self.page.window.prevent_close = True
         self.page.update()
         await self.body.scroll_to(offset=-1)

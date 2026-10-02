@@ -2,6 +2,10 @@
 
 ## Startup
 
+First read `engineering-playbook/GOVERNANCE_CONTEXT.md` and perform its context
+loading and ownership check. In the playbook source repository these framework
+files live at the root.
+
 Before changing anything:
 
 1. Read `engineering-playbook/REPOSITORY_CONTRACT.md`.
