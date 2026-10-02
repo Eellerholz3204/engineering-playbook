@@ -28,3 +28,13 @@ Verification: all 18 unit/integration tests passed, including actual PowerShell
 repository-generation coverage; all 75 framework checksums refreshed; `git diff
 --check` passed. Commit and tracked-branch remote state are recorded at milestone
 closure.
+
+## GOV-003 — Installed model-routing authority, 2026-10-02
+
+Moved the full model-routing policy into mandatory `GOVERNANCE_CONTEXT.md` and
+changed generated AGENTS.md to reference its installed path. Kept a pointer in
+`ENGINEERING_PLAYBOOK.md`; it is optional in some installed repositories. Added
+regression assertions against generated root guidance and installed policy.
+No downstream repositories were edited. Verification: all 18 tests passed, all
+75 framework checksums refreshed, and `git diff --check` passed. Commit and
+tracked-branch remote state are recorded at milestone closure.

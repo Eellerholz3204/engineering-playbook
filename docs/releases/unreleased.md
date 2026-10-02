@@ -8,3 +8,5 @@
 - Regression coverage for generation, missing context and preserving local rules.
 - Central model and reasoning-effort routing policy with task tiers and escalation
   triggers; generated AGENTS.md receives the compact rule.
+- Model-routing policy now resides in mandatory installed governance context, and
+  generated AGENTS.md references the installed path.

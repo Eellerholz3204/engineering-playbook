@@ -20,6 +20,10 @@ class GovernanceTests(unittest.TestCase):
         self.assertIn("METIS GOVERNANCE CONTEXT v1", agents.read_text())
         self.assertIn("## Model routing", agents.read_text())
         self.assertIn("governed-judgment/medium", agents.read_text())
+        self.assertIn("engineering-playbook/GOVERNANCE_CONTEXT.md", agents.read_text())
+        installed_policy = (repo / "engineering-playbook/GOVERNANCE_CONTEXT.md").read_text()
+        self.assertIn("## Model and reasoning-effort routing", installed_policy)
+        self.assertIn("Governed-judgment tier, medium effort", installed_policy)
         self.assertEqual([], check(repo, source=ROOT, local_only=True))
         central = self.base / "authority"
         (central / "docs").mkdir(parents=True)

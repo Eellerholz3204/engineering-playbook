@@ -1,10 +1,11 @@
 # Current milestone
 
-GOV-002: central model and reasoning-effort routing. Accepted by the current
-implementation request on the existing GOV-001 source branch. Scope: durable
-capability tiers and escalation guidance in the canonical playbook, compact
-generated AGENTS.md guidance, regression coverage, project delivery records and
-checksums. Do not edit downstream repositories. No release or merge is included.
+GOV-003: correct the installed location for model-routing authority. Accepted by
+the current governance-review correction on the existing source PR #1 branch.
+Scope: make the mandatory installed `GOVERNANCE_CONTEXT.md` canonical, point
+generated AGENTS.md to it, add installation-layout regression coverage, and
+refresh checksums and project delivery records. Do not edit downstream
+repositories. No release or merge is included.
 Checkpoint: focused and full applicable verification, commit and push to the
 tracked branch; source PR #1 remains open.
 

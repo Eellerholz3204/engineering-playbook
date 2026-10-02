@@ -12,27 +12,8 @@ This playbook defines a reusable architecture and engineering framework for soft
 4. Verified repository and runtime state override stale documentation.
 5. Project documentation must be corrected when verified state and documentation diverge.
 
-## Model and reasoning-effort routing
-
-Choose the least expensive available model and reasoning effort that can reliably
-meet the task's governance, correctness, and verification requirements. Classify by
-the work actually being performed; escalate if its scope or uncertainty changes.
-
-| Work | Minimum routing |
-|---|---|
-| Routine mechanical work (for example, status checks, merges, polling, downloads, or hash checks) | Efficient tier, low effort |
-| Narrow implementation with clear requirements and acceptance tests | Efficient tier, medium effort |
-| Cross-repository contracts, statistical semantics, governance decisions, production authority, or final governance/release review | Governed-judgment tier, medium effort |
-| Ambiguous architecture, security-sensitive judgment, conflicting evidence, or unresolved ownership | Governed-judgment tier, high effort |
-
-Escalate to the governed-judgment tier when work encounters contract or schema
-semantics, activation/readiness authority, statistical-method judgment, production
-permissions or destructive operations, unclear ownership, conflicting evidence, or
-repeated non-mechanical failures. Do not guess through a trigger; identify the
-uncertainty and resolve it using the applicable governance sources. Repository
-instructions may set a higher minimum for their work, but may not lower these
-central minimums. These tiers describe capabilities, not fixed model names or
-versions; any current model mapping is operational guidance and may change.
+Model and reasoning-effort routing is governed by the installed `GOVERNANCE_CONTEXT.md`,
+which is included in every framework installation.
 
 ## Core architectural laws
 

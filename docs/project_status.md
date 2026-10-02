@@ -9,3 +9,6 @@ preserved and flagged for reconciliation. Verification results are recorded in
 GOV-002 adds central model and reasoning-effort routing to the framework and
 generated generic AGENTS.md. The policy defines capability tiers and escalation
 triggers without binding normative guidance to transient model versions.
+Governance review identified that the prior AGENTS.md reference targeted an
+optional framework file. GOV-003 moves the normative policy to the mandatory
+installed `GOVERNANCE_CONTEXT.md` and corrects that reference.

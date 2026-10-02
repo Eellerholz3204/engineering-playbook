@@ -1,8 +1,8 @@
 {
   "version": 1,
   "sha256": {
-    "GOVERNANCE_CONTEXT.md": "6b6041770e4a9e04e1ae6ebb9df4776fc2155901c3dc37d7d033063a027fd956",
-    "templates/agents.md": "33d226bd358aa5f79d59afc91bc0da7f8d3c28854a2cc872721c7c5ea1fdf4d7",
+    "GOVERNANCE_CONTEXT.md": "0107ba07bbe5ac98e2746ff65f9fd90ca882a9c8ecbddb1221a056b9b23d20d4",
+    "templates/agents.md": "b750969c989a1e59a2a1230af2f7233213b4d7af52ae77db29541fbaffea0267",
     "templates/metis_agents.md": "fd758532c4bff9deb68ce093960372a041f2d645df67734d04ff1310b799773a",
     "scripts/verify_governance_context.py": "b58aa0456d712a983efc21fd88ca99177c2193c8a9cc032931fe40b4827e4349"
   }

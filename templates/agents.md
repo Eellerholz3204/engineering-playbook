@@ -20,5 +20,6 @@ governed-judgment/high for ambiguous architecture, security-sensitive judgment o
 conflicting evidence. Escalate on contract/schema semantics, activation authority,
 statistical-method judgment, production permissions, unclear ownership, conflicting
 evidence or repeated non-mechanical failures. Repository rules may raise these
-minimums but not lower them; see `ENGINEERING_PLAYBOOK.md` for the full policy.
+minimums but not lower them; see `engineering-playbook/GOVERNANCE_CONTEXT.md` for
+the full policy.
 <!-- END ENGINEERING GOVERNANCE CONTEXT v1 -->
