@@ -16,3 +16,15 @@ open PRs and two have no remote. Exact identities are maintained in the central
 Hosted Codex Control CI exposed stricter import/line-length rules. The shared
 checker was formatted at source, passed that repository's Ruff configuration
 and passed its two focused regression tests before propagation.
+
+## GOV-002 — Central model and reasoning-effort routing, 2026-10-02
+
+Added a capability-based routing policy to the canonical playbook and a compact
+rule to the generated generic AGENTS.md block. Routing sets minimum tiers by task
+type, names escalation triggers, permits repository-specific higher minimums, and
+does not bind the normative policy to transient model versions. Added generated
+instruction regression assertions. No downstream repositories were edited.
+Verification: all 18 unit/integration tests passed, including actual PowerShell
+repository-generation coverage; all 75 framework checksums refreshed; `git diff
+--check` passed. Commit and tracked-branch remote state are recorded at milestone
+closure.

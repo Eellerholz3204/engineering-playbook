@@ -1,11 +1,13 @@
 # Current milestone
 
-GOV-001: durable governance context loading. Accepted by Eric on 2026-09-26.
-Scope: generated AGENTS.md, generic reading procedure, selectable Metis instructions,
-structural verifier, regression coverage and additive adoption in existing Metis
-repositories. Preserve existing instructions and in-progress work. No business
-runtime, source schedule or measure activation is part of this milestone.
-Checkpoint: tested code, documented verification and focused pull requests.
+GOV-002: central model and reasoning-effort routing. Accepted by the current
+implementation request on the existing GOV-001 source branch. Scope: durable
+capability tiers and escalation guidance in the canonical playbook, compact
+generated AGENTS.md guidance, regression coverage, project delivery records and
+checksums. Do not edit downstream repositories. No release or merge is included.
+Checkpoint: focused and full applicable verification, commit and push to the
+tracked branch; source PR #1 remains open.
 
-Delivery: IMPLEMENTED and locally verified. Source PR #1 and Metis adoption PRs
-are open. No merge or packaged release is represented as complete.
+Delivery: IMPLEMENTED and locally verified. Full suite: 18 tests passed; all 75
+framework checksums refreshed; `git diff --check` passed. Commit and push close
+this bounded milestone; PR #1 remains open.

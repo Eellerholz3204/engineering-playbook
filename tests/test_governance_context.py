@@ -18,6 +18,8 @@ class GovernanceTests(unittest.TestCase):
         repo = Path(plan.repository_path)
         agents = repo / "AGENTS.md"
         self.assertIn("METIS GOVERNANCE CONTEXT v1", agents.read_text())
+        self.assertIn("## Model routing", agents.read_text())
+        self.assertIn("governed-judgment/medium", agents.read_text())
         self.assertEqual([], check(repo, source=ROOT, local_only=True))
         central = self.base / "authority"
         (central / "docs").mkdir(parents=True)
