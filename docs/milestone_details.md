@@ -101,5 +101,11 @@ installations. Additional baselines need separately tested bundles or reconcilia
 The Actions workflow was not dispatched; its packaging command was verified locally.
 No real downstream repositories, packaged app binaries, tags or releases changed.
 
-Delivery: IMPLEMENTED. Commit/push closure follows on the current tracked branch.
+Delivery: IMPLEMENTED. Implementation commit
+`dae80da38d4adb9b6db700fef16e45e5afa140e3` was pushed to
+`origin/codex/governance-context-loading`; `git ls-remote` matched that exact HEAD
+and the implementation checkpoint working tree was clean. The candidate payload
+was rechecked against the committed framework and matched exactly. This
+documentation-only delivery record follows on the same branch. Existing PR #1
+remains the review vehicle; no new PR was created.
 Next accepted implementation milestone: none. Publication and rollout remain explicit.

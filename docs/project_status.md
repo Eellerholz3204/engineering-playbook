@@ -9,7 +9,10 @@ AGENTS.md and project documents are preserved. Existing configuration retains lo
 fields and receives installed version/last-patch metadata. No consumer Git action runs.
 
 Versions remain playbook 3.3.0 and Builder 0.1.0 (unreleased source changes).
-Branch: `codex/governance-context-loading`; baseline HEAD: `a671fa9`.
+Branch: `codex/governance-context-loading`; implementation commit: `dae80da`.
+At the implementation checkpoint, HEAD and the remote branch both resolved to
+`dae80da38d4adb9b6db700fef16e45e5afa140e3`, and the working tree was clean. This
+delivery record is a documentation-only follow-up on the same branch.
 Verification: eight focused patch tests and all 30 suite tests passed, with the final
 suite run from a fresh tracked-file export free of ignored local artifacts.
 An actual Builder desktop upgrade from `builder-v0.1.0` / playbook 3.2.1 to the
