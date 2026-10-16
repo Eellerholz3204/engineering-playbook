@@ -12,3 +12,6 @@
 - GOV-004: external agent workspaces and artifact ownership - ACCEPTED, IMPLEMENTED.
   Scope: new repository generation, Builder explanation, installed helper/rules,
   ownership-focused testing and documentation; no existing-repository cleanup.
+- GOV-005: releaseable patches for existing repositories - ACCEPTED, IMPLEMENTED.
+  Scope: bundle build, preview/apply, preservation and recovery, Builder UI and
+  artifact-only workflow. Actual publication and downstream rollout are separate.

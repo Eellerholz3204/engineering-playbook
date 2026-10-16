@@ -17,6 +17,12 @@ This installs two reusable PowerShell commands in your profile. It does not chan
 
 ## Existing repository
 
+For releaseable offline patches, use `playbook_patch.py build`, `preview` and `apply`.
+The build command emits a ZIP/checksum from explicit base and target snapshots.
+Preview writes nothing; apply requires the reviewed ZIP digest, refuses framework
+conflicts and keeps backups outside the repository. See
+[`PATCH_RELEASES.md`](../PATCH_RELEASES.md) for complete commands and recovery.
+
 Preview:
 
 ```powershell

@@ -123,6 +123,12 @@ recorded as review evidence.
 
 ## Install or reconcile an existing repository
 
+For a reviewed patch ZIP, choose **Patch existing repository** in the current
+Repository Builder. Preview changes/conflicts before applying; backups stay in
+external scratch and project documents/instructions are preserved. Maintainers can
+build offline patch ZIPs and publish them through the normal release process. See
+[patch release and application guide](PATCH_RELEASES.md) for UI, CLI and recovery.
+
 Preview first:
 
 ```powershell

@@ -1,26 +1,32 @@
 # Current milestone
 
-GOV-004: external agent workspaces and artifact ownership. Accepted by Eric's
-2026-10-16 request to implement the agreed scratch-space approach in the playbook
-and Repository Builder. Previous GOV-003 implementation is retained in the ledger.
+GOV-005: releaseable playbook patches for existing repositories. Accepted by Eric's
+2026-10-16 request to provide a way to release patches to existing repos. GOV-004
+remains implemented; its scope and verification are retained in the ledger.
 
-Scope: external task workspace helper, automatic creation for every new repository
-profile, installed ownership/promotion rules, Builder review explanation, retained
-configuration compatibility, preservation on reconciliation and packaged resources.
-Temporary diagnostics remain outside project deliverables; maintained generator
-behavior and its focused regression coverage belong in this source repository.
+Scope: local patch ZIP build/checksum tooling, explicit base/target snapshots,
+no-write preview and conflict-checked apply, external backups with failure recovery,
+installed-version receipt, preserved project documents/instructions, Builder's
+existing-repository patch flow, and an artifact-only GitHub Actions build workflow.
+Prepare and verify a local candidate patch demonstrating scratch-rule adoption.
 
-Verification: actual generation across all profiles and available PowerShell
-editions; task isolation, resume and no-write previews; invalid destination checks;
-UI save/import round-trip and desktop review; reconciliation preservation; packaged
-allowlist generation with refreshed checksums; full required test suite; diff check.
+Constraints: do not execute bundle code; do not force local edits, delete framework
+files or change project source/tests. Preserve AGENTS.md and propose manual merges
+in external scratch. Patch implementation and its behavior tests belong here.
+No real downstream repo rollout, release publication, tag or merge is authorized.
 
-Checkpoint: update project documents and manifests, commit only milestone changes,
-push to the current tracked branch and verify remote state. No new PR is required.
-No downstream rollout, test deletion, automatic cleanup, merge or packaged release
-is included. There is no next accepted implementation milestone; stop after closure.
+Verification: package integrity/path validation, conflicts and no-write preview,
+apply/reapply, preservation and metadata, injected write failure and rollback,
+actual PowerShell generator output, UI creation-plan round-trip plus patch preview/
+apply round-trip, desktop rendering, full suite and packaged allowlist checksums.
 
-Delivery: IMPLEMENTED. All 22 tests passed from a fresh tracked-file export without
-local ignored artifacts. Actual desktop render/creation and Windows PowerShell 5.1
-creation passed; all 76 packaged checksums passed. Commit/push closure is recorded
-in the milestone ledger. No next accepted implementation milestone remains.
+Checkpoint: update project docs, regenerate checksums, review/stage only GOV-005,
+commit and push the current tracked branch, then verify remote state. No next
+implementation milestone is accepted. Publishing the prepared artifact or applying
+it to named downstream repositories is a separate scope decision.
+
+Delivery: IMPLEMENTED. All 30 tests passed from a fresh tracked-file export, including
+the patch contracts, existing generator/UI round-trips and packaged resource checks.
+All 80 framework checksums passed. Actual desktop upgrade of a repository generated
+from builder-v0.1.0 passed, including preservation and governance verification after
+explicit instruction reconciliation. Candidate identity and closure are in the ledger.

@@ -66,3 +66,40 @@ Closure evidence: implementation commit `05e28e4d7613e7efbb6724ed9a2292c0664c5f9
 the implementation checkpoint working tree was clean. This documentation-only
 delivery record follows on the same branch. Existing PR #1 remains the review
 vehicle; no new PR was created. No additional implementation milestone remains.
+
+## GOV-005 — Patch delivery to existing repositories, 2026-10-16
+
+Implemented offline ZIP/checksum production, read-only preview, conflict-checked
+apply, per-file atomic replacement, external backups/journal and caught-failure
+rollback. A shared engine serves CLI and Builder. It executes no bundle code and
+performs no consumer Git operations. Existing project configuration retains local
+fields while recording version/last-patch identity; project content and AGENTS.md
+are preserved. Suggested instruction blocks stay with external backups for review.
+Added the artifact-only GitHub Actions build workflow and PATCH_RELEASES.md guide.
+ADR GOV-005 records the delivery, ownership and recovery boundaries.
+
+Verification: eight focused patch tests passed; all 30 tests passed locally and
+again from a fresh tracked-file export after the Unicode-path correction. Coverage
+includes checksum/path tampering, duplicate entries, linked destinations, conflicts,
+no-write preview, apply/reapply, injected write-failure rollback, metadata and project
+preservation, CLI against actual generated repositories, and Builder preview/apply.
+Existing all-profile PowerShell generation, UI save/import and packaging checks pass.
+All 80 framework checksums and `git diff --check` passed.
+
+An actual desktop upgrade used a disposable repository created by the released
+`builder-v0.1.0` generator, base commit `7b22dd7dcad44826c32cf7c98d76b93b6f01cc43`
+(playbook 3.2.1). The 3.3.0 target preserved project files and local instructions.
+Governance verification correctly reported the preserved old instruction block,
+then passed after the documented explicit merge in the disposable repository.
+Desktop screenshots and diagnostic output stayed in external task scratch.
+
+Candidate: `scratch-workspace-patch-rc2.zip`, patch ID `scratch-workspace-2026-10`.
+ZIP SHA-256: `02953297c36b7d0da5398b182e0efebe8d8f08a4abb66170ccdb3059ccc2c253`.
+The ZIP and checksum sidecar are prepared locally; publishing remains unauthorized.
+This candidate targets the exact released 3.2.1 snapshot, not arbitrary modified
+installations. Additional baselines need separately tested bundles or reconciliation.
+The Actions workflow was not dispatched; its packaging command was verified locally.
+No real downstream repositories, packaged app binaries, tags or releases changed.
+
+Delivery: IMPLEMENTED. Commit/push closure follows on the current tracked branch.
+Next accepted implementation milestone: none. Publication and rollout remain explicit.

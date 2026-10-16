@@ -1,0 +1,58 @@
+name: Build playbook patch
+
+on:
+  workflow_dispatch:
+    inputs:
+      base_ref:
+        description: Previously released playbook commit or tag
+        required: true
+        type: string
+      patch_id:
+        description: Unique release patch ID (letters, numbers, hyphens, underscores)
+        required: true
+        type: string
+      summary:
+        description: What this patch changes for existing repositories
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  patch:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          path: target
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.base_ref }}
+          path: base
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+      - name: Install test dependencies
+        working-directory: target
+        run: python -m pip install -r requirements-builder.txt
+      - name: Verify patch tooling and repository generator
+        working-directory: target
+        run: python -m unittest discover -s tests -v
+      - name: Package reviewed framework snapshots
+        env:
+          PATCH_ID: ${{ inputs.patch_id }}
+          PATCH_SUMMARY: ${{ inputs.summary }}
+        shell: pwsh
+        run: |
+          python target/scripts/playbook_patch.py build --base base --target target --output artifacts/playbook-patch.zip --patch-id "$env:PATCH_ID" --summary "$env:PATCH_SUMMARY"
+          if ($LASTEXITCODE -ne 0) { throw 'Patch packaging failed.' }
+      - uses: actions/upload-artifact@v7
+        with:
+          name: playbook-patch
+          path: artifacts/*
+          if-no-files-found: error
+
+# Artifact preparation only. Review before publishing; no tags, releases or
+# downstream repository changes are made by this workflow.

@@ -36,3 +36,37 @@ Consequences: scratch is machine-local, optional for ordinary project execution,
 and created on demand in fresh clones. Moving a checkout creates a new identity.
 No automatic cleanup or downstream migration is included. Packaged binaries need
 a separate authorized rebuild/release to distribute this source change.
+
+## GOV-005 — Explicit patch bundles for existing repositories
+
+Status: ACCEPTED under Eric's 2026-10-16 patch-delivery request.
+
+Context: reconciliation copies the current framework but has no standalone patch
+identity, preflight baseline/conflict report or release artifact for existing repos.
+Playbook versions alone cannot distinguish historical same-version source changes.
+
+Decision: package an allowlisted target framework snapshot with exact before/after
+SHA-256 maps, a patch ID and summary. Build an offline ZIP and checksum sidecar from
+two reviewed snapshots. Preview is read-only. Apply verifies the reviewed ZIP digest,
+validates all payloads and installed files, and stops before replacement on conflicts.
+Only framework files and version/last-patch metadata in an existing project config
+are written. Unknown project metadata is preserved. AGENTS.md, project documents,
+source and tests are never replaced; proposed instruction blocks stay in scratch.
+
+The same Python engine serves CLI and Builder. Bundle code is not executed. Backups,
+transaction evidence and merge guidance live in external scratch. File replacements
+are atomic individually; caught write failures attempt rollback without overwriting
+concurrent edits. Abrupt process/machine termination requires inspection and recovery
+using the retained journal/backups. Updates create no commits or PRs in consumers.
+
+Rationale: content baselines avoid unsafe same-version overwrite, while a complete
+small framework payload is independently verifiable and requires no network during
+preview/apply. Patch removal/migration and automatic project-file reconciliation
+remain out of scope. Release trust comes from the reviewed publisher/checksum, not
+the fact that an archive contains hashes.
+
+Consequences: artifacts can be built locally or through an artifact-only workflow;
+publication and downstream application remain explicit. A changed instruction block
+can leave governance verification pending manual reconciliation even after a clean
+framework apply. Existing packaged Builder binaries need a later rebuild to expose
+the new UI; the CLI supports bootstrapping from the current trusted source checkout.

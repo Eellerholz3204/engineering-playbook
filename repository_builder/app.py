@@ -202,7 +202,16 @@ class RepositoryBuilder:
                 ft.Text("Version control", size=17, weight=ft.FontWeight.W_600), self.git,
                 ft.Text("Creates a local Git repository. You can connect it to GitHub later.", size=13, color=MUTED),
             ]),
+            ft.TextButton("Patch existing repository", icon=ft.Icons.SYSTEM_UPDATE_ALT,
+                          on_click=self.open_patch_view),
         ]
+
+    def open_patch_view(self, _):
+        if self.busy:
+            return
+        from .patch_ui import PatchView
+        self.patch_view = PatchView(self)
+        self.patch_view.show()
 
     def choose_profile(self, key: str):
         self.selected_profile = key

@@ -2,6 +2,15 @@
 
 ## Added
 
+- Build offline framework patch ZIPs/checksums from explicit base/target snapshots,
+  with CLI preview/apply and a Builder **Patch existing repository** flow.
+- Validate every framework file, reject local conflicts and untrusted archive paths,
+  preserve project content, and record installed version/patch identity in existing
+  configuration. Keep recoverable backups and instruction merge blocks in scratch.
+- Artifact-only GitHub Actions patch packaging workflow and release/application guide.
+- Product coverage for patch integrity, preservation, repeated apply, failure recovery,
+  real generator output, CLI and Builder preview/apply; scratch paths support Unicode.
+
 - External agent scratch space for every new repository profile, with a reusable
   PowerShell helper for task isolation, resume, no-write preview and local overrides.
 - Builder review explanation and creation-output workspace location; saved plans

@@ -77,6 +77,19 @@ If creation fails after writing files, the app preserves those files and shows t
 failure. Inspect the destination before retrying; it does not automatically erase
 partial output.
 
+## Patch an existing repository
+
+Choose **Patch existing repository** on the Project screen, select a trusted patch
+ZIP and repository, and preview before applying. The review shows changes, local
+conflicts, the ZIP digest and manual instruction/document reconciliation. Applying
+rechecks that digest and the installed files, backs up changed files outside the
+project, and preserves AGENTS.md, project documents, source and tests. Existing
+project config retains its fields while recording the installed version and patch.
+
+The patch engine is shared with `scripts/playbook_patch.py`; it never executes bundle
+code or creates consumer commits/PRs. See [patch delivery](../PATCH_RELEASES.md) for
+building/publishing bundles, CLI bootstrapping, trust, backup and recovery details.
+
 ## Agent scratch space
 
 All profiles automatically create an external local workspace and install the

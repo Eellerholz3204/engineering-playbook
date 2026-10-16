@@ -1,5 +1,29 @@
 # Project status
 
+## GOV-005 — 2026-10-16
+
+Patch delivery is implemented: reviewed ZIP/checksum production, no-write
+preview, conflict-checked apply, external backup/recovery and instruction merge
+guidance, plus Builder UI and artifact-only CI packaging. Consumer source, tests,
+AGENTS.md and project documents are preserved. Existing configuration retains local
+fields and receives installed version/last-patch metadata. No consumer Git action runs.
+
+Versions remain playbook 3.3.0 and Builder 0.1.0 (unreleased source changes).
+Branch: `codex/governance-context-loading`; baseline HEAD: `a671fa9`.
+Verification: eight focused patch tests and all 30 suite tests passed, with the final
+suite run from a fresh tracked-file export free of ignored local artifacts.
+An actual Builder desktop upgrade from `builder-v0.1.0` / playbook 3.2.1 to the
+current framework preserved project content; governance passed after explicit
+instruction reconciliation. Unicode scratch paths passed in the final suite. All 80
+framework checksums and the packaged allowlist passed; staged diff review passed.
+Candidate identity and commit/push delivery evidence are maintained in the ledger.
+
+No patch is published or applied to real downstream repositories. A local candidate
+ZIP demonstrates the released 3.2.1 baseline; different installed content requires
+a matching bundle or explicit reconciliation. Existing Builder binaries remain
+unchanged and need a separate rebuild to expose the patch UI. No next implementation
+milestone is accepted; release publication and rollout require an explicit decision.
+
 ## GOV-004 — 2026-10-16
 
 External agent workspaces and artifact ownership are implemented in the playbook
@@ -16,7 +40,8 @@ delivery record is a documentation-only follow-up on the same branch. Verificati
 artifacts; actual desktop creation/render and Windows PowerShell 5.1 creation passed;
 packaged allowlist generation and all 76 checksums passed. Commit/push evidence is
 recorded in the ledger below GOV-004. No packaged binary was rebuilt or published.
-No next implementation milestone or downstream cleanup is authorized.
+At GOV-004 closure no next implementation milestone or downstream cleanup was
+authorized; GOV-005 above records the subsequent patch-delivery request.
 
 ## Earlier milestones
 
