@@ -38,11 +38,15 @@ class GovernanceTests(unittest.TestCase):
         self.assertTrue(any("Missing Metis authority" in e for e in check(repo, metis=True, metis_root=central)))
         before = agents.read_bytes() + b"\nLocal rules must survive.\n"
         agents.write_bytes(before)
+        project_doc = repo / "docs/domain_map.md"
+        project_doc.write_text("Project-owned boundaries must survive reconciliation.\n")
+        project_before = project_doc.read_bytes()
         command = [powershell_executable(), "-NoProfile", "-File", str(ROOT / "scripts/install_engineering_playbook.ps1"),
                    "-RepositoryPath", str(repo), "-PlaybookSourcePath", str(ROOT), "-Reconcile"]
         result = subprocess.run(command, capture_output=True, text=True, timeout=60)
         self.assertEqual(0, result.returncode, result.stdout + result.stderr)
         self.assertEqual(before, agents.read_bytes())
+        self.assertEqual(project_before, project_doc.read_bytes())
         self.assertIn("reconcile governance blocks", result.stdout)
 
     def test_missing_entrypoint_and_stale_asset_fail(self):

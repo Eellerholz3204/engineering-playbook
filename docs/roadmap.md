@@ -9,3 +9,6 @@
 - Eric confirmed the rollout excludes Architecture Intelligence, legacy
   athena_dbt and the Terraform checkout on 2026-09-26.
 - Packaged release: follow the existing build/release process when authorized.
+- GOV-004: external agent workspaces and artifact ownership - ACCEPTED, IMPLEMENTED.
+  Scope: new repository generation, Builder explanation, installed helper/rules,
+  ownership-focused testing and documentation; no existing-repository cleanup.

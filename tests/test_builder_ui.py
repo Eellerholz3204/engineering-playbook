@@ -1,12 +1,13 @@
 """Check interface state and persistence without requiring a desktop client."""
 
 from pathlib import Path
+import os
 import tempfile
 import unittest
-from unittest.mock import AsyncMock, MagicMock
+from unittest.mock import AsyncMock, MagicMock, patch
 
 from repository_builder.app import RepositoryBuilder
-from repository_builder.core import CreationPlan
+from repository_builder.core import CreationPlan, create_repository
 
 
 class BuilderUITests(unittest.IsolatedAsyncioTestCase):
@@ -16,6 +17,9 @@ class BuilderUITests(unittest.IsolatedAsyncioTestCase):
         self.app = RepositoryBuilder(self.page)
         self.temporary = tempfile.TemporaryDirectory(prefix="playbook-ui-test-")
         self.addCleanup(self.temporary.cleanup)
+        environment = patch.dict(os.environ, {"ENGINEERING_PLAYBOOK_SCRATCH_ROOT": str(Path(self.temporary.name) / "scratch")})
+        environment.start()
+        self.addCleanup(environment.stop)
         self.app.name.value = "example-project"
         self.app.parent.value = self.temporary.name
 
@@ -23,6 +27,7 @@ class BuilderUITests(unittest.IsolatedAsyncioTestCase):
         self.app.choose_profile("dbt-python")
         self.app.toggle_capability("ai-governance", True)
         self.app.toggle_capability("metis-governance", True)
+        self.app.git.value = False
         self.app.reviewed_plan = self.app.plan()
         config = Path(self.temporary.name) / "project.json"
         self.app.picker = MagicMock()
@@ -36,6 +41,14 @@ class BuilderUITests(unittest.IsolatedAsyncioTestCase):
         await self.app.import_configuration(None)
         self.assertEqual("dbt-python", self.app.selected_profile)
         self.assertEqual({"ai-governance", "metis-governance"}, self.app.selected_capabilities)
+        self.assertEqual(plan, self.app.plan())
+        cards = self.app.review_view()
+        self.assertTrue(any(getattr(card, "content", None) and
+            getattr(card.content, "controls", None) and
+            getattr(card.content.controls[0], "value", None) == "Agent scratch space" for card in cards))
+        output = []
+        self.assertEqual(0, create_repository(self.app.plan(), output.append), "\n".join(output))
+        self.assertTrue(any(line.startswith("Agent scratch space (outside repository): ") for line in output))
 
     async def test_invalid_name_stays_on_project_screen(self):
         self.app.name.value = "../outside"

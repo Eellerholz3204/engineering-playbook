@@ -10,6 +10,16 @@ constraints and genuine gaps with source references; then continue authorized
 work. Preserve unrelated work and record durable findings in existing project
 documents. Do not treat a context summary as a substitute for authoritative files.
 
+## Agent scratch space
+
+Follow the scratch-space, blocker ownership and artifact-promotion rules in
+`engineering-playbook/GOVERNANCE_CONTEXT.md`. Use the installed
+`engineering-playbook/scripts/initialize_agent_workspace.ps1` with this checkout's
+absolute path and a unique task ID for temporary scripts, diagnostics and notes.
+Keep scratch outside the checkout. Commit only artifacts supporting maintained
+project behavior or workflows; tool fixes and their tests belong to the tool's
+owning repository. Verify the project without scratch dependencies before closure.
+
 ## Model routing
 
 Use the least expensive model and effort that reliably meets governance and

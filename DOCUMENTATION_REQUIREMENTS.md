@@ -4,6 +4,13 @@
 
 Files under `engineering-playbook/` define reusable rules and patterns. Files under `docs/` describe the actual project. Do not copy project facts into framework files or treat generic templates as verified project state.
 
+Keep temporary investigation notes, diagnostic outputs and agent execution logs in
+the external task workspace. Record durable decisions, project impacts, unresolved
+dependencies and concise verification outcomes in existing owning documents. Do not
+create a project document or milestone for every environment/tooling blocker. Retain
+required evidence in an approved project or artifact store before cleaning scratch;
+scratch notes are neither project authority nor required release evidence.
+
 ## Required project architecture documents
 
 ### `docs/product_vision.md`

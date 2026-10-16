@@ -35,6 +35,7 @@
     "scripts/install_engineering_playbook.ps1",
     "scripts/install_engineering_playbook_profile.ps1",
     "scripts/new_engineering_repository.ps1",
+    "scripts/initialize_agent_workspace.ps1",
     "scripts/create_repository_from_config.ps1",
     "scripts/start_repository_builder.ps1",
     "requirements-builder.txt",

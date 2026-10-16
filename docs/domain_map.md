@@ -7,3 +7,9 @@ are installed under `engineering-playbook/`. In this source repository they live
 at the root. Metis-specific instructions are an optional capability that refers
 to `metis-engineering-playbook/docs/contract_agent_workflow.md`; that repository
 continues to own Metis governance and project semantics.
+
+`GOVERNANCE_CONTEXT.md` owns scratch, blocker classification and artifact-promotion
+policy. `scripts/initialize_agent_workspace.ps1` owns external task-folder resolution
+and creation; the shared repository generator calls it for every profile. Builder
+explains the behavior without implementing a second path resolver. Scratch is local
+execution state outside version control, not project authority or a build dependency.

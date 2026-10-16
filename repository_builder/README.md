@@ -77,6 +77,30 @@ If creation fails after writing files, the app preserves those files and shows t
 failure. Inspect the destination before retrying; it does not automatically erase
 partial output.
 
+## Agent scratch space
+
+All profiles automatically create an external local workspace and install the
+agent ownership rules. Review explains this behavior; creation output prints the
+exact folder. On Windows the default is
+`%LOCALAPPDATA%\AgentWorkspaces\<checkout-name>-<path-hash>\default`.
+Agents use the installed `scripts/initialize_agent_workspace.ps1` to create or
+resume separate task folders. The workspace is not a project file and is excluded
+from project commits, test discovery and packaging by residing outside the checkout.
+
+Scratch holds temporary scripts, diagnostics and notes. Permanent artifacts must
+support maintained project behavior or workflows; reusable tooling fixes and their
+tests belong in their owning repository. Project verification must be reproducible
+without scratch dependencies. See `GOVERNANCE_CONTEXT.md` for the full rules.
+
+An external `ENGINEERING_PLAYBOOK_SCRATCH_ROOT` environment override supports local
+preferences and isolated tests. The location is resolved on the creating machine;
+saved configurations and copied commands do not capture it. Existing configuration
+fields are unchanged. Fresh clones initialize scratch when the helper is first run.
+Existing projects receive the helper during framework reconciliation, while their
+AGENTS.md and project documents remain preserved for manual rule reconciliation.
+Scratch folders are retained until explicitly cleaned up; moving or deleting a
+checkout does not remove its old scratch folder.
+
 ## Reuse a configuration
 
 **Save configuration** writes a JSON document containing the selections and exact

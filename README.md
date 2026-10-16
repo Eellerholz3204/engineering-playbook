@@ -82,6 +82,12 @@ JSON configuration for reuse or copy the equivalent PowerShell command. No profi
 installation is required for the app. See [the builder guide](repository_builder/README.md)
 for prerequisites, configuration automation, and design notes.
 
+Every new repository also gets a local agent scratch folder outside its checkout.
+Experiments, diagnostic tests and working notes stay there. Generated AGENTS.md
+directs agents to keep permanent project changes tied to maintained requirements
+and to place reusable tooling fixes in the owning repository. See
+[scratch workspace commands](scripts/README.md#agent-scratch-space).
+
 For command-line creation after the optional workstation setup above:
 
 ```powershell

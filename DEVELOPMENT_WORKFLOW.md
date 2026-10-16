@@ -17,6 +17,8 @@ Before changing anything:
 7. Inspect branch, HEAD, version, tags, working tree, tests, and relevant runtime state.
 8. Treat verified state as authoritative when documentation is stale.
 9. Preserve unrelated work and identify pre-existing changes.
+10. Use the external task workspace and artifact ownership rules in
+    `GOVERNANCE_CONTEXT.md` for experiments, diagnostics and local workarounds.
 
 ## Milestone discipline
 
@@ -29,6 +31,10 @@ Before changing anything:
 - Do not allow orchestration layers or consoles to acquire business logic.
 - Authorization to implement a milestone includes staging, committing, and pushing its verified repository changes to the current tracked branch.
 - Never include unrelated work in a milestone commit.
+- Classify blockers by owner before fixing them. Scratch diagnostics do not become
+  project milestones or tooling-only PRs in a consumer repository.
+- Promote supporting code, tests and documents only when they protect maintained
+  project behavior, contracts or development workflows. Keep tool fixes with their owner.
 - Tagging, releases, publishing, destructive cleanup, external-system mutation, and consequential business decisions require explicit authorization.
 
 ## Milestone continuation
@@ -93,7 +99,11 @@ Before closing each milestone:
 2. Update `docs/releases/unreleased.md` with implemented work only.
 3. Record an ADR when a lasting architectural decision changed.
 4. Run focused verification.
-5. Run the complete verification suite.
-6. Stage only milestone-owned changes, commit them, push to the tracked branch, and verify remote state.
+5. Run the complete required project verification suite. Scratch diagnostics are
+   separate, explicitly invoked checks, not additions to that suite. Verify the
+   project works from a clean checkout with declared dependencies and no scratch files.
+6. Review staged artifacts for ownership and accidental scratch dependencies.
+   Stage only milestone-owned project changes, commit them, push to the tracked
+   branch, and verify remote state.
 7. Record changed files, verification, limitations, documentation updates, ADR status, commit, remote state, and the next committed milestone.
 8. Continue to the next committed milestone when eligible; otherwise report the exact blocker, review, or authorization gate and stop.

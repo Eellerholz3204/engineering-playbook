@@ -52,6 +52,74 @@ The installer preserves existing AGENTS.md files and reports required manual
 reconciliation. Reconcile the generated blocks without deleting local rules.
 This procedure grants no release, deployment or external-mutation authority.
 
+## Agent scratch space and project ownership
+
+Work performed to complete a task is not automatically a project deliverable.
+Classify blockers and supporting artifacts before choosing where to fix or keep them:
+
+| Work | Owner and destination |
+|---|---|
+| Experiments, one-off reproduction scripts, diagnostic tests, temporary fixtures, logs, working notes and local environment workarounds | External agent task workspace |
+| Reusable agent tooling, launcher fixes and their maintained tests | The repository that owns the tooling |
+| Supported product behavior, project contracts and maintained build/development workflows | The project repository |
+
+New repositories receive an external workspace automatically. From a generated
+repository, resolve or create a separate folder for the current task:
+
+```powershell
+$agentScratch = & ./engineering-playbook/scripts/initialize_agent_workspace.ps1 `
+    -RepositoryPath (Get-Location).Path -TaskId 'task-123'
+```
+
+In this framework source repository use `./scripts/initialize_agent_workspace.ps1`.
+The default on Windows is `%LOCALAPPDATA%\AgentWorkspaces\<checkout-name>-<path-hash>\<task-id>`.
+The checkout's absolute path identifies its workspace; separate clones/worktrees
+and moved checkouts get separate locations. No absolute scratch path is committed.
+Use a unique task ID for concurrent work; repeat the same ID to resume it. The
+generator creates the `default` task folder. Fresh clones create their workspace
+on first helper invocation. Scratch is local and is not shared by Git.
+
+Set `ENGINEERING_PLAYBOOK_SCRATCH_ROOT` to an external absolute directory when a
+different location is needed (including isolated tests). The helper rejects
+overlapping checkout paths and directory links in the scratch path. `-ResolveOnly`
+prints the location without creating it; `-WhatIf` also makes no changes. If the
+workspace is unavailable, report the cause; do not silently put scratch in the
+project's source, tests, or documentation directories.
+
+### Handling blockers
+
+Diagnose in scratch first. A local environment workaround can unblock authorized
+work without becoming a project change. Fix a project defect in the project;
+route a reusable tool defect to its owning repository with focused tests there.
+Do not create tooling-only PRs in consumer projects, copy tool tests into every
+consumer, or turn each blocker into a new project milestone. Cross-repository
+changes still require applicable authority; a blocker does not expand scope.
+Record only durable project impact and unresolved dependencies in project docs.
+
+### Promoting artifacts and tests
+
+Before staging a helper, test, fixture, report or document, identify the maintained
+project requirement, supported contract or development workflow it protects, and
+its owning repository. Keep the smallest useful artifact and regression coverage.
+Checks that only prove a temporary diagnostic or agent workaround belong in scratch.
+Discovery by an agent does not disqualify a real product regression test.
+Do not remove existing tests just because of their age, count, or agent origin;
+review their supported behavior and ownership before moving or retiring them.
+
+Project builds, required tests and CI must work from a clean checkout with declared
+dependencies and no scratch files, hidden patches or local absolute-path imports.
+Run scratch diagnostics explicitly; do not add scratch to test discovery, package
+inputs, CI jobs or release artifacts. At the checkpoint, inspect the staged diff
+for accidental agent artifacts and verify that project success does not depend on
+the scratch environment. A passing diagnostic is not a substitute for project checks.
+
+Scratch notes may contain task state and reproduction commands, but are not an
+authority for project decisions or required evidence. Promote durable decisions
+to existing owning documents and required retained evidence to an approved project
+or artifact store. Do not retain secrets or sensitive copied data in scratch.
+No automatic cleanup runs: review task folders for needed evidence, then remove
+only explicitly selected completed task folders under normal deletion authority.
+
 ## Model and reasoning-effort routing
 
 Choose the least expensive available model and reasoning effort that can reliably

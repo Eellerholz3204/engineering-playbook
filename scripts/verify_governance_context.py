@@ -21,6 +21,7 @@ ASSETS = (
     "templates/agents.md",
     "templates/metis_agents.md",
     "scripts/verify_governance_context.py",
+    "scripts/initialize_agent_workspace.ps1",
 )
 
 

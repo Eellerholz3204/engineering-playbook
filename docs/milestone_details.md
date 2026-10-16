@@ -38,3 +38,24 @@ regression assertions against generated root guidance and installed policy.
 No downstream repositories were edited. Verification: all 18 tests passed, all
 75 framework checksums refreshed, and `git diff --check` passed. Commit and
 tracked-branch remote state are recorded at milestone closure.
+
+## GOV-004 — External agent workspaces and artifact ownership, 2026-10-16
+
+Implemented a shared external task-workspace helper, automatic creation for all
+seven profiles and Builder's review explanation. Added installed startup rules,
+blocker classification, artifact promotion, test ownership and scratch-independent
+verification. Existing configuration fields and project-document preservation remain
+unchanged. Governance bundle and framework checksums include the new helper.
+
+Verification: all 22 tests passed locally and again from a fresh tracked-file export
+without local ignored artifacts. Coverage includes actual PowerShell generation,
+Windows PowerShell/PowerShell 7 helper lifecycle checks, invalid paths and directory
+links, UI save/import followed by creation, reconciliation preservation and creation
+from a relocated packaged allowlist. All 76 framework checksums passed. Desktop
+screens rendered and creation completed; QA artifacts stayed in external scratch.
+Additional Windows PowerShell 5.1 repository generation passed. Staged diff review
+found no scratch artifacts or dependencies; `git diff --check` passed. ADR GOV-004
+records the accepted ownership and workspace decision. Delivery: IMPLEMENTED.
+
+Scope excludes downstream cleanup, test deletion, automatic scratch removal, merge,
+binary rebuild and release. Next committed implementation milestone: none.

@@ -278,6 +278,11 @@ class RepositoryBuilder:
                 ]),
                 ft.Text("The engineering-playbook folder contains the versioned framework. Project-owned documents live in docs/.", size=12, color=MUTED),
             ]),
+            self.card([
+                ft.Text("Agent scratch space", size=17, weight=ft.FontWeight.W_600),
+                ft.Text("Included for every repository: a local folder outside your project for agent experiments, diagnostics and working notes.", size=13, color=MUTED),
+                ft.Text("Each checkout and task has its own space. Scratch files stay out of project commits, tests and packages. The creation output shows the folder location.", size=12, color=MUTED),
+            ]),
             ft.Row([ft.TextButton("Save configuration", icon=ft.Icons.SAVE_OUTLINED, on_click=self.save_configuration),
                     ft.TextButton("Copy PowerShell", icon=ft.Icons.CONTENT_COPY, on_click=self.copy_command)], wrap=True),
             self.progress, self.status, self.output,
