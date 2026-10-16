@@ -59,3 +59,10 @@ records the accepted ownership and workspace decision. Delivery: IMPLEMENTED.
 
 Scope excludes downstream cleanup, test deletion, automatic scratch removal, merge,
 binary rebuild and release. Next committed implementation milestone: none.
+
+Closure evidence: implementation commit `05e28e4d7613e7efbb6724ed9a2292c0664c5f9c`
+(`feat: isolate agent scratch work from project deliverables`) was pushed to
+`origin/codex/governance-context-loading`. `git ls-remote` matched that exact HEAD;
+the implementation checkpoint working tree was clean. This documentation-only
+delivery record follows on the same branch. Existing PR #1 remains the review
+vehicle; no new PR was created. No additional implementation milestone remains.

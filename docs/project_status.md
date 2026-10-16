@@ -8,12 +8,14 @@ the checkout; installed guidance and a helper support fresh clones and separate
 tasks. Existing project documents and AGENTS.md remain preserved on reconciliation.
 
 Versions remain playbook 3.3.0 and Builder 0.1.0 (unreleased source changes).
-Branch: `codex/governance-context-loading`; baseline HEAD: `7dc6467`.
-The working tree contains only GOV-004 changes before closure. Verification: all
+Branch: `codex/governance-context-loading`; implementation commit: `05e28e4`.
+At the implementation checkpoint, HEAD and the remote branch both resolved to
+`05e28e4d7613e7efbb6724ed9a2292c0664c5f9c`, and the working tree was clean. This
+delivery record is a documentation-only follow-up on the same branch. Verification: all
 22 tests passed both locally and from a fresh tracked-file export with no ignored
 artifacts; actual desktop creation/render and Windows PowerShell 5.1 creation passed;
 packaged allowlist generation and all 76 checksums passed. Commit/push evidence is
-recorded at milestone closure. No packaged binary was rebuilt or published.
+recorded in the ledger below GOV-004. No packaged binary was rebuilt or published.
 No next implementation milestone or downstream cleanup is authorized.
 
 ## Earlier milestones
