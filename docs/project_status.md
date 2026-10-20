@@ -1,5 +1,26 @@
 # Project status
 
+## GOV-015 — 2026-10-20, patch-choice deduplication
+
+Implemented content-based display grouping for local, cached and published copies.
+The previous selected-local exception reproduced the reported two-choice display.
+The picker now retains that source/key but shows one entry with the matching
+published title and notes. Renamed byte-identical copies also merge; distinct or
+unverifiable contents remain separate. Preview/Apply validation is unchanged.
+
+All 15 focused UI tests and the real feature CLI/Builder preview/apply contract pass.
+Live public-feed desktop verification reproduced a selected cached ZIP and confirmed
+one compatible choice, published notes, separate preview/apply, preserved custom
+instructions and unchanged framework version on a disposable project. Screenshot
+inspection passed. All 59 tests passed from the clean staged-file export in 195.603
+seconds, with no skips, including actual PowerShell generation and packaging.
+All 82 checksums validate; export and working framework bytes match. Delivery:
+IMPLEMENTED. Versions remain framework 3.3.1 / Builder 0.1.0 on the existing tracked
+`codex/governance-context-loading` branch. Commit/push closure follows.
+No release, real consumer, desktop binary or architecture decision changes.
+Restart source-launched Builder and Check for patches to load the corrected picker.
+No next implementation milestone is accepted.
+
 ## GOV-014 — 2026-10-20, portable patch published; older choices retired
 
 The [portable scratch feature](releases/agent-scratch-workspaces-portable-v1.md)

@@ -255,9 +255,16 @@ class ScratchPatchTests(unittest.TestCase):
             view.repository.value = str(self.repo)
             view.bundle.value = str(bundle)
             view.choices["bundles"].add(str(bundle))
+            published = patch_downloads.PublishedPatch("playbook-patch-portable", "published.zip",
+                "Playbook patch: Portable scratch", patching.digest(bundle.read_bytes()),
+                "# Portable scratch\n\nPreserve custom instructions.")
+            view.published = {published.key: published}
             before = tree(self.repo)
             await view.repository_selected()
             self.assertEqual("Compatible", view.compatibility[str(bundle)][0])
+            self.assertEqual([str(bundle)], [o.key for o in view.bundle.options])
+            self.assertEqual("Portable scratch · Compatible", view.bundle.options[0].text)
+            self.assertEqual(published.notes, view.notes_text.value)
             self.assertIsNone(view.report)
             self.assertEqual(before, tree(self.repo))
             await view.preview(None)
@@ -265,10 +272,13 @@ class ScratchPatchTests(unittest.TestCase):
             self.assertIn(scratch_patch.BEGIN, view.report["agent_blocks"])
             await view.apply(None)
             self.assertTrue(view.completed)
+            self.assertEqual([str(bundle)], [o.key for o in view.bundle.options])
             self.assertEqual("Already applied", view.compatibility[str(bundle)][0])
             self.assertTrue((self.repo / "AGENTS.md").read_bytes().startswith(before["AGENTS.md"]))
 
-        asyncio.run(scenario())
+        with patch("repository_builder.patch_ui.cached_patches", return_value=[]), \
+             patch("repository_builder.patch_ui.PatchView.discovery_locations", return_value=(set(), set())):
+            asyncio.run(scenario())
 
     def test_feature_download_validates_before_exposing_offline_choice(self):
         sha = self.release["sha256"]

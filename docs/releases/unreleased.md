@@ -26,6 +26,14 @@ The same target framework is also published as
 the exact early-3.3.0 baseline `7dc6467`. It is an alternate-baseline patch, not a
 new target snapshot or desktop release. The original 3.2.1 patch remains unchanged.
 
+## Fixed
+
+- Builder groups byte-identical local/cached/published patches into one choice,
+  including renamed copies and explicitly selected local ZIPs. Published names
+  and notes remain visible; selection and preview/apply bindings are preserved.
+  Different contents or failed local checksum checks stay separately inspectable.
+  This source UI fix does not change published patch assets or desktop binaries.
+
 ## Added
 
 - Portable schema-2 scratch feature patches and `build-scratch` CLI/workflow support.

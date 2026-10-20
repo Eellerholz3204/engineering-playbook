@@ -12,6 +12,7 @@ from repository_builder.app import RepositoryBuilder
 from repository_builder.core import CreationPlan, create_repository
 from repository_builder.patch_ui import PatchView
 from repository_builder.patch_downloads import PublishedPatch
+from repository_builder.patching import digest
 
 
 class BuilderUITests(unittest.IsolatedAsyncioTestCase):
@@ -201,9 +202,11 @@ class BuilderUITests(unittest.IsolatedAsyncioTestCase):
         with zipfile.ZipFile(bundle, "w") as archive:
             archive.writestr("patch.json", json.dumps({"schema_version": 1, "patch_id": "scratch-rules",
                 "summary": "Keep agent artifacts out of the project.", "base_version": "3.2.1", "target_version": "3.3.0"}))
-        item = PublishedPatch("playbook-patch-test", bundle.name, "Scratch workspaces", "a" * 64)
+        sha = digest(bundle.read_bytes())
+        item = PublishedPatch("playbook-patch-test", bundle.name, "Scratch workspaces", sha,
+            notes="# Scratch\n\nPublished purpose.\n\n## Details\nKeep custom rules.")
         with patch("repository_builder.patch_ui.cached_patches", return_value=[bundle]), \
-             patch("repository_builder.patch_ui.cached_checksum", return_value="a" * 64), \
+             patch("repository_builder.patch_ui.cached_checksum", return_value=sha), \
              patch("repository_builder.patch_ui.available_patches", return_value=[item]):
             self.app.open_patch_view(None)
             view = self.app.patch_view
@@ -213,6 +216,10 @@ class BuilderUITests(unittest.IsolatedAsyncioTestCase):
             self.assertFalse(view.notes.visible)
             await view.check_online(None)
             self.assertEqual(str(bundle), view.bundle.value)  # Never switch an explicit choice.
+            self.assertEqual([str(bundle)], [o.key for o in view.bundle.options])
+            self.assertEqual(item.title, view.bundle.options[0].text)
+            self.assertEqual(item.notes, view.notes_text.value)
+            self.assertIn("Matches published patch", view.bundle_path.value)
             view.bundle.value = item.key
             view.refresh()
             self.assertEqual([item.key], [o.key for o in view.bundle.options])
@@ -226,6 +233,85 @@ class BuilderUITests(unittest.IsolatedAsyncioTestCase):
                 await view.check_online(None)
             self.assertEqual(str(bundle), view.bundle.value)
             self.assertEqual("Keep agent artifacts out of the project.", view.description.value)
+
+    async def test_renamed_local_copies_merge_by_bytes_not_names_and_keep_selection(self):
+        root = Path(self.temporary.name)
+        bundle = root / "candidate.zip"
+        with zipfile.ZipFile(bundle, "w") as archive:
+            archive.writestr("patch.json", json.dumps({"schema_version": 2,
+                "kind": "agent-scratch-workspace", "patch_id": "portable", "summary": "Local summary"}))
+        renamed = root / "renamed.zip"
+        renamed.write_bytes(bundle.read_bytes())
+        sha = digest(bundle.read_bytes())
+        item = PublishedPatch("playbook-patch-portable", "published.zip",
+            "Playbook patch: Portable scratch", sha, "# Scratch\n\nPublished purpose.")
+        with patch.object(PatchView, "discovery_locations", return_value=(set(), {root})), \
+             patch("repository_builder.patch_ui.available_patches", return_value=[item]), \
+             patch("repository_builder.patch_ui.download_patch") as download, \
+             patch("repository_builder.patch_ui.inspect_patch",
+                   return_value=self.patch_report(changes=[{"path": "AGENTS.md", "action": "append"}])) as inspect, \
+             patch("repository_builder.patch_ui.apply_patch") as apply:
+            self.app.open_patch_view(None)
+            view = self.app.patch_view
+            self.assertEqual(1, len(view.bundle.options))  # Offline local copies too.
+            view.bundle.value = str(renamed)
+            view.repository.value = str(root / "consumer")
+            view.populate()
+            await view.check_online(None)
+            self.assertEqual([str(renamed)], [o.key for o in view.bundle.options])
+            self.assertEqual(str(renamed), view.bundle.value)
+            self.assertEqual("Portable scratch · Compatible", view.bundle.options[0].text)
+            self.assertIn("1 compatible", view.compatibility_status.value)
+            self.assertEqual(item.notes, view.notes_text.value)
+            self.assertIsNone(view.report)
+            await view.preview(None)
+            self.assertEqual(renamed, view.reviewed_bundle)
+            self.assertEqual(view.values(), view.reviewed_inputs)
+            self.assertEqual("Apply patch", self.app.next.content)
+            self.assertEqual(renamed, inspect.call_args.args[0])
+            download.assert_not_called()
+            apply.assert_not_called()
+            # A normal offline refresh must not restore duplicates or lose notes.
+            await view.refresh_and_check()
+            self.assertEqual(1, len(view.bundle.options))
+            with patch("repository_builder.patch_ui.available_patches", return_value=[]):
+                await view.check_online(None)
+            self.assertEqual([str(renamed)], [o.key for o in view.bundle.options])
+            self.assertFalse(view.notes.visible)
+            # With no explicit local selection the published choice is preferred.
+            view.bundle.value = None
+            view.repository.value = None
+            await view.check_online(None)
+            self.assertEqual([item.key], [o.key for o in view.bundle.options])
+            self.assertEqual(item.key, view.bundle.value)
+
+    async def test_same_names_or_ids_and_unverified_copies_are_not_collapsed(self):
+        root = Path(self.temporary.name)
+        bundle = root / "same.zip"
+        with zipfile.ZipFile(bundle, "w") as archive:
+            archive.writestr("patch.json", json.dumps({"schema_version": 2,
+                "kind": "agent-scratch-workspace", "patch_id": "same"}))
+        sha = digest(bundle.read_bytes())
+        item = PublishedPatch("playbook-patch-same", bundle.name, "Same name", sha)
+        sidecar = bundle.with_suffix(".zip.sha256")
+        with patch.object(PatchView, "discovery_locations", return_value=(set(), {root})):
+            self.app.open_patch_view(None)
+            view = self.app.patch_view
+            view.published = {item.key: item}
+            view.bundle.value = str(bundle)
+            for checksum in ("invalid", "0" * 64 + "  same.zip"):
+                sidecar.write_text(checksum)
+                view.populate()
+                self.assertEqual(2, len(view.bundle.options))
+            sidecar.unlink()
+            # Same ZIP name and patch ID but different bytes remain distinct.
+            with zipfile.ZipFile(bundle, "a") as archive:
+                archive.writestr("changed.txt", "different artifact")
+            view.populate()
+            self.assertEqual(2, len(view.bundle.options))
+            bundle.unlink()
+            view.populate()
+            self.assertEqual(2, len(view.bundle.options))  # Missing explicit choice is visible.
 
     async def test_conflicting_preview_is_explicitly_blocked_until_inputs_change(self):
         self.app.open_patch_view(None)

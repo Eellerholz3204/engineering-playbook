@@ -8,7 +8,7 @@ import zipfile
 
 import flet as ft
 
-from .patching import apply_patch, inspect_patch
+from .patching import MAX_BUNDLE_BYTES, apply_patch, digest, inspect_patch, ordinary_path
 from .core import ROOT
 from .patch_downloads import available_patches, cached_checksum, cached_patches, download_patch, local_checksum
 
@@ -50,6 +50,24 @@ def patch_label(path):
             return "Agent scratch workspaces (additive; preserves custom instructions)"
         return f"{data['patch_id'].replace('-', ' ')} ({data['base_version']} to {data['target_version']})"
     return None
+
+
+def patch_identity(path):
+    """Content identity for display only; Preview still validates the archive."""
+    try:
+        ordinary_path(path)
+        if not path.is_file() or path.stat().st_size > MAX_BUNDLE_BYTES:
+            return None
+        expected = local_checksum(path)
+        with path.open("rb") as stream:
+            data = stream.read(MAX_BUNDLE_BYTES + 1)
+        if len(data) > MAX_BUNDLE_BYTES:
+            return None
+        actual = digest(data)
+        return actual if expected is None or expected == actual else None
+    except (OSError, ValueError):
+        # An unreadable or mismatched copy must remain independently inspectable.
+        return None
 
 
 def release_title(item):
@@ -158,26 +176,41 @@ class PatchView:
             bundles.add(Path(self.bundle.value))
         self.repository.options = [ft.DropdownOption(key=str(p), text=f"{p.name} · {p.parent}")
             for p in sorted(repositories, key=lambda p: str(p).casefold())]
-        # Match only pinned cache identities, never filenames alone. One choice per
-        # published download; local selections are retained without silently switching.
+        identities = {str(path): patch_identity(path) for path in bundles}
+        # Restore verified cache mappings, not a claimed folder hash alone.
         for path in bundles:
             try:
                 sha = cached_checksum(path)
             except (OSError, ValueError):
                 continue
             for key, item in self.published.items():
-                if sha and sha == item.asset_digest and path.name == item.name:
+                if sha and sha == identities[str(path)] == item.asset_digest and path.name == item.name:
                     self.downloaded[key] = (path, sha)
-        self.patch_options = [ft.DropdownOption(key=p.key, text=release_title(p))
+        options = [ft.DropdownOption(key=p.key, text=release_title(p))
             for p in self.published.values()]
+        identities.update({p.key: p.asset_digest for p in self.published.values()})
         remote_paths = {str(path) for key, (path, _) in self.downloaded.items() if key in self.published}
         for path in sorted(bundles, key=lambda p: str(p).casefold()):
             if str(path) in remote_paths and str(path) != self.bundle.value:
                 continue
             label = patch_label(path)
             if label or str(path) in self.choices["bundles"] or str(path) == self.bundle.value:
-                self.patch_options.append(ft.DropdownOption(key=str(path),
+                options.append(ft.DropdownOption(key=str(path),
                     text=label or path.name, tooltip=str(path)))
+        groups = {}
+        for option in options:
+            identity = identities.get(option.key)
+            groups.setdefault(("sha256", identity) if identity else ("key", option.key), []).append(option)
+        self.patch_options = []
+        self.option_releases = {}
+        for copies in groups.values():
+            # Keep the selected source/key and its preview/apply binding intact.
+            chosen = next((o for o in copies if o.key == self.bundle.value), copies[0])
+            release = next((self.published[o.key] for o in copies if o.key in self.published), None)
+            if release:
+                self.option_releases[chosen.key] = release
+            self.patch_options.append(ft.DropdownOption(key=chosen.key,
+                text=release_title(release) if release else chosen.text, tooltip=chosen.tooltip))
         self.filter_options()
 
     def filter_options(self):
@@ -285,7 +318,8 @@ class PatchView:
                 self.compatibility[option.key] = result
             self.populate()
             if self.repository.value == repo:
-                compatible = [key for key, (state, _) in self.compatibility.items() if state == "Compatible"]
+                compatible = [o.key for o in self.patch_options
+                    if self.compatibility.get(o.key, ("Not checked", ""))[0] == "Compatible"]
                 if not self.bundle.value and len(compatible) == 1:
                     self.bundle.value = compatible[0]
                 self.summarize_compatibility()
@@ -407,14 +441,16 @@ class PatchView:
         self.repository_path.value = self.repository.value or (
             "No installed repositories found. Browse to a repository containing engineering-playbook/."
             if not self.repository.options else "Choose the project you want to update.")
-        item = self.published.get(self.bundle.value)
+        item = self.option_releases.get(self.bundle.value)
         self.notes.visible = bool(item and item.notes)
         self.notes_text.value = item.notes if item else ""
         result = self.compatibility.get(self.bundle.value) if self.compatibility_repo == (self.repository.value or "") else None
         self.selected_compatibility.value = f"{result[0]} — {result[1]}" if result else (
             "Not checked — select a repository and use Refresh lists to check compatibility." if self.bundle.value else "")
         if item:
-            self.bundle_path.value = ("Downloaded · Available offline" if item.key in self.downloaded else
+            self.bundle_path.value = ("Local copy · Matches published patch · " + self.bundle.value
+                if self.bundle.value not in self.published else
+                "Downloaded · Available offline" if item.key in self.downloaded else
                 "Published on GitHub · Downloads automatically when you preview")
             self.description.value = release_summary(item.notes)
         elif self.bundle.value:

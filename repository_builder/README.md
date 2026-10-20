@@ -105,7 +105,12 @@ Choose **Patch existing repository** on the Project screen, select a trusted pat
 ZIP and repository from searchable dropdowns, and preview before applying. Lists
 discover installed projects in the parent folder and `~/source/repos`, plus patch
 ZIPs in Downloads, Builder's `dist` and folders browsed this session. Published and
-local patches use the same selector. Browse handles other locations; Refresh rescans
+local patches use the same selector. Byte-identical copies appear once, even under
+different filenames. A matching published release supplies the displayed name and
+notes; an explicitly selected local source stays selected and works offline.
+Different contents or unreadable/checksum-mismatched copies are not merged.
+This display grouping does not replace full Preview/Apply validation.
+Browse handles other locations; Refresh rescans
 without selecting a target or applying anything. Local previews automatically read
 the cache's checksum or an adjacent `.zip.sha256` file when present. Only use local
 ZIPs from a trusted publisher. A sole patch is selected after checking online;

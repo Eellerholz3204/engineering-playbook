@@ -1,5 +1,29 @@
 # Current milestone
 
+GOV-015: deduplicate local and published patch choices. ACCEPTED, IMPLEMENTED under
+Eric's explicit request to fix the duplicate picker display.
+
+Scope: group byte-identical ZIP copies using bounded content hashes, retaining
+explicit selection keys and the existing preview/apply binding. Prefer published
+display names/notes when a matching published digest exists. Different or unverifiable
+copies remain separate. No changes to releases, consumer repositories or app binaries.
+Builder owns this maintained behavior; regression tests belong in this repository.
+ADRs GOV-008/GOV-012 remain unchanged. Verify selected cached/local aliases, renamed
+copies, distinct bytes, checksum errors, offline refresh and the actual patch flow.
+Run the full clean-export suite, refresh checksums and owning records, then commit/
+push the current tracked branch and verify remote state. No next milestone is accepted.
+
+Verification complete: all 59 tests passed from a clean staged-file export in
+195.603 seconds with no skips, including actual PowerShell generation, UI plan
+round-trips, both patch formats and relocated packaging. All 82 checksums validate;
+exported framework bytes match the working source. Live desktop verification of a
+selected cached ZIP plus published release shows one compatible entry, published
+notes and a successful disposable preview/apply preserving custom instructions.
+Screenshots were inspected. No consumer, published artifact or app binary changed.
+Commit/push closure on the existing tracked branch follows.
+
+## Previous milestone: GOV-014
+
 GOV-014: publish the portable scratch patch and retire the three older patch choices.
 ACCEPTED, IMPLEMENTED under Eric's explicit 2026-10-20 publication/discard request.
 

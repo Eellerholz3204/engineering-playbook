@@ -569,3 +569,34 @@ marked retired. All 82 refreshed documentation/framework checksums validate and
 whitespace checks pass. Delivery is IMPLEMENTED; this final record is committed
 and pushed on the existing tracked branch, with remote HEAD/clean-tree verification.
 No next milestone is accepted.
+
+## GOV-015 — Deduplicate local and published patch choices — 2026-10-20
+
+ACCEPTED, CURRENT under Eric's explicit duplicate-display correction request.
+The selected-local preservation exception kept the local ZIP alongside its matching
+published release. Group bounded, byte-identical ZIP identities for display while
+retaining the selected source/key, existing review binding and published metadata.
+Different bytes and unreadable/checksum-mismatched copies remain inspectable.
+No filename/patch-ID equivalence, consumer writes, deletion, release mutation or
+desktop binary rebuild. Existing ADRs GOV-008/GOV-012 are unchanged.
+
+Focused coverage: selected cache/local sources, differently named copies, one
+compatibility count, offline refresh and release disappearance, published preference
+without a selection, distinct bytes, malformed/mismatched checksums and missing
+local files. The real feature contract exercises grouped preview and disposable apply.
+All 15 UI tests plus that contract pass. App-owned desktop verification using the
+live release and selected cached ZIP confirms one choice, published title/notes,
+preview/apply preservation and unchanged framework version; screenshot inspected.
+One focused assertion initially exposed ambient user-cache discovery in its fixture;
+the maintained UI contract now isolates discovery from machine-specific cache state.
+Temporary render scripts/screenshots remain in external `patch-picker-deduplication`
+scratch, not packaging or test discovery. Full clean-export verification follows.
+
+GOV-015 verification complete: all 59 tests passed from the clean staged-file export
+in 195.603 seconds, no skips. Actual PowerShell generation, UI plan/patch round-trips,
+snapshot/additive feature contracts and relocated packaging passed. All 82 refreshed
+checksums validate; clean-export framework bytes match the working implementation.
+Staged whitespace and artifact ownership checks passed. No new scratch dependencies,
+release assets, consumer changes or desktop binaries are included.
+Delivery: IMPLEMENTED. Commit/push closure follows on the current tracked branch.
+No next milestone is accepted; ADRs GOV-008/GOV-012 remain unchanged.

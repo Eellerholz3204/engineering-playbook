@@ -39,3 +39,5 @@
 - GOV-014: publish portable scratch patch and discard superseded choices - ACCEPTED,
   IMPLEMENTED. Published the verified feature artifact; retired three exact-baseline releases
   and their local cache entries recoverably. No consumer apply or desktop release.
+- GOV-015: deduplicate local/published patch choices - ACCEPTED, IMPLEMENTED. Group
+  identical content while preserving selection, release information and review gates.
