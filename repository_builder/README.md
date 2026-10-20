@@ -103,6 +103,16 @@ project, and preserves AGENTS.md, project documents, source and tests. Existing
 project config retains its fields while recording the installed version and patch.
 
 Conflicts show **Patch blocked**, an explanation and a disabled primary action.
+Choosing a repository checks local and discovered published patches against its
+actual files. **Check for patches** also checks newly discovered releases for the
+selected repository. Checks download verified ZIPs to the external cache, never
+write project files, and label choices **Compatible**, **Already applied**,
+**Not compatible** or **Unable to check**. Compatible choices sort first; **Show all
+patches** reveals incompatible ones. An explicit selection stays visible even when
+incompatible. Errors remain visible with their reason. **Stop checking** stops after
+the current patch; **Refresh lists** retries/rechecks. Preview always revalidates
+current files and remains a separate prerequisite for Apply.
+
 Choose a matching patch or reconcile the differences explicitly, then Refresh and
 preview again. A conflict can mean another framework revision, not a damaged repo.
 Early 3.3.0 repositories matching `7dc6467` use the patch named

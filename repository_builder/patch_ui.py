@@ -71,10 +71,18 @@ class PatchView:
         self.published = {}
         self.downloaded = {}
         self.reviewed_bundle = None
+        self.compatibility = {}
+        self.compatibility_repo = ""
+        self.cancel_checks = False
+        self.compatibility_status = ft.Text("Select a repository to check which patches fit.", size=12)
+        self.selected_compatibility = ft.Text(size=13)
+        self.show_all = ft.Checkbox(label="Show all patches (including incompatible)", value=False,
+            on_change=self.filter_changed)
+        self.stop_button = ft.TextButton("Stop checking", visible=False, on_click=self.stop_checking)
         self.check_button = ft.TextButton("Check for patches", icon=ft.Icons.CLOUD_DOWNLOAD_OUTLINED,
             on_click=self.check_online)
         self.online_status = ft.Text("Checks this project's public GitHub releases only when requested. No sign-in needed.", size=12)
-        self.repository = ft.Dropdown(label="Existing repository", on_select=self.changed,
+        self.repository = ft.Dropdown(label="Existing repository", on_select=self.repository_selected,
             expand=True, expanded_insets=0,
             editable=True, enable_filter=True, on_text_change=self.search_changed,
             enable_search=True, menu_height=300, hint_text="Select a repository or browse…",
@@ -92,7 +100,7 @@ class PatchView:
             controls=[self.notes_text])
         self.pick_repository = ft.TextButton("Browse repositories…", on_click=self.choose_repository)
         self.pick_bundle = ft.TextButton("Browse patch ZIPs…", on_click=self.choose_bundle)
-        self.refresh_button = ft.TextButton("Refresh lists", icon=ft.Icons.REFRESH, on_click=self.refresh)
+        self.refresh_button = ft.TextButton("Refresh lists", icon=ft.Icons.REFRESH, on_click=self.refresh_and_check)
         # Session-only choices: no project files or machine-specific paths are saved.
         if not hasattr(builder, "patch_choices"):
             builder.patch_choices = {"repositories": set(), "bundles": set()}
@@ -111,11 +119,12 @@ class PatchView:
         self.inputs = builder.card([
             ft.Row([self.repository, self.pick_repository]), self.repository_path,
             ft.Row([self.check_button, self.pick_bundle, self.refresh_button]),
-            self.bundle, self.bundle_path,
+            self.compatibility_status, ft.Row([self.show_all, self.stop_button]),
+            self.bundle, self.selected_compatibility, self.bundle_path,
             ft.Text("What this patch does", size=16, weight=ft.FontWeight.W_600),
             self.description, self.notes,
             self.online_status,
-            ft.Text("Preview downloads published patches and verifies their checksums automatically. It does not change project files.", size=12),
+            ft.Text("Compatibility checks download and verify published patches as needed, outside your project. Preview and Apply remain separate; checking never changes project files.", size=12),
             ft.Text("Project documents and AGENTS.md are preserved. Local framework edits block the patch; backups are stored outside the project.", size=12),
         ])
 
@@ -155,7 +164,7 @@ class PatchView:
             for key, item in self.published.items():
                 if sha and sha == item.asset_digest and path.name == item.name:
                     self.downloaded[key] = (path, sha)
-        self.bundle.options = [ft.DropdownOption(key=p.key, text=release_title(p))
+        self.patch_options = [ft.DropdownOption(key=p.key, text=release_title(p))
             for p in self.published.values()]
         remote_paths = {str(path) for key, (path, _) in self.downloaded.items() if key in self.published}
         for path in sorted(bundles, key=lambda p: str(p).casefold()):
@@ -163,12 +172,126 @@ class PatchView:
                 continue
             label = patch_label(path)
             if label or str(path) in self.choices["bundles"] or str(path) == self.bundle.value:
-                self.bundle.options.append(ft.DropdownOption(key=str(path),
+                self.patch_options.append(ft.DropdownOption(key=str(path),
                     text=label or path.name, tooltip=str(path)))
+        self.filter_options()
+
+    def filter_options(self):
+        current = self.repository.value or ""
+        results = self.compatibility if current == self.compatibility_repo else {}
+        order = {"Compatible": 0, "Already applied": 1, "Not checked": 2,
+                 "Unable to check": 3, "Not compatible": 4}
+        options = sorted(self.patch_options,
+            key=lambda o: (order[results.get(o.key, ("Not checked", ""))[0]], o.text.casefold()))
+        self.bundle.options = []
+        for option in options:
+            state, detail = results.get(option.key, ("Not checked", ""))
+            # Never silently replace an explicit selection when it fails a check.
+            if state == "Not compatible" and not self.show_all.value and option.key != self.bundle.value:
+                continue
+            self.bundle.options.append(ft.DropdownOption(key=option.key,
+                text=f"{option.text} · {state}" if current else option.text,
+                tooltip=detail or option.tooltip))
+
+    def filter_changed(self, _=None):
+        self.filter_options()
+        self.show()
+
+    def summarize_compatibility(self):
+        states = [self.compatibility.get(option.key, ("Not checked", ""))[0] for option in self.patch_options]
+        self.compatibility_status.value = (
+            f"{states.count('Compatible')} compatible · {states.count('Already applied')} already applied · "
+            f"{states.count('Not compatible')} not compatible · {states.count('Unable to check')} unable to check"
+            + (f" · {states.count('Not checked')} not checked (Refresh lists to retry)" if "Not checked" in states else "")
+            + ". Incompatible choices are hidden unless selected or Show all is enabled. Preview rechecks current files.")
+        if not states:
+            self.compatibility_status.value = "No patches available. Check for patches or Browse to a local ZIP."
+
+    def stop_checking(self, _=None):
+        self.cancel_checks = True
+        self.stop_button.disabled = True
+        self.compatibility_status.value = "Stopping after the current patch check…"
+        self.builder.page.update()
+
+    async def repository_selected(self, _=None):
+        if self.builder.busy:
+            return
+        self.changed()
+        await self.check_compatibility()
+
+    async def refresh_and_check(self, _=None):
+        if self.builder.busy:
+            return
+        self.refresh()
+        await self.check_compatibility()
+
+    @staticmethod
+    def compatibility_result(report):
+        if not report["can_apply"]:
+            return ("Not compatible", f"{len(report['conflicts'])} framework file(s) differ from this patch's starting or target snapshot. Preview for details.")
+        if not report["changes"]:
+            return ("Already applied", "The framework already matches this target. Preview for any receipt or instruction follow-up.")
+        return ("Compatible", "Installed files match this patch's supported snapshot. Preview the changes before applying.")
+
+    async def resolve_bundle(self, key, repo):
+        item = self.published.get(key)
+        if item:
+            cached = self.downloaded.get(key)
+            if cached is None:
+                cached = await asyncio.to_thread(download_patch, item, Path(repo))
+                self.downloaded[key] = cached
+                self.choices["bundles"].add(str(cached[0]))
+            return cached
+        path = Path(key)
+        return path, await asyncio.to_thread(local_checksum, path)
+
+    async def check_compatibility(self):
+        if self.builder.busy or not self.repository.value:
+            return
+        repo = self.repository.value
+        self.changed()
+        self.compatibility_repo = repo
+        self.compatibility.clear()
+        self.populate()
+        candidates = list(self.patch_options)
+        self.cancel_checks = False
+        self.stop_button.visible = True
+        self.stop_button.disabled = False
+        self.busy(True)
+        try:
+            for index, option in enumerate(candidates):
+                if self.cancel_checks or self.repository.value != repo:
+                    break
+                self.compatibility_status.value = f"Checking {index + 1} of {len(candidates)}: {option.text}"
+                self.show()
+                try:
+                    path, checksum = await self.resolve_bundle(option.key, repo)
+                    report = await asyncio.to_thread(inspect_patch, path, Path(repo), checksum)
+                    result = self.compatibility_result(report)
+                except Exception as exc:
+                    result = ("Unable to check", str(exc))
+                if self.repository.value != repo:
+                    break  # A delayed result cannot describe a different repository.
+                self.compatibility[option.key] = result
+            self.populate()
+            if self.repository.value == repo:
+                compatible = [key for key, (state, _) in self.compatibility.items() if state == "Compatible"]
+                if not self.bundle.value and len(compatible) == 1:
+                    self.bundle.value = compatible[0]
+                self.summarize_compatibility()
+            else:
+                self.compatibility.clear()
+                self.compatibility_status.value = "Repository changed. Refresh lists to check its patches."
+            self.show()
+        finally:
+            self.stop_button.visible = False
+            self.busy(False)
 
     def refresh(self, _=None):
         if self.builder.busy:
             return
+        self.compatibility.clear()
+        self.compatibility_status.value = "Compatibility needs checking for the current files."
         self.populate()
         self.changed()
 
@@ -178,6 +301,7 @@ class PatchView:
         self.online_status.value = "Checking published GitHub patches…"
         self.changed()
         self.busy(True)
+        refreshed = False
         try:
             patches = await asyncio.to_thread(available_patches)
             # A disappeared release becomes an offline local choice only if downloaded.
@@ -188,18 +312,22 @@ class PatchView:
             self.published = {p.key: p for p in patches}
             self.downloaded = {key: cached for key, cached in self.downloaded.items()
                 if key in self.published and self.published[key].asset_digest == cached[1]}
+            self.compatibility.clear()
             self.populate()
-            if not self.bundle.value and len(self.bundle.options) == 1:
+            if not self.repository.value and not self.bundle.value and len(self.bundle.options) == 1:
                 self.bundle.value = self.bundle.options[0].key
             self.online_status.value = (f"Found {len(patches)} published patch(es). Choose a patch, then Preview patch."
                 if patches else "No published patch ZIP/checksum pairs found. Local patches remain available.")
             self.show()
+            refreshed = True
         except Exception as exc:
             self.online_status.value = "Couldn't refresh published patches. Existing choices remain available; downloaded patches work offline."
             self.show()
             self.builder.show_error(str(exc))
         finally:
             self.busy(False)
+        if refreshed:
+            await self.check_compatibility()
 
     def search_changed(self, event):
         control = event.control
@@ -215,6 +343,12 @@ class PatchView:
         self.report = self.reviewed_inputs = None
         self.reviewed_bundle = None
         self.completed = False
+        if (self.repository.value or "") != self.compatibility_repo:
+            self.compatibility.clear()
+            self.compatibility_repo = self.repository.value or ""
+            self.compatibility_status.value = ("Compatibility needs checking for this repository."
+                if self.repository.value else "Select a repository to check which patches fit.")
+        self.filter_options()
         self.show()
 
     async def choose_repository(self, _):
@@ -224,7 +358,7 @@ class PatchView:
                 self.choices["repositories"].add(chosen)
                 self.repository.value = chosen
                 self.populate()
-                self.changed()
+                await self.repository_selected()
         except Exception as exc:
             self.builder.show_error(str(exc))
 
@@ -237,6 +371,7 @@ class PatchView:
                 self.bundle.value = files[0].path
                 self.populate()
                 self.changed()
+                await self.check_compatibility()
         except Exception as exc:
             self.builder.show_error(str(exc))
 
@@ -265,6 +400,9 @@ class PatchView:
         item = self.published.get(self.bundle.value)
         self.notes.visible = bool(item and item.notes)
         self.notes_text.value = item.notes if item else ""
+        result = self.compatibility.get(self.bundle.value) if self.compatibility_repo == (self.repository.value or "") else None
+        self.selected_compatibility.value = f"{result[0]} — {result[1]}" if result else (
+            "Not checked — select a repository and use Refresh lists to check compatibility." if self.bundle.value else "")
         if item:
             self.bundle_path.value = ("Downloaded · Available offline" if item.key in self.downloaded else
                 "Published on GitHub · Downloads automatically when you preview")
@@ -277,8 +415,10 @@ class PatchView:
         else:
             self.description.value = "Select a patch to see its purpose before making changes."
             self.bundle_path.value = (
-                "No patches found. Check for patches above, or Browse to a local ZIP."
-                if not self.bundle.options else "Choose a patch, then preview its compatibility with the selected repository.")
+                "No compatible choices shown. Enable Show all patches to inspect incompatible patches."
+                if self.patch_options and not self.bundle.options else (
+                    "No patches found. Check for patches above, or Browse to a local ZIP."
+                    if not self.bundle.options else "Choose a patch, then preview its compatibility with the selected repository."))
         app.body.controls = [self.title, self.inputs]
         if blocked:
             self.blocked_reason.value = (f"{len(self.report['conflicts'])} framework file(s) do not match "
@@ -310,7 +450,7 @@ class PatchView:
         app.back.disabled = value
         app.next.disabled = value or self.completed or bool(self.report and not self.report["can_apply"])
         for control in (self.repository, self.bundle, self.pick_repository,
-                        self.pick_bundle, self.refresh_button, self.check_button):
+                        self.pick_bundle, self.refresh_button, self.check_button, self.show_all):
             control.disabled = value
         app.page.update()
 
@@ -324,23 +464,18 @@ class PatchView:
             repo, bundle = values
             if not repo or not bundle:
                 raise ValueError("Choose the existing repository and patch.")
-            item = self.published.get(bundle)
-            if item:
-                cached = self.downloaded.get(bundle)
-                if cached:
-                    path, checksum = cached
-                else:
-                    self.online_status.value = "Downloading and verifying the selected patch…"
-                    self.show()
-                    path, checksum = await asyncio.to_thread(download_patch, item, Path(repo))
-                    self.downloaded[bundle] = (path, checksum)
-                    self.choices["bundles"].add(str(path))
-                    self.populate()
-                self.online_status.value = "Download verified. Checking repository compatibility…"
-            else:
-                path = Path(bundle)
-                checksum = local_checksum(path)
-            self.report = await asyncio.to_thread(inspect_patch, path, Path(repo), checksum)
+            self.online_status.value = "Verifying the selected patch and current repository files…"
+            self.show()
+            path, checksum = await self.resolve_bundle(bundle, repo)
+            report = await asyncio.to_thread(inspect_patch, path, Path(repo), checksum)
+            if values != self.values():
+                self.changed()
+                return
+            self.report = report
+            self.compatibility_repo = repo
+            self.compatibility[bundle] = self.compatibility_result(report)
+            self.populate()
+            self.summarize_compatibility()
             self.reviewed_bundle = path
             self.reviewed_inputs = values
             self.online_status.value = ("Patch blocked by framework conflicts. No project files changed."
@@ -350,6 +485,10 @@ class PatchView:
         except Exception as exc:
             self.report = self.reviewed_inputs = None
             self.reviewed_bundle = None
+            if self.repository.value:
+                self.compatibility[self.bundle.value] = ("Unable to check", str(exc))
+                self.filter_options()
+                self.summarize_compatibility()
             self.online_status.value = "Preview failed. No patch was applied. Review the error and retry or choose another patch."
             self.show()
             self.builder.show_error(str(exc))
@@ -367,10 +506,17 @@ class PatchView:
         try:
             repo, _ = self.reviewed_inputs
             self.report = await asyncio.to_thread(apply_patch, self.reviewed_bundle, Path(repo), self.report["sha256"])
+            self.compatibility.clear()
+            self.compatibility[self.bundle.value] = self.compatibility_result(self.report)
+            self.compatibility_status.value = "Patch applied. Refresh lists to recheck other patches against the updated framework."
+            self.populate()
             self.completed = True
             self.show()
         except Exception as exc:
             self.report = self.reviewed_inputs = None
+            self.compatibility.clear()
+            self.compatibility_status.value = "Apply failed. Refresh lists or Preview to recheck the current files."
+            self.filter_options()
             self.show()
             self.builder.show_error(str(exc))
         finally:

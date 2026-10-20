@@ -19,6 +19,12 @@ new target snapshot or desktop release. The original 3.2.1 patch remains unchang
 
 ## Added
 
+- Repository-aware patch compatibility labels, compatible-first ordering and Show all
+  filtering. Repository selection and explicit discovery/refresh check actual files,
+  with verified external downloads, progress and stop/retry. Failed checks remain
+  visible; classification never grants Apply approval. Preview revalidates current
+  files. This Builder source change is not in the published patch releases.
+
 - Publisher-only `--base-additions` pins for separately adopted legacy governance
   files; emitted patches retain exact version-1 matching and all preservation rules.
 - Framework 3.3.1 retains the access/identity startup and documentation requirements

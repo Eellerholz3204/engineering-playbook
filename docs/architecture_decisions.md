@@ -128,3 +128,31 @@ Other baselines need independent review. Publisher recipes contain hashes only,
 not project documents or credentials. Missing project configuration stays missing;
 Metis instructions must still be preserved/reconciled manually. Existing releases
 remain immutable. This supersedes no prior application or publication boundaries.
+
+## GOV-012 — Advisory repository-specific patch classification
+
+Status: ACCEPTED under Eric's 2026-10-20 compatibility-selection implementation request.
+
+Context: release names/version labels cannot determine which exact baseline matches
+a selected repository. Repeated manual preview attempts make supported patches hard
+to find, even though the existing patch engine can safely inspect them.
+
+Decision: on repository selection, Browse, explicit Refresh or successful online
+discovery, validate available patches with the existing downloader and inspection
+engine. No startup network discovery. Download only into the existing external cache,
+one patch at a time; allow stopping after the current bounded check. Rank compatible
+results first; hide incompatible choices unless Show all or explicitly selected.
+Distinguish inspection/download failure from incompatibility. Identical target files
+count as Already applied even if a different patch receipt is recorded.
+
+Results are advisory and session-only. Repository changes invalidate classifications;
+refresh retries/rechecks. Do not infer compatibility from names or semantic versions.
+Do not silently change an explicit selection. Classification does not set a reviewed
+transaction: Preview independently verifies current bytes, and Apply retains its
+existing digest/conflict/recovery checks. No new publisher, patch format or write
+authority is introduced; ADRs GOV-005/GOV-008 remain in force.
+
+Consequences: selecting a repository after discovering releases can download multiple
+ZIPs. Progress and unknown/error states remain visible, cached checks work offline,
+and files changed externally may stale a label until refresh/preview. Application,
+instruction reconciliation and real consumer Git operations remain explicit.

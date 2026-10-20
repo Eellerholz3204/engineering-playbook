@@ -69,16 +69,45 @@ five adopted governance files, with their historical BOM/line-ending bytes. Othe
 ### Select and review a patch
 
 To obtain a patch directly, choose **Patch existing repository**, then **Check for
-patches**. Choose an **Existing repository** and an entry in the single **Patch**
-selector, then **Preview patch**. Published releases and local ZIPs share this list.
+patches**. Choose an **Existing repository**. Builder checks local and discovered
+published patches against that repository's actual framework files, downloading and
+verifying published ZIPs into the external cache as needed. Choosing the repository
+first also works: **Check for patches** checks newly discovered releases for it.
+No network discovery runs just from opening the screen.
+
+The single **Patch** selector labels and ranks results:
+
+- **Compatible**: supported file contents; select and preview before applying.
+- **Already applied**: framework matches the target, even if another patch delivered
+  it. Preview can still show receipt or instruction reconciliation.
+- **Not compatible**: different starting files or local changes.
+- **Unable to check**: download, checksum, archive or repository inspection failed;
+  select it to read the reason. This is not a compatibility verdict.
+
+Compatible choices sort first. Incompatible ones are hidden until **Show all patches**
+is enabled, except an explicitly selected patch remains visible with its explanation.
+Failed checks and already-applied patches stay visible. A sole compatible choice is
+selected only when no explicit patch selection exists; the repository is never chosen
+automatically. If none fits, Builder reports that instead of recommending a version
+number match. A version label or release title is not a compatibility test.
+
+Checks run one patch at a time with progress. **Stop checking** stops after the
+current check; remaining patches are marked **Not checked**. **Refresh lists**
+rechecks current files and retries failures without refreshing the online catalog.
+Changing repositories discards previous compatibility results. Results are advisory
+snapshots: **Preview patch** revalidates the selected ZIP and current repository,
+and only its separate **Apply patch** action can write files. Classification never
+creates a reviewed/apply-ready transaction.
+
+Published releases and local ZIPs share this list.
 Published patches show their readable release name, purpose and expandable release
-notes before download. A sole available patch is selected after checking; a target
-repository is never selected automatically. Existing selections are preserved.
+notes before download. Without a target repository, a sole available release may
+be selected, but it is not yet classified. Existing selections are preserved.
 Builder checks the public `Eellerholz3204/engineering-playbook` GitHub releases,
 excluding drafts, prereleases and releases without a patch ZIP/checksum pair.
 No sign-in is required and no network check runs just from opening Builder.
 
-Preview downloads the selected published ZIP as needed and validates its checksum
+Compatibility checking and Preview download published ZIPs as needed and validate their checksums
 and full archive automatically. There is no manual SHA-256 field. Downloads are retained outside projects
 under `%LOCALAPPDATA%\RepositoryBuilder\patches\<sha256>\` (or `~/.cache` when local
 application data is unavailable). Completed downloads appear in the same patch list
@@ -90,7 +119,7 @@ Network requests use HTTPS, GitHub/CDN redirect restrictions, size limits, 30-se
 request timeouts and a maximum of five 100-release pages. Connection failures, rate
 limits or oversized catalogs leave Browse/local preview available. Only the fixed
 publisher is supported; checksums protect integrity, not independent publisher
-authenticity. Downloading never applies a patch or determines project compatibility.
+authenticity. Download integrity alone does not establish repository compatibility.
 
 Use the searchable **Existing repository** and **Patch** dropdowns.
 Repository discovery checks immediate children of the creation screen's parent

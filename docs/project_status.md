@@ -1,5 +1,28 @@
 # Project status
 
+## GOV-012 — 2026-10-20, compatibility selection implemented
+
+Builder now classifies patches for the selected repository using existing full
+archive/checksum validation and read-only file comparison. Compatible patches sort
+first; incompatible choices are hidden unless Show all is enabled or explicitly
+selected. Already-applied and failed checks remain visible. Progress, stop-after-
+current-check and refresh/retry are supported. Scans never establish Apply approval;
+Preview rechecks current files, updating labels/counts if a prior result is stale.
+
+All 47 tests passed from the final clean tracked-file export in 161.019 seconds,
+including actual PowerShell generation, UI plan round-trip and packaging. All 81
+checksums and staged whitespace checks passed. Real desktop checks used all three
+published releases: correct classification/filtering, separate disposable apply,
+same-target receipt distinction and offline refresh passed. Independent disposable
+fixtures for all three released baselines each selected only their matching patch.
+Scans made no project writes. Temporary QA scripts/screenshots stayed outside Git.
+
+Unreleased source change; version labels remain framework 3.3.1 / Builder 0.1.0.
+No published release, real consumer repository or desktop binary is changed.
+Branch: `codex/governance-context-loading`; ADR GOV-012 records the interaction policy.
+Commit/push closure follows. No next accepted milestone remains; source-launched
+Builder users restart to load the update.
+
 ## GOV-011 — 2026-10-19, legacy migration published and verified
 
 Published a separately approved release for metis-engineering-playbook's older

@@ -31,3 +31,5 @@
 - GOV-011: legacy Metis scratch migration - ACCEPTED, IMPLEMENTED. Reviewed supplemental
   baseline pins, preserved access/identity requirements in 3.3.1 and published a separate
   compatible patch. No real consumer application or desktop binary release.
+- GOV-012: repository-aware patch compatibility - ACCEPTED, IMPLEMENTED. Classify actual
+  installed files, rank/filter options and explain failures; keep Preview/Apply separate.

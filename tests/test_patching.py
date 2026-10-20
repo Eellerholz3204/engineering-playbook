@@ -228,6 +228,14 @@ class PatchTests(unittest.TestCase):
             view = app.patch_view
             view.repository.value = str(self.repo)
             view.bundle.value = str(self.bundle)
+            view.choices["bundles"].add(str(self.bundle))
+            view.populate()
+            before = tree_bytes(self.repo)
+            await view.repository_selected()
+            self.assertEqual("Compatible", view.compatibility[str(self.bundle)][0])
+            self.assertIsNone(view.report)  # Classification is not approval to apply.
+            self.assertEqual(before, tree_bytes(self.repo))
+            self.assertFalse(self.scratch.exists())
             await view.preview(None)
             self.assertTrue(view.report["can_apply"])
             self.assertEqual("Apply patch", app.next.content)
@@ -241,6 +249,7 @@ class PatchTests(unittest.TestCase):
             await view.apply(None)
             self.assertTrue(view.completed, app.error.value)
             self.assertEqual("applied", view.report["status"])
+            self.assertEqual("Already applied", view.compatibility[str(self.bundle)][0])
             view.close(None)
             self.assertEqual("Choose type", app.next.content)
         asyncio.run(scenario())

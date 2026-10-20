@@ -378,3 +378,54 @@ tests protect product baseline/ownership behavior. Existing PR #1 remains the re
 vehicle. No real consumer write, new PR, merge, desktop release or cleanup occurred.
 No next implementation milestone is accepted. Real apply and AGENTS.md/template
 reconciliation remain explicit user/project-owner actions.
+
+## GOV-012 — Repository-aware patch compatibility — 2026-10-20
+
+ACCEPTED, CURRENT under Eric's approval to identify compatible patches for the
+selected repository, show compatible options first and hide incompatible choices
+behind Show all. Builder uses its existing validated external downloader and
+read-only inspection engine, not version-name inference or a second matching policy.
+
+Implemented four result labels, per-choice explanations, compatible-first ordering,
+explicit-selection preservation, unknown/failed-check visibility and no-compatible
+guidance. Selecting a repository, browsing or explicit discovery/refresh checks the
+available choices. Checks are serial with progress and stop-after-current behavior;
+remaining options stay Not checked. Repository changes discard old results. Already
+applied means the target framework bytes match even if a different patch receipt
+exists. Scans never create an Apply-ready transaction; Preview independently checks
+current files, and Apply keeps its existing validation/recovery boundary.
+
+Focused verification: all 23 UI/patch tests passed in 72.694 seconds. Four new UI
+contracts cover classification/order/filtering, errors and explicit selections,
+repository changes/refresh/preview drift, cancellation/delayed-result isolation and
+empty states. The maintained real-engine UI round-trip also proves scanning makes
+no repository writes and does not create an apply approval.
+
+Actual desktop verification used all three published releases and a disposable
+repository generated with PowerShell from the original 3.2.1 baseline. Exactly one
+compatible patch was shown/selected, two incompatible choices were hidden and
+available through Show all, and explicit selection explained the incompatible case.
+Scanning/preview preserved all project bytes; separate Apply upgraded only the
+disposable project. Refresh with downloads disabled recognized both identical target
+releases as Already applied. Screenshots were inspected; all QA scripts/artifacts
+remain in external scratch. No real consumer, published asset, binary or PR changed.
+
+Updated patch/Builder guides and owning records; ADR GOV-012 records the advisory
+classification and interaction policy. Version labels remain 3.3.1 / Builder 0.1.0;
+this is unreleased source behavior, not a new patch publication. Full clean-export
+verification and commit/push closure follow. No next milestone is accepted.
+
+GOV-012 final verification: all 47 tests passed from the final clean tracked-file
+export in 161.019 seconds, including actual PowerShell generation, UI creation-plan
+round-trip and relocated packaging. The earlier clean export also passed all 47
+tests; the final run includes the additional stale-preview summary assertion.
+All 81 framework checksums and staged whitespace checks passed; the exported
+framework matches the working implementation byte-for-byte.
+
+Three independent disposable baseline fixtures (original 3.2.1, early 3.3.0 and
+legacy Metis 3.2.1) each showed/selected only their matching published patch and
+marked the other two incompatible. Framework bytes stayed unchanged during every
+scan. Tests also cover stale classifications, explicit selection, local errors,
+checksum failures, cancellation and delayed results. No new dependencies, diagnostic
+tests in consumers, live consumer writes, published-asset changes or binary release.
+Delivery: IMPLEMENTED; commit/push closure follows on the existing tracked branch.

@@ -1,5 +1,32 @@
 # Current milestone
 
+GOV-012: repository-aware patch compatibility. ACCEPTED, IMPLEMENTED under Eric's
+2026-10-20 approval to identify compatible patches for the selected repository.
+
+Scope: classify local/discovered published patches using existing verified downloads
+and the read-only patch engine; rank compatible choices, hide incompatible choices
+behind Show all, explain failures/already-applied states, refresh on repository
+selection and explicit refresh/discovery, and preserve the separate Preview/Apply
+gate. No consumer writes, new release, published-asset changes or binary rebuild.
+
+Verification: classification/filtering/selection and async-state tests; real engine
+no-write checks; actual desktop/live download flow on disposable repositories;
+full clean-export suite including PowerShell generation, UI plan round-trip and
+packaging; updated checksums. ADR GOV-012 records advisory scan/interaction boundaries.
+Checkpoint: synchronize docs, commit/push the tracked branch and verify remote.
+No next implementation milestone is accepted.
+
+Verification completed: all 47 tests passed from the final clean tracked-file
+export (161.019 seconds), including actual PowerShell generation, UI plan round-trip
+and packaging. All 81 checksums and whitespace checks passed. Live desktop discovery/
+download/classification and disposable apply/offline refresh passed. Each of the
+three historical baseline fixtures selected only its compatible published patch,
+with no writes during checks. Screenshots and QA stayed in external scratch.
+Commit/push closure follows; restart the source-launched Builder to load the change.
+No published release, real consumer, desktop binary or PR merge was changed.
+
+## Previous milestone: GOV-011
+
 GOV-011: legacy Metis scratch migration. ACCEPTED, IMPLEMENTED under Eric's approval
 to implement and publish a compatible migration for metis-engineering-playbook.
 
