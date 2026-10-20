@@ -8,6 +8,10 @@ no new desktop installer has been published.
 
 ## Added
 
+- Explicit **Patch blocked** explanation and disabled primary action for conflicting
+  previews; changing selection or refreshing resets the review gate. Conflicts can
+  indicate a different baseline, not necessarily local edits or corruption.
+
 - One patch selector for published releases and local ZIPs, readable release names,
   purpose descriptions and expandable release notes. Preview downloads and verifies
   published patches automatically; local previews use available sidecars/cache pins.

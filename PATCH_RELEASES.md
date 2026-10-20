@@ -92,6 +92,20 @@ Review changed files, conflicts and manual follow-up, then choose **Apply patch*
 Apply rechecks the exact ZIP digest captured internally during preview. Download
 and preview never apply the patch or change project files.
 
+An incompatible preview shows **Patch blocked** with the conflict count and a
+disabled primary action. This can be a different framework revision, not necessarily
+user edits or corruption. Select the patch for the installed baseline; after an
+explicit reconciliation outside Builder, use **Refresh lists** and preview again.
+There is no force-apply option. Source-launched Builder needs a restart to load
+this status UI; it is not an update to previously packaged desktop binaries.
+
+For early 3.3.0 installations matching source revision `7dc6467`, use
+**agent scratch workspaces (early 3.3.0 repositories)**, not the original 3.2.1 patch.
+See its [compatibility and release notes](https://github.com/Eellerholz3204/engineering-playbook/releases/tag/playbook-patch-scratch-workspace-early-330-2026-10).
+Both snapshots use the historical 3.3.0 version label; exact content checks, not
+that label alone, determine compatibility. The new bundle has the same verified
+target framework as the first patch and a different reviewed starting snapshot.
+
 This UI is available in the source-based Builder after restart; older packaged
 Builder downloads require a separately built app update. They can be bootstrapped
 using the trusted current source checkout and CLI below.

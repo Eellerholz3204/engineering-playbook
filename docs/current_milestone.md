@@ -1,5 +1,32 @@
 # Current milestone
 
+GOV-010: explicit blocked patch state and alternate-baseline scratch patch.
+ACCEPTED, CURRENT under Eric's approval to implement the blocked-state message
+and publish a compatible patch for early 3.3.0 repositories.
+
+Scope: clear conflict explanation and disabled primary action with selection/refresh
+recovery; publish a new ZIP/checksum release from exact source `7dc6467` to the
+previously reviewed target `dae80da`. Do not alter the first release, force conflicts,
+apply to real repositories, merge PRs or rebuild desktop binaries. Versions remain
+3.3.0/Builder 0.1.0 because the patch redistributes an existing target snapshot.
+Existing ADRs GOV-005/GOV-008 retain ownership and trust boundaries; no new ADR.
+
+Verification: focused blocked-state test, current full suite from clean export,
+target snapshot full suite, exact baseline/target/payload audit, disposable generation,
+preview/apply/preservation/reapply and instruction reconciliation, desktop rendering,
+read-only compatibility check against the named repository, tag and download-back checks.
+Checkpoint: synchronize docs/checksums, commit/push current tracked branch, publish
+the explicitly approved new release only after checks pass, verify remote identities,
+and record closure here and in the ledger. No next implementation milestone is accepted.
+
+Prepublication checks passed: all 41 current tests from the final clean export
+(137.019 seconds), all 30 target-snapshot tests, 81 current framework checksums,
+desktop blocked-state/recovery and disposable upgrade/preservation/reapply/governance.
+The exact compatible baseline has zero conflicts against the named real repository
+in read-only preview. Release publication and download-back verification follow.
+
+## Previous milestone: GOV-009
+
 GOV-009: one patch selector with automatic downloads and readable patch information.
 ACCEPTED, IMPLEMENTED under Eric's request to remove duplicate patch selectors and
 manual checksum entry and explain each patch in the available screen space.

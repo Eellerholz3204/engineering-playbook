@@ -227,6 +227,33 @@ class BuilderUITests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(str(bundle), view.bundle.value)
             self.assertEqual("Keep agent artifacts out of the project.", view.description.value)
 
+    async def test_conflicting_preview_is_explicitly_blocked_until_inputs_change(self):
+        self.app.open_patch_view(None)
+        view = self.app.patch_view
+        view.repository.value = str(Path(self.temporary.name) / "consumer")
+        view.bundle.value = str(Path(self.temporary.name) / "patch.zip")
+        report = dict(can_apply=False, already_applied=False, patch_id="test", summary="Test update",
+            base_version="3.3.0", target_version="3.3.0", sha256="a" * 64,
+            changes=[], conflicts=["GOVERNANCE_CONTEXT.md"], configuration_update=False, review_required=[])
+        with patch("repository_builder.patch_ui.local_checksum", return_value=None), \
+             patch("repository_builder.patch_ui.inspect_patch", return_value=report), \
+             patch("repository_builder.patch_ui.apply_patch") as apply:
+            await view.preview(None)
+            self.assertEqual("Patch blocked", self.app.next.content)
+            self.assertTrue(self.app.next.disabled)
+            self.assertFalse(view.bundle.disabled)
+            self.assertIn(view.blocked_notice, self.app.body.controls)
+            self.assertIn("1 framework file(s)", view.blocked_reason.value)
+            self.assertIn("Patch blocked", view.online_status.value)
+            view.busy(True)
+            view.busy(False)
+            self.assertTrue(self.app.next.disabled)
+            apply.assert_not_called()
+            view.refresh()
+            self.assertEqual("Preview patch", self.app.next.content)
+            self.assertFalse(self.app.next.disabled)
+            self.assertNotIn(view.blocked_notice, self.app.body.controls)
+
     async def test_catalog_disables_unsupported_virtual_environment(self):
         await self.app.advance(None)
         self.assertEqual(1, self.app.step)

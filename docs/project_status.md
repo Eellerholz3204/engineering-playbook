@@ -1,5 +1,35 @@
 # Project status
 
+## GOV-010 — 2026-10-19, release preparation
+
+Implemented explicit Patch blocked messaging, conflict count/baseline explanation
+and disabled primary action. The blocked state survives the end of the busy cycle;
+selection changes or Refresh restore preview. Existing patch validation is unchanged.
+
+Prepared `scratch-workspace-early-330-2026-10.zip` for the exact early 3.3.0 baseline
+`7dc6467b7c0482a048fe755dfea31356c56c3f72` to the first patch's identical target
+`dae80da38d4adb9b6db700fef16e45e5afa140e3`. All 76 installed framework files in
+metis-ingestion-control-plane match this baseline; a read-only candidate preview
+has zero conflicts and 22 changes. Its original framework is unchanged since the
+initial repository commit, not a set of uncommitted local edits.
+
+The artifact is 163112 bytes, SHA-256
+`d08de17db25022f1f6384e2e7b29ca8c5acf14ae204e058aa1e7e044afb1144f`.
+Target's 30 tests passed from a fresh Git export (135.958 seconds). Exact snapshot,
+allowlist and payload audits passed. Desktop blocked/recovery, disposable generation,
+upgrade, project preservation, reapply and instruction reconciliation passed. A
+temporary QA path-length issue was resolved within scratch; no project workaround
+was added. All 41 current tests passed from the final clean tracked-file export
+in 137.019 seconds, including PowerShell generation, UI plan round-trip and relocated
+packaging. All 81 current framework checksums and whitespace checks passed.
+Implementation/release-preparation commit and publication closure follow.
+
+Versions remain playbook 3.3.0 and Builder 0.1.0. This redistributes a previously
+reviewed target for a different baseline; the first release is unchanged. Publication
+of this separate patch is explicitly authorized. No real consumer apply, desktop
+binary rebuild or PR merge is authorized. Existing ADRs GOV-005/GOV-008 apply; no new
+ADR. Next implementation milestone: none. Branch: `codex/governance-context-loading`.
+
 ## GOV-009 — 2026-10-19
 
 Builder now uses one Patch selector for published releases and local ZIPs. Published

@@ -102,6 +102,12 @@ rechecks the internally captured digest and installed files, backs up changed fi
 project, and preserves AGENTS.md, project documents, source and tests. Existing
 project config retains its fields while recording the installed version and patch.
 
+Conflicts show **Patch blocked**, an explanation and a disabled primary action.
+Choose a matching patch or reconcile the differences explicitly, then Refresh and
+preview again. A conflict can mean another framework revision, not a damaged repo.
+Early 3.3.0 repositories matching `7dc6467` use the patch named
+**agent scratch workspaces (early 3.3.0 repositories)**, not the original 3.2.1 patch.
+
 The patch engine is shared with `scripts/playbook_patch.py`; it never executes bundle
 code or creates consumer commits/PRs. See [patch delivery](../PATCH_RELEASES.md) for
 building/publishing bundles, CLI bootstrapping, trust, backup and recovery details.

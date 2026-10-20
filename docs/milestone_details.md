@@ -253,3 +253,37 @@ Closure evidence: implementation commit
 and the implementation checkpoint working tree was clean. This documentation-only
 record follows on the same branch. Existing PR #1 remains the review vehicle;
 no new PR was created and no next implementation milestone is accepted.
+
+## GOV-010 — Blocked patch state and early-3.3.0 patch, 2026-10-19
+
+Eric explicitly approved both clear blocked-state UI and publication of a compatible
+scratch-workspace patch for the earlier 3.3.0 baseline. The prior patch's ten conflicts
+are a baseline mismatch: all 76 installed framework files in the named consumer match
+source `7dc6467`, not the original patch's 3.2.1 baseline. No consumer edits are required
+to diagnose it. Preserve the first release and do not apply to real repositories.
+
+Implemented a prominent Patch blocked explanation and conflict count, disabled primary
+action through busy-state completion, and selection/refresh recovery. Prepared new
+patch ID `scratch-workspace-early-330-2026-10`, base
+`7dc6467b7c0482a048fe755dfea31356c56c3f72`, target
+`dae80da38d4adb9b6db700fef16e45e5afa140e3`. Target payload is identical to the first
+release. Both source snapshots historically carry version 3.3.0; the distinct artifact
+and exact hashes define compatibility. No new framework implementation is released.
+
+Candidate ZIP: 163112 bytes, SHA-256
+`d08de17db25022f1f6384e2e7b29ca8c5acf14ae204e058aa1e7e044afb1144f`.
+Sidecar SHA-256: `cdc90934aea440cc8bed0caa6a10894a4487cbb03e7db901fb32ce6dafe71024`.
+Target snapshot's 30 tests passed from a fresh Git export in 135.958 seconds. Exact
+baseline/target/allowlist audit, original-target payload comparison and private-key/token
+pattern audit passed. Candidate preview against the real named repository is read-only
+and has zero conflicts/22 changes. Disposable old-generator desktop preview/apply,
+project preservation, no-op reapply and governance after explicit instruction merge
+passed. A long QA folder hit Windows path limits; repeating from a shorter temporary
+folder passed without a product workaround. All diagnostics/screenshots remain external.
+
+All 41 current tests passed from the final clean tracked-file export in 137.019
+seconds, including PowerShell generation, UI plan round-trip and packaging. All 81
+current framework checksums and whitespace checks passed. Publication closure follows.
+Updated patch/Builder guides, release notes and owning project records. Existing ADRs GOV-005/GOV-008 remain
+valid; no new ADR. No real consumer apply, binary release or PR merge. No next accepted
+implementation milestone remains.

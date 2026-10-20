@@ -101,6 +101,13 @@ class PatchView:
         # Keep the input subtree stable when filtering so typing retains focus.
         self.title = builder.heading("Update an existing repository.",
             "Preview a playbook patch before applying it to this project.")
+        self.blocked_reason = ft.Text(color="#B42318")
+        self.blocked_notice = builder.card([
+            ft.Text("Patch blocked", size=20, weight=ft.FontWeight.W_600, color="#B42318"),
+            self.blocked_reason,
+            ft.Text("This can mean a different framework revision or local edits—not a damaged project. Version numbers alone do not establish compatibility."),
+            ft.Text("No files were changed. Choose a patch for this repository's baseline, or reconcile the differences and Refresh lists to preview again. Do not overwrite the conflicts."),
+        ])
         self.inputs = builder.card([
             ft.Row([self.repository, self.pick_repository]), self.repository_path,
             ft.Row([self.check_button, self.pick_bundle, self.refresh_button]),
@@ -247,9 +254,11 @@ class PatchView:
         app.import_button.visible = False
         app.error.visible = False
         ready = self.report and self.report["can_apply"] and not self.report["already_applied"]
-        app.next.content = "Patch applied" if self.completed else ("Apply patch" if ready else "Preview patch")
+        blocked = bool(self.report and not self.report["can_apply"])
+        app.next.content = "Patch applied" if self.completed else (
+            "Patch blocked" if blocked else ("Apply patch" if ready else "Preview patch"))
         app.next.on_click = self.apply if ready else self.preview
-        app.next.disabled = self.completed or app.busy
+        app.next.disabled = self.completed or app.busy or blocked
         self.repository_path.value = self.repository.value or (
             "No installed repositories found. Browse to a repository containing engineering-playbook/."
             if not self.repository.options else "Choose the project you want to update.")
@@ -271,6 +280,10 @@ class PatchView:
                 "No patches found. Check for patches above, or Browse to a local ZIP."
                 if not self.bundle.options else "Choose a patch, then preview its compatibility with the selected repository.")
         app.body.controls = [self.title, self.inputs]
+        if blocked:
+            self.blocked_reason.value = (f"{len(self.report['conflicts'])} framework file(s) do not match "
+                f"this patch's supported starting snapshot or target ({self.report['base_version']} to {self.report['target_version']}).")
+            app.body.controls.insert(1, self.blocked_notice)
         if self.report:
             report = self.report
             details = [ft.Text(report["patch_id"], size=18, weight=ft.FontWeight.W_600),
@@ -294,7 +307,8 @@ class PatchView:
         app = self.builder
         app.busy = value
         app.page.window.prevent_close = value
-        app.back.disabled = app.next.disabled = value
+        app.back.disabled = value
+        app.next.disabled = value or self.completed or bool(self.report and not self.report["can_apply"])
         for control in (self.repository, self.bundle, self.pick_repository,
                         self.pick_bundle, self.refresh_button, self.check_button):
             control.disabled = value
@@ -329,7 +343,9 @@ class PatchView:
             self.report = await asyncio.to_thread(inspect_patch, path, Path(repo), checksum)
             self.reviewed_bundle = path
             self.reviewed_inputs = values
-            self.online_status.value = "Preview complete. No project files changed. Review the results before applying."
+            self.online_status.value = ("Patch blocked by framework conflicts. No project files changed."
+                if not self.report["can_apply"] else
+                "Preview complete. No project files changed. Review the results before applying.")
             self.show()
         except Exception as exc:
             self.report = self.reviewed_inputs = None

@@ -25,3 +25,6 @@
 - GOV-009: unified patch selection and readable patch information - ACCEPTED, IMPLEMENTED.
   Automatic verified download during Preview, no manual hash field, purpose and
   release notes; explicit Apply and existing trust boundaries remain unchanged.
+- GOV-010: explicit blocked patch state and early-3.3.0-compatible patch publication -
+  ACCEPTED, CURRENT. New alternate-baseline release to the existing verified target;
+  no forced overwrite, first-release changes, real consumer apply or binary rebuild.
