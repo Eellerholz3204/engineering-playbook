@@ -600,3 +600,9 @@ Staged whitespace and artifact ownership checks passed. No new scratch dependenc
 release assets, consumer changes or desktop binaries are included.
 Delivery: IMPLEMENTED. Commit/push closure follows on the current tracked branch.
 No next milestone is accepted; ADRs GOV-008/GOV-012 remain unchanged.
+
+GOV-015 delivery closure: implementation
+`a23f4fc3f2c61902ea1bc334fd68e3a6bc53d832` was committed and pushed to
+`origin/codex/governance-context-loading`; remote HEAD matched and the checkpoint
+working tree was clean. This documentation-only closure follows on the same branch.
+Existing review remains the vehicle; no new PR, merge or release occurred.

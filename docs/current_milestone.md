@@ -20,7 +20,9 @@ exported framework bytes match the working source. Live desktop verification of 
 selected cached ZIP plus published release shows one compatible entry, published
 notes and a successful disposable preview/apply preserving custom instructions.
 Screenshots were inspected. No consumer, published artifact or app binary changed.
-Commit/push closure on the existing tracked branch follows.
+Implementation `a23f4fc3f2c61902ea1bc334fd68e3a6bc53d832` was pushed and
+remote-verified on the existing tracked branch; the checkpoint tree was clean.
+This documentation-only closure follows. No next milestone is accepted.
 
 ## Previous milestone: GOV-014
 

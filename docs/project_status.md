@@ -16,7 +16,9 @@ inspection passed. All 59 tests passed from the clean staged-file export in 195.
 seconds, with no skips, including actual PowerShell generation and packaging.
 All 82 checksums validate; export and working framework bytes match. Delivery:
 IMPLEMENTED. Versions remain framework 3.3.1 / Builder 0.1.0 on the existing tracked
-`codex/governance-context-loading` branch. Commit/push closure follows.
+`codex/governance-context-loading` branch. Implementation
+`a23f4fc3f2c61902ea1bc334fd68e3a6bc53d832` was pushed, remote HEAD matched,
+and the checkpoint tree was clean. This documentation-only closure follows.
 No release, real consumer, desktop binary or architecture decision changes.
 Restart source-launched Builder and Check for patches to load the corrected picker.
 No next implementation milestone is accepted.
