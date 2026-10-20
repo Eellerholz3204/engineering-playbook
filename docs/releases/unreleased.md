@@ -2,6 +2,10 @@
 
 ## Added
 
+- Searchable existing-repository and patch dropdowns with bounded local discovery,
+  Browse fallback, session choices, full paths and Refresh. Changing inputs clears
+  prior preview state; changing patches clears the old expected checksum.
+
 - Build offline framework patch ZIPs/checksums from explicit base/target snapshots,
   with CLI preview/apply and a Builder **Patch existing repository** flow.
 - Validate every framework file, reject local conflicts and untrusted archive paths,

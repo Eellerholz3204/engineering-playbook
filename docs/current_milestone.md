@@ -1,5 +1,32 @@
 # Current milestone
 
+GOV-006: selectable existing repositories and patch bundles. ACCEPTED, IMPLEMENTED
+under Eric's 2026-10-19 request for dropdowns instead of manually named paths.
+
+Scope: searchable dropdowns with bounded local discovery, Browse fallback, session
+choices, full selected paths, refresh/empty states and preview invalidation.
+Preserve the GOV-005 patch engine, trust checks and explicit preview/apply boundary.
+No persistent registry, network catalog, publication, binary rebuild or downstream
+repository update is included. Existing ownership/dependency decisions are unchanged;
+no new ADR is required for this UI adapter change.
+
+Verification: focused UI discovery, browse, search and refresh checks; desktop
+rendering; full generator, UI round-trip, patch and packaging suite; refreshed
+framework checksums and clean-export verification.
+
+Checkpoint: update project records, review/stage only this milestone, commit and
+push the tracked branch and verify remote state. Report completion in this chat.
+No next implementation milestone is accepted; publication and rollout still require
+separate authorization. GOV-005 historical closure follows.
+
+Delivery: all 32 tests passed, including the final implementation in a fresh
+tracked-file export. Desktop discovery, preview and application to a disposable
+repository passed. All 80 checksums and staged whitespace checks passed. Two focused
+UI cases cover discovery/filtering, refresh, Browse/cancel and session reuse.
+Temporary screenshots and verification scripts remain outside the repository.
+
+## Previous milestone
+
 GOV-005: releaseable playbook patches for existing repositories. Accepted by Eric's
 2026-10-16 request to provide a way to release patches to existing repos. GOV-004
 remains implemented; its scope and verification are retained in the ledger.

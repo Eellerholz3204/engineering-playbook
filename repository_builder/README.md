@@ -80,7 +80,11 @@ partial output.
 ## Patch an existing repository
 
 Choose **Patch existing repository** on the Project screen, select a trusted patch
-ZIP and repository, and preview before applying. The review shows changes, local
+ZIP and repository from searchable dropdowns, and preview before applying. Lists
+discover installed projects in the parent folder and `~/source/repos`, plus patch
+ZIPs in Downloads, Builder's `dist` and folders browsed this session. Browse handles
+other locations; Refresh rescans without selecting a target or applying anything.
+The review shows changes, local
 conflicts, the ZIP digest and manual instruction/document reconciliation. Applying
 rechecks that digest and the installed files, backs up changed files outside the
 project, and preserves AGENTS.md, project documents, source and tests. Existing

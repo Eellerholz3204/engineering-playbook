@@ -1,5 +1,31 @@
 # Project status
 
+## GOV-006 — 2026-10-19
+
+Builder's patch screen now has searchable repository and patch dropdowns, Browse
+fallbacks, selected full paths and Refresh. Discovery is local and nonrecursive:
+installed projects in the creation parent folder and ~/source/repos; patch ZIPs in
+Downloads, Builder dist and ZIP folders browsed this session. Session choices are
+not persisted. Display metadata does not establish patch trust or compatibility.
+Searching, selection changes and Refresh invalidate preview; patch changes clear
+the expected checksum. The input controls remain stable while filtering.
+
+Versions remain playbook 3.3.0 and Builder 0.1.0. Branch:
+`codex/governance-context-loading`; the implementation starts from committed HEAD
+`c27ebf47b05b9f97a3dd8f3e6608d2281ba4f065`. Only GOV-006 files changed at this
+checkpoint; delivery identity will be recorded after commit/push verification.
+All 32 tests passed, including the final code in a fresh tracked-file export with
+declared dependencies and no ignored source artifacts. Actual desktop rendering,
+discovered choices, preview and disposable apply passed. Existing PowerShell
+generation, creation-plan round-trip, patch contracts and packaging passed; all 80
+checksums were refreshed and validated. Staged whitespace checks passed.
+
+No patch engine or architecture decision changed; no new ADR is needed. The
+source-launched Builder picks this up after restart. Packaged binaries, the prior
+patch candidate and real downstream repositories were not changed. No network
+release catalog or persistent recent-location registry is included. No next
+implementation milestone is accepted; publication and rollout remain separate.
+
 ## GOV-005 — 2026-10-16
 
 Patch delivery is implemented: reviewed ZIP/checksum production, no-write

@@ -109,3 +109,27 @@ was rechecked against the committed framework and matched exactly. This
 documentation-only delivery record follows on the same branch. Existing PR #1
 remains the review vehicle; no new PR was created.
 Next accepted implementation milestone: none. Publication and rollout remain explicit.
+
+## GOV-006 — Repository and patch dropdowns, 2026-10-19
+
+Accepted under Eric's request to replace manually named repository/ZIP paths with
+dropdowns. Implemented searchable selectors with bounded local discovery, patch
+ID/version labels, selected full paths, Browse, Refresh, empty-state guidance and
+session choices. Search and selection changes invalidate prior review; changing
+patches clears the old expected checksum. Stable input controls retain the filtering
+subtree. Existing preview/apply and patch integrity policy remain in their owner.
+
+Verification: all 32 tests passed in the working checkout and in tracked-file
+exports; the final export passed in 144.260 seconds. Two focused UI tests cover
+discovery, ignored non-patch ZIPs, empty/missing locations, Browse/cancel, session
+reuse, refresh, filtering and disabled busy controls. Existing actual PowerShell
+generation, UI plan round-trip, patch application/preservation and relocated package
+checks passed. All 80 framework checksums and staged whitespace checks passed.
+Desktop screenshots were inspected; discovery, preview and disposable apply passed.
+Temporary scripts, screenshots and exports stayed in external task scratch.
+
+Updated patch/application guidance, current milestone, roadmap, project status and
+unreleased notes. No lasting architecture change or new ADR. Delivery: IMPLEMENTED.
+No real downstream repository, prior candidate ZIP or packaged Builder binary was
+changed; no patch publication or automatic network discovery is included. Source
+launcher users restart Builder. No next implementation milestone is accepted.

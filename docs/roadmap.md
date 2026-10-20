@@ -15,3 +15,5 @@
 - GOV-005: releaseable patches for existing repositories - ACCEPTED, IMPLEMENTED.
   Scope: bundle build, preview/apply, preservation and recovery, Builder UI and
   artifact-only workflow. Actual publication and downstream rollout are separate.
+- GOV-006: repository and patch dropdowns - ACCEPTED, IMPLEMENTED. Bounded local
+  discovery, Browse fallback and refreshed preview state; no downstream updates.

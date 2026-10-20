@@ -47,7 +47,21 @@ requires its own tested bundle; a matching version label alone is insufficient.
 ## Preview and apply in Repository Builder
 
 Open the current Builder and choose **Patch existing repository** on the Project
-screen. Select the existing repository and downloaded ZIP. Paste the checksum from
+screen. Use the searchable **Existing repository** and **Available patch** dropdowns.
+Repository discovery checks immediate children of the creation screen's parent
+folder and `~/source/repos` for an installed `engineering-playbook/playbook.json`.
+Patch discovery checks Downloads, Builder's `dist` folder and ZIP folders browsed
+this session. It reads patch IDs and base/target versions for display; discovery
+does not establish authenticity or compatibility. No recursive disk scan runs.
+
+Use **Browse repositories…** or **Browse patch ZIPs…** for other locations, and
+**Refresh lists** after downloading a patch. Browsed choices remain available until
+Builder exits; no paths or selection history are written into project files.
+Full selected paths appear below the dropdowns. Nothing is selected or applied
+automatically. Searching, changing selections or refreshing requires a new preview;
+changing patches also clears the prior expected checksum.
+
+Paste the checksum from
 the trusted release when available. Choose **Preview patch**, review changed files,
 conflicts and manual follow-up, then choose **Apply patch**. Apply checks the exact
 ZIP digest shown in the preview again, even if no expected digest was entered.
