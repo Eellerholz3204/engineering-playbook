@@ -1,12 +1,12 @@
 # Project status
 
-## GOV-010 — 2026-10-19, release preparation
+## GOV-010 — 2026-10-19, published and verified
 
 Implemented explicit Patch blocked messaging, conflict count/baseline explanation
 and disabled primary action. The blocked state survives the end of the busy cycle;
 selection changes or Refresh restore preview. Existing patch validation is unchanged.
 
-Prepared `scratch-workspace-early-330-2026-10.zip` for the exact early 3.3.0 baseline
+Published `scratch-workspace-early-330-2026-10.zip` for the exact early 3.3.0 baseline
 `7dc6467b7c0482a048fe755dfea31356c56c3f72` to the first patch's identical target
 `dae80da38d4adb9b6db700fef16e45e5afa140e3`. All 76 installed framework files in
 metis-ingestion-control-plane match this baseline; a read-only candidate preview
@@ -22,11 +22,18 @@ temporary QA path-length issue was resolved within scratch; no project workaroun
 was added. All 41 current tests passed from the final clean tracked-file export
 in 137.019 seconds, including PowerShell generation, UI plan round-trip and relocated
 packaging. All 81 current framework checksums and whitespace checks passed.
-Implementation/release-preparation commit and publication closure follow.
+Implementation/release-preparation commit `b743aae37fb8c79a3bdda8676acec0617d396cc5`
+was pushed and matched the tracked remote; the preparation checkpoint tree was clean.
+This documentation-only closure follows on the same branch.
 
 Versions remain playbook 3.3.0 and Builder 0.1.0. This redistributes a previously
-reviewed target for a different baseline; the first release is unchanged. Publication
-of this separate patch is explicitly authorized. No real consumer apply, desktop
+reviewed target for a different baseline; the first release is unchanged. The new
+[release](https://github.com/Eellerholz3204/engineering-playbook/releases/tag/playbook-patch-scratch-workspace-early-330-2026-10)
+was published at 2026-10-20 03:18:12 UTC (2026-10-19 local), stable and not marked
+Latest. Draft/public download bytes and notes matched the committed candidate;
+Builder's live public discovery/download/read-only preview passed with zero conflicts
+and 22 changes for the named repository. Annotated tag `83f8a292afde942b3e5e022f56c6efa14f722806`
+resolves remotely to the exact target above. No real consumer apply, desktop
 binary rebuild or PR merge is authorized. Existing ADRs GOV-005/GOV-008 apply; no new
 ADR. Next implementation milestone: none. Branch: `codex/governance-context-loading`.
 

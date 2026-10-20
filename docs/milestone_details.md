@@ -287,3 +287,26 @@ current framework checksums and whitespace checks passed. Publication closure fo
 Updated patch/Builder guides, release notes and owning project records. Existing ADRs GOV-005/GOV-008 remain
 valid; no new ADR. No real consumer apply, binary release or PR merge. No next accepted
 implementation milestone remains.
+
+GOV-010 publication closure: [release](https://github.com/Eellerholz3204/engineering-playbook/releases/tag/playbook-patch-scratch-workspace-early-330-2026-10)
+published at 2026-10-20 03:18:12 UTC (2026-10-19 local), not a draft/prerelease and
+not marked Latest. Draft assets were downloaded and verified before publishing;
+public assets were then downloaded through Builder's unauthenticated HTTPS adapter.
+Both matched the exact local bytes and GitHub digests above. Published notes match
+the committed release document. Live Builder discovery selected the friendly early
+3.3.0 title, downloaded and previewed against the real named repository with zero
+conflicts/22 changes, without applying. The first release's notes and digests remain
+unchanged. The named consumer's working tree remained clean.
+
+- ZIP asset ID `658132684`, 163112 bytes; sidecar asset ID `658132683`, 107 bytes.
+- Annotated tag `playbook-patch-scratch-workspace-early-330-2026-10`, object
+  `83f8a292afde942b3e5e022f56c6efa14f722806`, peeled target
+  `dae80da38d4adb9b6db700fef16e45e5afa140e3`; local/remote identities matched.
+- Implementation/preparation commit `b743aae37fb8c79a3bdda8676acec0617d396cc5`
+  was pushed to `origin/codex/governance-context-loading`; remote HEAD matched and
+  the preparation checkpoint tree was clean. This documentation-only closure follows.
+
+Delivery: IMPLEMENTED. Existing PR #1 remains the review vehicle; no new PR, merge,
+consumer write or desktop binary release occurred. No next implementation milestone
+is accepted. Restart the source-launched Builder and select the early-3.3.0 patch;
+real application and subsequent instruction reconciliation remain explicit.

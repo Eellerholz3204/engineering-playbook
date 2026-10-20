@@ -6,6 +6,11 @@ patch. The source implementation history below also covers Builder features awai
 a separate packaged app release. The later dropdown changes are not in this patch;
 no new desktop installer has been published.
 
+The same target framework is also published as
+[scratch-workspace-early-330-2026-10](scratch-workspace-early-330-2026-10.md) for
+the exact early-3.3.0 baseline `7dc6467`. It is an alternate-baseline patch, not a
+new target snapshot or desktop release. The original 3.2.1 patch remains unchanged.
+
 ## Added
 
 - Explicit **Patch blocked** explanation and disabled primary action for conflicting

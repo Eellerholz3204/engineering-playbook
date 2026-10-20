@@ -1,7 +1,7 @@
 # Current milestone
 
 GOV-010: explicit blocked patch state and alternate-baseline scratch patch.
-ACCEPTED, CURRENT under Eric's approval to implement the blocked-state message
+ACCEPTED, IMPLEMENTED under Eric's approval to implement the blocked-state message
 and publish a compatible patch for early 3.3.0 repositories.
 
 Scope: clear conflict explanation and disabled primary action with selection/refresh
@@ -23,7 +23,14 @@ Prepublication checks passed: all 41 current tests from the final clean export
 (137.019 seconds), all 30 target-snapshot tests, 81 current framework checksums,
 desktop blocked-state/recovery and disposable upgrade/preservation/reapply/governance.
 The exact compatible baseline has zero conflicts against the named real repository
-in read-only preview. Release publication and download-back verification follow.
+in read-only preview.
+
+Published `playbook-patch-scratch-workspace-early-330-2026-10` at
+2026-10-20 03:18:12 UTC (2026-10-19 local). Draft and public download-back bytes,
+release notes, stable feed discovery and read-only Builder preview passed. Remote
+annotated tag points to the exact reviewed target. First release remains unchanged;
+no real consumer apply occurred. Preparation commit `b743aae` was pushed and verified;
+this documentation-only closure records the completed milestone. No next scope remains.
 
 ## Previous milestone: GOV-009
 
