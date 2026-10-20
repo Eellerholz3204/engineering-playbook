@@ -495,3 +495,14 @@ recipe from it produces the candidate's exact manifest and payload. The candidat
 ZIP/sidecar retain the SHA above. The final real-repository read-only audit and
 disposable-copy preservation/reapply again passed for all 15 installations.
 Delivery: IMPLEMENTED. Commit/push closure follows on the existing tracked branch.
+
+GOV-013 delivery closure: implementation
+`9ef4b378301489c86c3866b30dd3aa2e3bd9f398` was committed and pushed to
+`origin/codex/governance-context-loading`. Remote HEAD matched that exact commit
+and the implementation checkpoint tree was clean. This documentation-only record
+follows on the same branch. Existing PR #1 remains the review vehicle; no new PR,
+merge, published asset, consumer apply or desktop binary release occurred.
+The local portable candidate remains in external task scratch with its sidecar.
+Restart source-launched Builder and Browse to it for explicit preview; it will
+not appear in the online release list until separately authorized publication.
+No next implementation milestone is accepted.

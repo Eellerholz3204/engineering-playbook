@@ -29,7 +29,9 @@ without skips. Actual PowerShell generation, UI round-trips, both patch formats 
 relocated packaging passed. All 82 checksums passed; exported framework bytes equal
 the working source, and the candidate manifest/payload match the final recipe.
 The final read-only/disposable-copy audit again passed for all 15 installations.
-Tracked-branch commit/push closure follows in the ledger.
+Implementation `9ef4b378301489c86c3866b30dd3aa2e3bd9f398` was pushed to
+`origin/codex/governance-context-loading`; remote HEAD matched and the checkpoint
+tree was clean. This documentation-only closure follows on the same branch.
 
 Branch remains `codex/governance-context-loading`; versions remain framework 3.3.1 /
 Builder 0.1.0. ADR GOV-013 records the additive write boundary. The candidate is local

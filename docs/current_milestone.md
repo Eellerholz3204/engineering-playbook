@@ -27,7 +27,9 @@ payload match the final source recipe exactly. All 15 audited installations pass
 read-only compatibility plus disposable-copy apply/preservation/reapply, including
 the final Markdown guards. Desktop rendered instruction preview and success state
 were inspected. No real consumer, published release or binary changed.
-Implementation commit/push closure follows in the ledger.
+Implementation `9ef4b378301489c86c3866b30dd3aa2e3bd9f398` was committed and pushed
+to the tracked branch; remote HEAD matched and the checkpoint tree was clean.
+This documentation-only closure follows. No next accepted milestone remains.
 
 ## Previous milestone: GOV-012
 
