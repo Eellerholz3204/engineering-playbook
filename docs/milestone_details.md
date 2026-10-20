@@ -310,3 +310,44 @@ Delivery: IMPLEMENTED. Existing PR #1 remains the review vehicle; no new PR, mer
 consumer write or desktop binary release occurred. No next implementation milestone
 is accepted. Restart the source-launched Builder and select the early-3.3.0 patch;
 real application and subsequent instruction reconciliation remain explicit.
+
+## GOV-011 — Legacy Metis scratch migration
+
+ACCEPTED, CURRENT under Eric's approval to implement and publish a compatible
+migration after both earlier patches conflicted with metis-engineering-playbook.
+The reviewed installation contains a valid 51-file 3.2.1 snapshot plus five later
+governance files. All 56 files match committed content at
+`1dfdd6c3b22dea347284c7e4ec757d89d5233429` after read-only encoding comparison;
+exact installed bytes, not normalized hashes, define the patch baseline. Existing
+consumer changes are outside the framework and are preserved without application.
+
+Implemented publisher-only `--base-additions` with explicit exact pins, validated
+base snapshot and target allowlist membership. No inferred ownership, base override,
+new patch schema or relaxed consumer matching. Promoted the reusable access/identity
+startup/documentation requirements into target framework 3.3.1; no project-specific
+identity facts are copied. Builder remains 0.1.0. ADR GOV-011 records the extension.
+
+Focused verification: all 10 patch tests passed (69.122 seconds), including CLI
+legacy build, BOM/CRLF exact matching, rejection of unsafe/invalid/overriding pins,
+preservation and no-op reapply. Candidate audit matched 56 base and 82 target files;
+real consumer read-only preview has zero conflicts and 61 changes. Existing version-1
+reader compatibility passed. Desktop disposable preview/apply preserved project,
+identity and unknown files, created no absent configuration, and passed governance
+after explicit generic/Metis instruction reconciliation. Screenshots and diagnostic
+scripts remain external; no real consumer files changed. Full-suite verification
+and release identity/publication closure follow below.
+
+GOV-011 prepublication verification: all 43 tests passed from the final clean
+tracked-file export in 194.280 seconds, including actual PowerShell generation,
+UI plan round-trip and relocated packaging. The initial run exposed a Windows
+default-decoding mistake in the new assertion; explicit UTF-8 fixed that test and
+the complete final run passed. All 81 checksums and staged whitespace checks pass.
+The final ZIP and earlier QA candidate have identical manifests/payloads, matching
+the target source exactly. Final-artifact desktop verification and existing version-1
+reader compatibility passed again; no real consumer apply occurred.
+
+- Artifact: `scratch-workspace-legacy-metis-2026-10.zip`, 174097 bytes.
+- ZIP SHA-256: `d63068f7072bd70c6f988dafc459d0b4e764259571afc57b493f76deeeb4bc93`.
+- Sidecar: 110 bytes; SHA-256 `c9ec25c91a01ce980152f354ac139e66e54c93fa880473773fac2866ae31ee99`.
+- Target: framework 3.3.1, 82 files; baseline: 56 files (51 catalog + five explicit pins).
+- Published asset/tag identities will be recorded after download-back verification.

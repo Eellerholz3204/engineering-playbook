@@ -18,6 +18,8 @@ def main() -> int:
     build.add_argument("--output", type=Path, required=True)
     build.add_argument("--patch-id", required=True)
     build.add_argument("--summary", required=True)
+    build.add_argument("--base-additions", type=Path,
+                       help="Reviewed JSON path/SHA-256 map of legacy framework additions outside the base catalog")
     for name in ("preview", "apply"):
         command = commands.add_parser(name)
         command.add_argument("--bundle", type=Path, required=True)
@@ -26,7 +28,7 @@ def main() -> int:
     args = parser.parse_args()
     try:
         if args.command == "build":
-            report = build_patch(args.base, args.target, args.output, args.patch_id, args.summary)
+            report = build_patch(args.base, args.target, args.output, args.patch_id, args.summary, args.base_additions)
         elif args.command == "preview":
             report = inspect_patch(args.bundle, args.repo, args.sha256)
         else:

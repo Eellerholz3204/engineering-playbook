@@ -1,5 +1,21 @@
 # Project status
 
+## GOV-011 — legacy migration in progress
+
+Preparing a separately approved release for metis-engineering-playbook's older
+3.2.1 installation: 51 checksummed files plus five later governance assets. The
+baseline content matches committed framework at `1dfdd6c3b22dea347284c7e4ec757d89d5233429`
+after read-only BOM/line-ending comparison; release pins retain exact installed
+bytes. Unrelated consumer work remains untouched. Publisher build now accepts
+reviewed additional baseline pins without changing consumer hash matching. Target
+3.3.1 preserves access/identity startup and documentation requirements; Builder
+remains 0.1.0. All 43 tests passed from the final clean export in 194.280 seconds,
+including PowerShell generation, UI plan round-trip and packaging. All 81 checksums,
+old-reader compatibility and final-artifact desktop/disposable preservation checks
+passed. Real consumer read-only preview has zero conflicts and 61 changes.
+Publication remains pending. Branch remains
+`codex/governance-context-loading`; existing PR #1 remains the review vehicle.
+
 ## GOV-010 — 2026-10-19, published and verified
 
 Implemented explicit Patch blocked messaging, conflict count/baseline explanation

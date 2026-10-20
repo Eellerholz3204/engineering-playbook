@@ -104,3 +104,27 @@ Consequences: browsing/downloading does not apply patches or execute payload cod
 Existing preview, baseline checks, explicit Apply and backup/recovery remain required.
 No automatic update scheduler, arbitrary feed URLs, private releases, prereleases,
 desktop self-update or publication changes are included.
+
+## GOV-011 — Reviewed legacy baseline additions
+
+Status: ACCEPTED under Eric's legacy migration implementation/publication approval.
+
+Context: the older Metis 3.2.1 catalog contains 51 framework files, while five
+governance files were installed additively. Treating these as absent additions
+blocks a safe upgrade; forcing replacement would discard reviewed local policy.
+
+Decision: extend publisher-side build with an explicit JSON path/SHA-256 map for
+reviewed supplemental base files. Validate the original snapshot unchanged, reject
+base overrides and paths outside the target allowlist, and verify every supplied
+pin against exact bytes. Emit the existing version-1 before/after format. Do not
+normalize consumer files or infer ownership from directory contents. Integrate the
+reusable access/identity requirements into the target framework before migration.
+
+Rationale: legacy adoption can be represented by the existing content-hash contract
+without changing consumer trust, conflict handling, rollback or project preservation.
+
+Consequences: releases remain specific to audited bytes, including BOM/line endings.
+Other baselines need independent review. Publisher recipes contain hashes only,
+not project documents or credentials. Missing project configuration stays missing;
+Metis instructions must still be preserved/reconciled manually. Existing releases
+remain immutable. This supersedes no prior application or publication boundaries.

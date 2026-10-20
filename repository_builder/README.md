@@ -108,6 +108,11 @@ preview again. A conflict can mean another framework revision, not a damaged rep
 Early 3.3.0 repositories matching `7dc6467` use the patch named
 **agent scratch workspaces (early 3.3.0 repositories)**, not the original 3.2.1 patch.
 
+The older, separately governed `metis-engineering-playbook` installation uses
+**agent scratch workspaces (legacy Metis 3.2.1 to 3.3.1)**. This is an exact-baseline
+migration, not a general force upgrade. Access/identity requirements are retained;
+local project documents and AGENTS.md remain untouched and may need reconciliation.
+
 The patch engine is shared with `scripts/playbook_patch.py`; it never executes bundle
 code or creates consumer commits/PRs. See [patch delivery](../PATCH_RELEASES.md) for
 building/publishing bundles, CLI bootstrapping, trust, backup and recovery details.

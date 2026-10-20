@@ -32,6 +32,15 @@ Capability packs may add operator-console, workspace, document-processing, servi
 operations, or AI-governance documents. Do not install or maintain a capability document
 for a repository that does not implement that capability.
 
+### `docs/access_and_identity.md` when applicable
+
+A project that uses external identities, credentials, cloud roles, or workload identity
+must maintain a project-specific access and identity document. Record the authority
+boundary, named identity types, canonical infrastructure and workflow definitions,
+verification evidence, operating constraints, and rollback path. Link the exact additional
+artifacts that must be read before an agent changes or uses those identities. Keep account-
+and repository-specific facts in the project document, not in the reusable framework.
+
 ## Decision and delivery terminology
 
 Track product or architecture decisions independently from delivery. Decision statuses are

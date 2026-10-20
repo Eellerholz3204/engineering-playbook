@@ -1,5 +1,32 @@
 # Current milestone
 
+GOV-011: legacy Metis scratch migration. ACCEPTED, CURRENT under Eric's approval
+to implement and publish a compatible migration for metis-engineering-playbook.
+
+Scope: reviewed publisher-only baseline additions, unchanged version-1 patch
+application, preservation of reusable access/identity policy in playbook 3.3.1,
+and a separate release for the audited legacy 3.2.1 installation. Preserve both
+prior releases. No real consumer apply, project edits, PR merge or app binary release.
+
+Verification: exact committed-content/installed-byte baseline audit; focused
+addition-pin and policy contracts; full clean-export suite including PowerShell
+generation, UI plan round-trip and packaging; disposable upgrade/preservation,
+reapply and governance checks; real repository read-only preview; draft and public
+download-back plus remote tag/branch verification. ADR GOV-011 records the narrow
+publisher extension; no consumer matching or ownership boundary is relaxed.
+
+Checkpoint: update owning records/checksums, commit/push the tracked branch,
+publish only after checks pass and record closure. No next accepted milestone.
+
+Prepublication verification passed: all 43 tests from the final clean export
+(194.280 seconds), including PowerShell generation, UI plan round-trip and packaging.
+All 81 framework checksums passed. The final artifact passed exact baseline/payload
+audit, old-reader compatibility and desktop disposable apply/preservation/reapply/
+governance reconciliation. Read-only preview against the named consumer has zero
+conflicts and 61 changes. No real consumer apply occurred. Publication is pending.
+
+## Previous milestone: GOV-010
+
 GOV-010: explicit blocked patch state and alternate-baseline scratch patch.
 ACCEPTED, IMPLEMENTED under Eric's approval to implement the blocked-state message
 and publish a compatible patch for early 3.3.0 repositories.

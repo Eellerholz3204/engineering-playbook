@@ -24,6 +24,12 @@ class GovernanceTests(unittest.TestCase):
         installed_policy = (repo / "engineering-playbook/GOVERNANCE_CONTEXT.md").read_text()
         self.assertIn("## Model and reasoning-effort routing", installed_policy)
         self.assertIn("Governed-judgment tier, medium effort", installed_policy)
+        workflow = (repo / "engineering-playbook/DEVELOPMENT_WORKFLOW.md").read_text(encoding="utf-8-sig")
+        requirements = (repo / "engineering-playbook/DOCUMENTATION_REQUIREMENTS.md").read_text(encoding="utf-8-sig")
+        self.assertIn("Read `docs/access_and_identity.md`", workflow)
+        self.assertIn("canonical artifacts referenced by those documents", workflow)
+        self.assertIn("### `docs/access_and_identity.md` when applicable", requirements)
+        self.assertIn("authority\nboundary", requirements)
         self.assertEqual([], check(repo, source=ROOT, local_only=True))
         central = self.base / "authority"
         (central / "docs").mkdir(parents=True)

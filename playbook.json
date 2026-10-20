@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "playbook_name": "Engineering Playbook",
-  "playbook_version": "3.3.0",
+  "playbook_version": "3.3.1",
   "install_directory": "engineering-playbook",
   "immutable_framework_files": [
     "ARCHITECTURE_PRINCIPLES.md",

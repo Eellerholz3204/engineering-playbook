@@ -46,6 +46,28 @@ requires its own tested bundle; a matching version label alone is insufficient.
 
 ## Preview and apply in Repository Builder
 
+### Legacy installations with separately adopted governance
+
+Some older catalogs omit governance files installed later. A publisher may pass
+`--base-additions reviewed-baseline.json` to `build`: this JSON object maps each
+additional framework-relative path to its reviewed, exact SHA-256. The original
+base catalog/checksums must still validate. Each additional file must exist, match
+its pin, be outside the base allowlist and belong to the target allowlist. There
+is no directory scan, baseline override, text normalization or consumer force mode.
+The resulting ZIP uses the existing version-1 format and works with existing
+patch-capable Builders. Review policy differences before building; exact pins do
+not establish that replacing a local policy is appropriate.
+
+For the reviewed legacy installation in **metis-engineering-playbook**, choose
+**agent scratch workspaces (legacy Metis 3.2.1 to 3.3.1)**. It preserves the reusable
+access/identity requirements in the new framework and leaves project documents,
+AGENTS.md and unknown files untouched. This baseline includes 51 catalog files plus
+five adopted governance files, with their historical BOM/line-ending bytes. Other
+3.2.1 installations are not automatically compatible. See the
+[legacy migration notes](https://github.com/Eellerholz3204/engineering-playbook/releases/tag/playbook-patch-scratch-workspace-legacy-metis-2026-10).
+
+### Select and review a patch
+
 To obtain a patch directly, choose **Patch existing repository**, then **Check for
 patches**. Choose an **Existing repository** and an entry in the single **Patch**
 selector, then **Preview patch**. Published releases and local ZIPs share this list.

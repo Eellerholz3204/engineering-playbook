@@ -19,6 +19,9 @@ Before changing anything:
 9. Preserve unrelated work and identify pre-existing changes.
 10. Use the external task workspace and artifact ownership rules in
     `GOVERNANCE_CONTEXT.md` for experiments, diagnostics and local workarounds.
+11. Read `docs/access_and_identity.md` and other project-specific security or operations
+    documents when present. When the work touches an external identity, credential,
+    permission, or runtime, also read the canonical artifacts referenced by those documents.
 
 ## Milestone discipline
 

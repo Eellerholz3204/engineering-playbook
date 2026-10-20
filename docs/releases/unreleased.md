@@ -13,6 +13,13 @@ new target snapshot or desktop release. The original 3.2.1 patch remains unchang
 
 ## Added
 
+- Publisher-only `--base-additions` pins for separately adopted legacy governance
+  files; emitted patches retain exact version-1 matching and all preservation rules.
+- Framework 3.3.1 retains the access/identity startup and documentation requirements
+  from the reviewed legacy Metis installation. No project identity facts are bundled.
+  The dedicated legacy patch is pending verification/publication; prior releases
+  and packaged Builder binaries remain unchanged.
+
 - Explicit **Patch blocked** explanation and disabled primary action for conflicting
   previews; changing selection or refreshing resets the review gate. Conflicts can
   indicate a different baseline, not necessarily local edits or corruption.

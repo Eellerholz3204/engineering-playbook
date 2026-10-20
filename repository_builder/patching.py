@@ -109,13 +109,30 @@ def snapshot(root: Path) -> tuple[dict, dict[str, bytes]]:
     return validate_snapshot(files), files
 
 
-def build_patch(base: Path, target: Path, output: Path, patch_id: str, summary: str) -> dict:
+def build_patch(base: Path, target: Path, output: Path, patch_id: str, summary: str,
+                base_additions: Path | None = None) -> dict:
     if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,79}", patch_id):
         raise ValueError("Use a patch ID of at most 80 letters, numbers, hyphens and underscores.")
     if not summary.strip():
         raise ValueError("Provide a release summary explaining the patch.")
     before_catalog, before = snapshot(base)
     after_catalog, after = snapshot(target)
+    if base_additions is not None:
+        # Publisher-reviewed additions adopted outside an older catalog. Never
+        # infer ownership by scanning a consumer or relax hashes during apply.
+        additions = read_json(base_additions.read_bytes())
+        if not isinstance(additions, dict) or not additions:
+            raise ValueError("Base additions must be a nonempty path/checksum object.")
+        for name, expected in additions.items():
+            valid_path(name)
+            if name not in after or name.casefold() in {n.casefold() for n in before}:
+                raise ValueError(f"Base addition must be a new target framework path: {name}")
+            if not isinstance(expected, str) or not re.fullmatch(r"[0-9a-f]{64}", expected):
+                raise ValueError(f"Invalid base addition checksum: {name}")
+            data = destination(base, name).read_bytes()
+            if digest(data) != expected:
+                raise ValueError(f"Base addition checksum mismatch: {name}")
+            before[name] = data
     if before_catalog.get("schema_version") != after_catalog.get("schema_version"):
         raise ValueError("Catalog schema changes require a reviewed migration, not a patch.")
     for field in ("repository_profiles", "capability_packs"):

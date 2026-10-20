@@ -108,6 +108,69 @@ class PatchTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "checksum"):
             patching.apply_patch(self.bundle, self.repo, report["sha256"])
 
+    def legacy_addition_fixture(self):
+        name = "GOVERNANCE_CONTEXT.md"
+        catalog = patching.read_json((self.base / "playbook.json").read_bytes())
+        catalog["immutable_framework_files"].remove(name)
+        (self.base / "playbook.json").write_bytes(patching.json_bytes(catalog))
+        # Old installations may retain BOM/CRLF bytes; pins are exact, not normalized.
+        (self.base / name).write_bytes(b"\xef\xbb\xbfLegacy adopted governance.\r\n")
+        refresh_fixture(self.base)
+        for path in self.base.rglob("*"):
+            if path.is_file():
+                shutil.copyfile(path, self.repo / "engineering-playbook" / path.relative_to(self.base))
+        additions = self.root / "additions.json"
+        additions.write_bytes(patching.json_bytes({name: patching.digest((self.base / name).read_bytes())}))
+        return name, additions
+
+    def test_reviewed_legacy_additions_preserve_exact_baseline_and_project(self):
+        name, additions = self.legacy_addition_fixture()
+        without = self.root / "without.zip"
+        patching.build_patch(self.base, self.target, without, "without", "No adoption pins")
+        self.assertIn(name, patching.inspect_patch(without, self.repo)["conflicts"])
+        bundle = self.root / "legacy.zip"
+        process = subprocess.run([sys.executable, str(ROOT / "scripts/playbook_patch.py"), "build",
+            "--base", str(self.base), "--target", str(self.target), "--output", str(bundle),
+            "--patch-id", "legacy", "--summary", "Reviewed legacy migration",
+            "--base-additions", str(additions)], capture_output=True, text=True, timeout=30)
+        self.assertEqual(0, process.returncode, process.stderr)
+        manifest, _, sha = patching.load_patch(bundle)
+        self.assertEqual(1, manifest["schema_version"])
+        self.assertEqual(patching.digest((self.base / name).read_bytes()), manifest["before"][name])
+        (self.repo / ".engineering-playbook.json").unlink()
+        (self.repo / "engineering-playbook/unmanaged.txt").write_text("Preserve unknown content")
+        before = tree_bytes(self.repo)
+        self.assertTrue(patching.inspect_patch(bundle, self.repo)["can_apply"])
+        self.assertEqual(before, tree_bytes(self.repo))
+        installed = self.repo / "engineering-playbook" / name
+        original = installed.read_bytes()
+        for changed in (original.replace(b"\r\n", b"\n"), b"Different local governance"):
+            installed.write_bytes(changed)
+            self.assertIn(name, patching.inspect_patch(bundle, self.repo)["conflicts"])
+        installed.write_bytes(original)
+        self.assertEqual("applied", patching.apply_patch(bundle, self.repo, sha)["status"])
+        self.assertFalse((self.repo / ".engineering-playbook.json").exists())
+        for path in ("AGENTS.md", "docs/product_vision.md", "source.py", "engineering-playbook/unmanaged.txt"):
+            self.assertEqual(before[path], (self.repo / path).read_bytes())
+        self.assertEqual(patching.snapshot(self.target), patching.snapshot(self.repo / "engineering-playbook"))
+        self.assertEqual("already_applied", patching.apply_patch(bundle, self.repo, sha)["status"])
+
+    def test_legacy_addition_pins_cannot_override_or_expand_target_ownership(self):
+        name, additions = self.legacy_addition_fixture()
+        expected = patching.digest((self.base / name).read_bytes())
+        invalid = [{}, [], {name: "0" * 64}, {name: 42}, {"../outside": expected},
+                   {"VERSION": expected}, {"unmanaged.txt": expected}, {name.upper(): expected}]
+        for pins in invalid:
+            with self.subTest(pins=pins):
+                additions.write_bytes(patching.json_bytes(pins))
+                output = self.root / "invalid-legacy.zip"
+                with self.assertRaises(ValueError):
+                    patching.build_patch(self.base, self.target, output, "legacy", "Migration", additions)
+                self.assertFalse(output.exists())
+        additions.write_text('{"GOVERNANCE_CONTEXT.md":"' + expected + '","GOVERNANCE_CONTEXT.md":"' + expected + '"}')
+        with self.assertRaisesRegex(ValueError, "Duplicate"):
+            patching.build_patch(self.base, self.target, self.root / "duplicate-legacy.zip", "legacy", "Migration", additions)
+
     def test_payload_tampering_and_unsafe_zip_entries_are_rejected(self):
         with zipfile.ZipFile(self.bundle) as archive:
             entries = {n: archive.read(n) for n in archive.namelist()}
