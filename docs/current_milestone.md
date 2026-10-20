@@ -22,7 +22,9 @@ and packaging. All 81 checksums and whitespace checks passed. Live desktop disco
 download/classification and disposable apply/offline refresh passed. Each of the
 three historical baseline fixtures selected only its compatible published patch,
 with no writes during checks. Screenshots and QA stayed in external scratch.
-Commit/push closure follows; restart the source-launched Builder to load the change.
+Implementation commit `b8b940dc4e337b73a31d34350acfc1bd840ba985` was pushed to
+the tracked branch and matched remote HEAD; the checkpoint working tree was clean.
+This documentation-only closure follows. Restart the source-launched Builder to load the change.
 No published release, real consumer, desktop binary or PR merge was changed.
 
 ## Previous milestone: GOV-011

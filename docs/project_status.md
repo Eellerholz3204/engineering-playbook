@@ -20,7 +20,9 @@ Scans made no project writes. Temporary QA scripts/screenshots stayed outside Gi
 Unreleased source change; version labels remain framework 3.3.1 / Builder 0.1.0.
 No published release, real consumer repository or desktop binary is changed.
 Branch: `codex/governance-context-loading`; ADR GOV-012 records the interaction policy.
-Commit/push closure follows. No next accepted milestone remains; source-launched
+Implementation commit `b8b940dc4e337b73a31d34350acfc1bd840ba985` was pushed and
+matched remote HEAD, with a clean checkpoint working tree. This documentation-only
+closure follows. No next accepted milestone remains; source-launched
 Builder users restart to load the update.
 
 ## GOV-011 — 2026-10-19, legacy migration published and verified

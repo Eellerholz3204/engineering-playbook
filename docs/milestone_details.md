@@ -429,3 +429,10 @@ scan. Tests also cover stale classifications, explicit selection, local errors,
 checksum failures, cancellation and delayed results. No new dependencies, diagnostic
 tests in consumers, live consumer writes, published-asset changes or binary release.
 Delivery: IMPLEMENTED; commit/push closure follows on the existing tracked branch.
+
+GOV-012 delivery closure: implementation `b8b940dc4e337b73a31d34350acfc1bd840ba985`
+was committed and pushed to `origin/codex/governance-context-loading`; remote HEAD
+matched and the checkpoint working tree was clean. This documentation-only closure
+follows there. Existing PR #1 remains the review vehicle; no new PR or merge was
+performed. No next accepted milestone remains. Restart the source-launched Builder,
+choose a repository and Check for patches; matching is automatic, Apply is not.
