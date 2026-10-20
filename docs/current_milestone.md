@@ -1,5 +1,24 @@
 # Current milestone
 
+GOV-014: publish the portable scratch patch and retire the three older patch choices.
+ACCEPTED, CURRENT under Eric's explicit 2026-10-20 publication/discard request.
+
+Scope: publish the exact GOV-013 candidate bytes with the portable filename and
+sidecar, annotated tag at `9ef4b37`, readable release notes and stable feed entry.
+After download-back verification, retire the original/early-330/legacy-Metis patch
+releases to recoverable drafts and move their verified local cache entries outside
+Builder discovery. Preserve historical tags/assets, the desktop app release,
+applied consumer state and unrelated downloads. No consumer apply or PR merge.
+
+Verification: full suite from the exact release source export; candidate manifest/
+payload/source audit; draft/public download-back and GitHub digest verification;
+live Builder discovery/download/preview with only the portable choice remaining;
+local retirement identity/path checks; remote branch/tag verification. Record the
+retirement recovery paths and publication identities in the ledger. No new ADR or
+implementation milestone is needed. Commit/push owning records after verification.
+
+## Previous milestone: GOV-013
+
 GOV-013: portable additive scratch-workspace migration. ACCEPTED, IMPLEMENTED under
 Eric's 2026-10-20 request to support remaining repositories without overwriting
 their custom instructions.

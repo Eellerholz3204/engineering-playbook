@@ -506,3 +506,36 @@ The local portable candidate remains in external task scratch with its sidecar.
 Restart source-launched Builder and Browse to it for explicit preview; it will
 not appear in the online release list until separately authorized publication.
 No next implementation milestone is accepted.
+
+## GOV-014 — Publish portable patch and retire superseded choices — 2026-10-20
+
+ACCEPTED, CURRENT under Eric's explicit request to publish the portable patch for
+Builder download and discard the other patches. Scope is the reviewed portable
+artifact plus the three original/early-330/legacy-Metis release/cache choices, not
+installed consumer state, the Builder application release, other downloads or tags.
+Retirement uses recoverable drafts and external cache archival; no release payloads
+are repackaged and no installed updates are undone. ADR GOV-013 remains unchanged.
+
+Prepared the exact GOV-013 candidate, renamed for distribution without changing ZIP
+bytes: `agent-scratch-workspaces-portable-v1.zip`, 5844 bytes, SHA-256
+`8ec723e90b79e792bb6e7ba0afa1d5ec7087e7305931484d7b3a9f0bbbb48b3e`.
+The matching sidecar is 107 bytes, SHA-256
+`2dff9bc878a967b7451870611a303a5fda7361f51b90cbde141cec3bd8c87e79`.
+Exact source: `9ef4b378301489c86c3866b30dd3aa2e3bd9f398`. Its clean export
+validates all 82 checksums and rebuilds the exact candidate manifest/payload.
+The four payload destinations and secret-pattern audit passed; no project-specific
+facts, tests or unrelated framework updater files are shipped.
+
+Read-only retirement inventory resolved three release IDs: original `417889468`,
+early-330 `417964323`, legacy-Metis `417976515`. Their asset hashes match the prior
+published identities, and each exact local cache directory contains only its ZIP
+and verified sidecar. Downloads and Builder dist contain no other patch choices.
+Original metadata, notes and tag refs are retained in external task
+`portable-patch-publication/retirement-before.json`; cache retirement will retain
+the original content-addressed directories under that task's `retired-cache/`.
+The desktop app release `builder-v0.1.0` is outside retirement scope.
+
+The exact source export passed all 57 tests in 180.910 seconds with no skips,
+including actual PowerShell generation, UI round-trips and packaging.
+Publication/download-back, retirement and final delivery closure follow.
+No real consumer application, new PR, merge or desktop binary release is authorized.
