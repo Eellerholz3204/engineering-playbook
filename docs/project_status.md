@@ -1,5 +1,27 @@
 # Project status
 
+## GOV-007 — 2026-10-19
+
+Publication of the first framework patch is authorized and prepared. The existing
+candidate is unchanged, with published filename `scratch-workspace-2026-10.zip` and
+SHA-256 `02953297c36b7d0da5398b182e0efebe8d8f08a4abb66170ccdb3059ccc2c253`.
+Base: `7b22dd7dcad44826c32cf7c98d76b93b6f01cc43` (3.2.1); target:
+`dae80da38d4adb9b6db700fef16e45e5afa140e3` (3.3.0). No version bump is needed
+to publish this already-versioned snapshot. Builder remains 0.1.0.
+
+All 30 target-snapshot tests passed from a fresh Git export (140.859 seconds).
+Candidate hashes/payload matched both committed snapshots; fresh old-generator
+upgrade, preservation, reapply and post-reconciliation governance passed. All 80
+framework checksums passed. The archive contains only its manifest and 81 allowlisted
+framework files; a private-key/GitHub-token pattern scan found no matches. Release
+notes describe exact compatibility, manual reconciliation and recovery requirements.
+
+Branch: `codex/governance-context-loading`; starting committed HEAD:
+`2b8f7efd88be1ddc3b87daf836b32a52e7f2a6f2`. Only release documentation changes
+are in progress. Publication/tag/download verification will be recorded below after
+completion. No new ADR, consumer changes, Builder binary rebuild or PR merge is in
+scope. No next implementation milestone is accepted.
+
 ## GOV-006 — 2026-10-19
 
 Builder's patch screen now has searchable repository and patch dropdowns, Browse

@@ -1,5 +1,23 @@
 # Current milestone
 
+GOV-007: publish the first framework patch. ACCEPTED, CURRENT under Eric's explicit
+2026-10-19 approval to publish the prepared first patch release.
+
+Scope: verify the existing candidate unchanged, retain exact baseline/target source
+identities, publish a dedicated annotated tag and GitHub release with the ZIP,
+checksum and instructions, download back the assets and verify remote identities.
+Target remains playbook 3.3.0 at `dae80da`; no version bump or rebundling is needed.
+No Builder binary rebuild, PR merge, downstream apply or cleanup is authorized.
+
+Verification: complete target-snapshot suite from a clean Git export; candidate
+payload and baseline against committed snapshots; disposable old-generator upgrade,
+preservation, reapply and governance reconciliation; release asset and tag verification.
+Checkpoint: commit/push release documentation on the existing tracked branch,
+publish only after checks pass, then record publication evidence and final Git state.
+Report in this chat. No new ADR or next implementation milestone is required.
+
+## Previous milestone: GOV-006
+
 GOV-006: selectable existing repositories and patch bundles. ACCEPTED, IMPLEMENTED
 under Eric's 2026-10-19 request for dropdowns instead of manually named paths.
 

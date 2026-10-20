@@ -17,3 +17,6 @@
   artifact-only workflow. Actual publication and downstream rollout are separate.
 - GOV-006: repository and patch dropdowns - ACCEPTED, IMPLEMENTED. Bounded local
   discovery, Browse fallback and refreshed preview state; no downstream updates.
+- GOV-007: publish the first framework patch - ACCEPTED, CURRENT. Existing verified
+  3.2.1-to-3.3.0 candidate, annotated source tag and ZIP/checksum release assets;
+  no downstream application or Builder binary release.

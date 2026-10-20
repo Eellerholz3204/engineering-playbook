@@ -140,3 +140,23 @@ Closure evidence: implementation commit
 and the implementation checkpoint working tree was clean. This documentation-only
 record follows on the same branch. Existing PR #1 remains the review vehicle;
 no new PR was created.
+
+## GOV-007 — First framework patch publication, 2026-10-19
+
+Explicitly authorized by Eric after reviewing the local candidate and publication
+gap. Scope: publish that exact candidate under a dedicated annotated source tag,
+with ZIP/checksum assets, complete compatibility instructions and download-back
+verification. No downstream apply, cleanup, binary rebuild or PR merge is included.
+
+Prepared `scratch-workspace-2026-10.zip`, retaining the GOV-005 candidate's exact
+SHA-256 `02953297c36b7d0da5398b182e0efebe8d8f08a4abb66170ccdb3059ccc2c253`.
+Base commit `7b22dd7dcad44826c32cf7c98d76b93b6f01cc43` (3.2.1) and target
+`dae80da38d4adb9b6db700fef16e45e5afa140e3` (3.3.0) were exported freshly.
+Candidate baseline hashes and every payload byte matched those snapshots. All 30
+target tests passed in 140.859 seconds; all 80 framework checksums passed. A fresh
+3.2.1-generated repository passed preview, apply, preserved project content, no-op
+reapply and governance checks after explicit instruction merge. Archive allowlist
+and credential-pattern audit passed. One-release diagnostics stayed in scratch.
+
+Release notes are in `docs/releases/scratch-workspace-2026-10.md`. No architecture
+decision changed. Publication and remote verification are pending at this checkpoint.
