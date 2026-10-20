@@ -1,5 +1,32 @@
 # Project status
 
+## GOV-009 — 2026-10-19
+
+Builder now uses one Patch selector for published releases and local ZIPs. Published
+choices show the release title without the generic prefix/ZIP filename, an overview
+and expandable original release notes. Preview downloads and verifies the selected
+patch automatically; cached choices can be previewed offline. There is no manual
+SHA-256 field. Local sidecars are read automatically when present; the exact preview
+digest remains pinned internally for separate Apply. Selection changes invalidate
+review, and release identity changes invalidate cached remote mappings.
+
+Versions remain playbook 3.3.0 and Builder 0.1.0 on
+`codex/governance-context-loading`. Working-checkout verification: all 40 tests
+passed (135.868 seconds); the final additional cache-identity assertion also passed.
+Live desktop checks exercised published notes, unified selection, automatic download,
+read-only preview, offline reuse and disposable application with project preservation.
+Screenshots were inspected and retained in external scratch. All 81 framework
+checksums passed. The final clean tracked-file export passed all 40 tests in
+139.575 seconds, including all-profile PowerShell generation, UI plan round-trip
+and relocated packaged resources. Staged whitespace checks passed. Delivery:
+IMPLEMENTED; commit/push closure follows on the same tracked branch.
+
+Updated patch and Builder guides, milestone, roadmap and unreleased notes. Existing
+ADRs GOV-005/GOV-008 remain unchanged; this is a UI orchestration refinement, not a
+new publisher or application policy. No published patch/tag, real consumer project
+or packaged binary changed. Restart the source-launched Builder to load the changes.
+No next implementation milestone is accepted.
+
 ## GOV-008 — 2026-10-19
 
 Builder now checks the fixed public playbook GitHub repository on explicit user

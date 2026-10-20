@@ -22,3 +22,6 @@
   no downstream application or Builder binary release.
 - GOV-008: in-app published patch discovery and downloads - ACCEPTED, IMPLEMENTED.
   Fixed public release source, external validated cache and explicit preview/apply.
+- GOV-009: unified patch selection and readable patch information - ACCEPTED, IMPLEMENTED.
+  Automatic verified download during Preview, no manual hash field, purpose and
+  release notes; explicit Apply and existing trust boundaries remain unchanged.

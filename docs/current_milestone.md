@@ -1,5 +1,30 @@
 # Current milestone
 
+GOV-009: one patch selector with automatic downloads and readable patch information.
+ACCEPTED, IMPLEMENTED under Eric's request to remove duplicate patch selectors and
+manual checksum entry and explain each patch in the available screen space.
+
+Scope: unify published/local choices; download and verify as part of explicit
+Preview; show friendly release titles, purpose and expandable release notes;
+automatically read local sidecars/cache pins. Keep separate Apply, unchanged patch
+engine, fixed publisher and external cache boundaries. Existing ADRs remain valid.
+No published assets, real consumer repos, packaged binaries or PR merge are in scope.
+
+Verification: focused UI/cache/notes contracts, real published patch desktop flow
+using a disposable old-baseline repo, full suite including PowerShell generation,
+UI plan round-trip and packaging, clean tracked-file export and refreshed checksums.
+Checkpoint: synchronize project records, commit/push the tracked branch and verify
+remote state. Report here; no next implementation milestone is authorized.
+
+Delivery: all 40 tests passed locally and from the clean tracked-file export
+(139.575 seconds). Actual PowerShell generation, UI plan round-trip, packaging,
+live desktop published-patch download/notes, offline reuse and disposable apply
+passed. All 81 checksums and staged whitespace checks passed. QA artifacts stayed
+outside the checkout. Restart the source-launched Builder; no binary release or
+real consumer change occurred. Commit/push closure is recorded in the ledger.
+
+## Previous milestone: GOV-008
+
 GOV-008: check for and download published patches in Repository Builder. ACCEPTED,
 IMPLEMENTED under Eric's 2026-10-19 request to eliminate manual GitHub downloads.
 

@@ -8,6 +8,12 @@ no new desktop installer has been published.
 
 ## Added
 
+- One patch selector for published releases and local ZIPs, readable release names,
+  purpose descriptions and expandable release notes. Preview downloads and verifies
+  published patches automatically; local previews use available sidecars/cache pins.
+  Removed the separate download selector/action and manual SHA-256 entry. Apply
+  still requires a separate action and rechecks the previewed bytes.
+
 - Explicit in-app checking and downloading of published stable playbook patches,
   with checksum/archive validation, an external persistent cache, offline selection
   and clear network failure states. Preview/apply remain separate user actions.

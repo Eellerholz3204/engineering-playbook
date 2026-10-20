@@ -70,6 +70,7 @@ class PublishedPatch:
     name: str
     title: str
     asset_digest: str | None = None
+    notes: str = ""
 
     def __post_init__(self):
         safe_component(self.tag)
@@ -119,7 +120,9 @@ def available_patches():
                         continue
                     sha = None if raw_digest is None else raw_digest[7:]
                     title = release.get("name") or tag
-                    item = PublishedPatch(tag, name, str(title)[:200], sha)
+                    notes = release.get("body")
+                    item = PublishedPatch(tag, name, str(title)[:200], sha,
+                        notes[:32000] if isinstance(notes, str) else "")
                 except (ValueError, TypeError, KeyError, AttributeError):
                     continue
                 found[item.key] = item
@@ -155,6 +158,20 @@ def cached_checksum(path):
         return None
     ordinary_path(path)
     return path.parent.name
+
+
+def local_checksum(path):
+    """Use the cache pin or adjacent publisher sidecar without manual hash entry."""
+    expected = cached_checksum(path)
+    if expected:
+        return expected
+    sidecar = path.with_suffix(".zip.sha256")
+    ordinary_path(sidecar)
+    if not sidecar.exists():
+        return None
+    if sidecar.stat().st_size > CHECKSUM_LIMIT:
+        raise ValueError("Local checksum file exceeds the size limit.")
+    return checksum_value(sidecar.read_bytes(), path.name)
 
 
 def download_patch(item, repository=None):

@@ -79,21 +79,26 @@ partial output.
 
 ## Patch an existing repository
 
-Click **Check for patches**, select a published patch, then **Download selected
-patch** to get the ZIP/checksum directly from this project's public GitHub releases.
-Builder validates the download, selects it and fills the expected checksum. Verified
+Click **Check for patches**, choose the repository and a patch in the single **Patch**
+selector, then **Preview patch**. Builder downloads published patches directly from
+this project's public GitHub releases and verifies the checksum automatically;
+there is no hash to type or separate download step. Readable patch names, a purpose
+description and expandable release notes explain the change before preview. Verified
 downloads persist in an external local-app-data cache for offline use. No sign-in,
 startup polling or automatic application occurs; connection failures leave local
-Browse available. A download still requires repository selection, Preview and Apply.
+Browse available. Preview never applies a patch; **Apply patch** remains a separate action.
 
 Choose **Patch existing repository** on the Project screen, select a trusted patch
 ZIP and repository from searchable dropdowns, and preview before applying. Lists
 discover installed projects in the parent folder and `~/source/repos`, plus patch
-ZIPs in Downloads, Builder's `dist` and folders browsed this session. Browse handles
-other locations; Refresh rescans without selecting a target or applying anything.
-The review shows changes, local
-conflicts, the ZIP digest and manual instruction/document reconciliation. Applying
-rechecks that digest and the installed files, backs up changed files outside the
+ZIPs in Downloads, Builder's `dist` and folders browsed this session. Published and
+local patches use the same selector. Browse handles other locations; Refresh rescans
+without selecting a target or applying anything. Local previews automatically read
+the cache's checksum or an adjacent `.zip.sha256` file when present. Only use local
+ZIPs from a trusted publisher. A sole patch is selected after checking online;
+explicit selections and the repository choice are never switched automatically.
+The review shows changes, local conflicts and manual instruction/document reconciliation. Applying
+rechecks the internally captured digest and installed files, backs up changed files outside the
 project, and preserves AGENTS.md, project documents, source and tests. Existing
 project config retains its fields while recording the installed version and patch.
 

@@ -47,15 +47,19 @@ requires its own tested bundle; a matching version label alone is insufficient.
 ## Preview and apply in Repository Builder
 
 To obtain a patch directly, choose **Patch existing repository**, then **Check for
-patches**. Select a **Published patches** entry and click **Download selected patch**.
+patches**. Choose an **Existing repository** and an entry in the single **Patch**
+selector, then **Preview patch**. Published releases and local ZIPs share this list.
+Published patches show their readable release name, purpose and expandable release
+notes before download. A sole available patch is selected after checking; a target
+repository is never selected automatically. Existing selections are preserved.
 Builder checks the public `Eellerholz3204/engineering-playbook` GitHub releases,
 excluding drafts, prereleases and releases without a patch ZIP/checksum pair.
 No sign-in is required and no network check runs just from opening Builder.
 
-The downloaded checksum and full archive are validated before the ZIP is selected.
-The expected SHA-256 is filled automatically. Downloads are retained outside projects
+Preview downloads the selected published ZIP as needed and validates its checksum
+and full archive automatically. There is no manual SHA-256 field. Downloads are retained outside projects
 under `%LOCALAPPDATA%\RepositoryBuilder\patches\<sha256>\` (or `~/.cache` when local
-application data is unavailable). Completed downloads appear in the local patch list
+application data is unavailable). Completed downloads appear in the same patch list
 on later launches and can be previewed offline. Selecting a cached ZIP restores its
 pinned expected hash; preview still verifies the file. Damaged cache entries are
 reported, not silently overwritten. No automatic cache cleanup runs.
@@ -66,8 +70,7 @@ limits or oversized catalogs leave Browse/local preview available. Only the fixe
 publisher is supported; checksums protect integrity, not independent publisher
 authenticity. Downloading never applies a patch or determines project compatibility.
 
-Open the current Builder and choose **Patch existing repository** on the Project
-screen. Use the searchable **Existing repository** and **Available patch** dropdowns.
+Use the searchable **Existing repository** and **Patch** dropdowns.
 Repository discovery checks immediate children of the creation screen's parent
 folder and `~/source/repos` for an installed `engineering-playbook/playbook.json`.
 Patch discovery checks Downloads, Builder's `dist` folder and ZIP folders browsed
@@ -75,16 +78,19 @@ this session. It reads patch IDs and base/target versions for display; discovery
 does not establish authenticity or compatibility. No recursive disk scan runs.
 
 Use **Browse repositories…** or **Browse patch ZIPs…** for other locations, and
-**Refresh lists** after downloading a patch. Browsed choices remain available until
+**Refresh lists** to rescan local files. Browsed choices remain available until
 Builder exits; no paths or selection history are written into project files.
-Full selected paths appear below the dropdowns. Nothing is selected or applied
-automatically. Searching, changing selections or refreshing requires a new preview;
-changing patches also clears the prior expected checksum.
+Local paths appear below the dropdowns; published choices show download status.
+Searching, changing selections or refreshing requires a new preview. For local ZIPs,
+Builder automatically uses the cache's pinned checksum or an adjacent `.zip.sha256`
+file. An invalid sidecar blocks preview. Without either, archive integrity is still
+checked, but publisher authenticity must be established by obtaining the ZIP from
+a trusted source. Local selections show the manifest summary; published release
+notes are available after an online check. Notes are informational, not executed.
 
-Paste the checksum from
-the trusted release when available. Choose **Preview patch**, review changed files,
-conflicts and manual follow-up, then choose **Apply patch**. Apply checks the exact
-ZIP digest shown in the preview again, even if no expected digest was entered.
+Review changed files, conflicts and manual follow-up, then choose **Apply patch**.
+Apply rechecks the exact ZIP digest captured internally during preview. Download
+and preview never apply the patch or change project files.
 
 This UI is available in the source-based Builder after restart; older packaged
 Builder downloads require a separately built app update. They can be bootstrapped

@@ -83,7 +83,8 @@ class BuilderUITests(unittest.IsolatedAsyncioTestCase):
             view = self.app.patch_view
             self.assertEqual([str(repo)], [o.key for o in view.repository.options])
             self.assertEqual([str(bundle)], [o.key for o in view.bundle.options])
-            self.assertIn("3.2.1 → 3.3.0", view.bundle.options[0].text)
+            self.assertIn("3.2.1 to 3.3.0", view.bundle.options[0].text)
+            self.assertNotIn("release.zip", view.bundle.options[0].text)
             self.assertIsNone(view.repository.value)  # Never pick a target silently.
             view.repository.value = str(repo)
             view.bundle.value = str(bundle)
@@ -93,9 +94,8 @@ class BuilderUITests(unittest.IsolatedAsyncioTestCase):
             self.assertIsNone(view.report)
             self.assertEqual(str(repo), view.repository.value)
             self.assertEqual(str(bundle), view.bundle.value)
-            view.checksum.value = "old-patch-checksum"
-            view.bundle_changed()
-            self.assertEqual("", view.checksum.value)
+            self.assertFalse(hasattr(view, "checksum"))
+            self.assertFalse(hasattr(view, "remote"))
             view.repository.text = "typing another project"
             inputs = self.app.body.controls[1]
             view.search_changed(MagicMock(control=view.repository))
@@ -126,7 +126,7 @@ class BuilderUITests(unittest.IsolatedAsyncioTestCase):
             self.app.picker.pick_files.return_value = []
             await view.choose_repository(None)
             await view.choose_bundle(None)
-            self.assertEqual((str(repo), str(bundle), ""), view.values())
+            self.assertEqual((str(repo), str(bundle)), view.values())
             view.close(None)
             self.app.open_patch_view(None)
             self.assertEqual([str(bundle)], [o.key for o in self.app.patch_view.bundle.options])
@@ -135,49 +135,97 @@ class BuilderUITests(unittest.IsolatedAsyncioTestCase):
         self.assertIn(root, patches)
         self.assertIn(Path.home() / "Downloads", patches)
 
-    async def test_online_patch_check_download_and_errors_preserve_preview_gate(self):
-        item = PublishedPatch("playbook-patch-test", "test.zip", "Published test")
+    async def test_online_patch_preview_downloads_and_errors_preserve_apply_gate(self):
+        item = PublishedPatch("playbook-patch-test", "test.zip", "Playbook patch: agent scratch workspaces (3.2.1 to 3.3.0)",
+            notes="# Scratch workspaces\n\nPatch ID: `test`\n\nKeep temporary agent work outside projects.\n\n## Downloads\n\nRelease instructions.")
         with patch("repository_builder.patch_ui.available_patches", return_value=[item]) as check:
             self.app.open_patch_view(None)
             view = self.app.patch_view
             check.assert_not_called()  # Opening the screen is offline.
             await view.check_online(None)
-        self.assertEqual([item.key], [o.key for o in view.remote.options])
-        self.assertTrue(view.download_button.disabled)
-        view.remote.value = item.key
+        self.assertEqual([item.key], [o.key for o in view.bundle.options])
+        self.assertEqual(item.key, view.bundle.value)
+        self.assertEqual("agent scratch workspaces (3.2.1 to 3.3.0)", view.bundle.options[0].text)
+        self.assertEqual("Keep temporary agent work outside projects.", view.description.value)
+        self.assertTrue(view.notes.visible)
+        self.assertEqual(item.notes, view.notes_text.value)
+        repo = Path(self.temporary.name) / "consumer"
+        view.repository.value = str(repo)
         view.report = {"previous": "review"}
-        view.remote_changed()
+        view.changed()
         self.assertIsNone(view.report)
-        self.assertFalse(view.download_button.disabled)
         path = Path(self.temporary.name) / "downloaded.zip"
-        with patch("repository_builder.patch_ui.download_patch", return_value=(path, "a" * 64)) as download:
-            await view.download(None)
-        download.assert_called_once_with(item, None)
-        self.assertEqual(str(path), view.bundle.value)
-        self.assertEqual("a" * 64, view.checksum.value)
-        self.assertEqual("Preview patch", self.app.next.content)
-        self.assertIsNone(view.report)
-        self.assertFalse(view.completed)
-        with patch("repository_builder.patch_ui.cached_checksum", return_value="a" * 64):
-            view.checksum.value = ""
-            view.bundle_changed()
-            self.assertEqual("a" * 64, view.checksum.value)
+        report = dict(can_apply=True, already_applied=False, patch_id="test", summary="Verified summary",
+            base_version="3.2.1", target_version="3.3.0", sha256="a" * 64,
+            changes=[], conflicts=[], configuration_update=False, review_required=[])
+        with patch("repository_builder.patch_ui.download_patch", return_value=(path, "a" * 64)) as download, \
+             patch("repository_builder.patch_ui.inspect_patch", return_value=report) as inspect, \
+             patch("repository_builder.patch_ui.apply_patch") as apply:
+            await view.preview(None)
+            download.assert_called_once_with(item, repo)
+            inspect.assert_called_once_with(path, repo, "a" * 64)
+            apply.assert_not_called()
+            self.assertEqual(item.key, view.bundle.value)
+            self.assertEqual([item.key], [o.key for o in view.bundle.options])
+            self.assertEqual("Apply patch", self.app.next.content)
+            self.assertFalse(view.completed)
+            # Re-preview a verified download offline, still verifying its pinned hash.
+            await view.preview(None)
+            self.assertEqual(1, download.call_count)
+            self.assertEqual(2, inspect.call_count)
+            view.repository.value = str(repo / "different")
+            await view.apply(None)
+            apply.assert_not_called()
+            self.assertIsNone(view.report)
+        view.downloaded.clear()
         with patch("repository_builder.patch_ui.download_patch", side_effect=ValueError("checksum mismatch")):
-            await view.download(None)
+            await view.preview(None)
         self.assertIn("checksum mismatch", self.app.error.value)
         self.assertFalse(self.app.busy)
         self.assertIsNone(view.report)
         self.assertFalse(view.completed)
         with patch("repository_builder.patch_ui.available_patches", side_effect=ValueError("offline")):
             await view.check_online(None)
-        self.assertEqual(str(path), view.bundle.value)
+        self.assertEqual(item.key, view.bundle.value)
         self.assertTrue(self.app.error.visible)
         self.assertFalse(self.app.busy)
-        self.assertEqual([], view.remote.options)
-        self.assertTrue(view.download_button.disabled)
+        self.assertIn(item.key, [o.key for o in view.bundle.options])
         with patch("repository_builder.patch_ui.available_patches", return_value=[]):
             await view.check_online(None)
         self.assertIn("No published", view.online_status.value)
+        self.assertNotIn(item.key, [o.key for o in view.bundle.options])
+
+    async def test_cached_patch_merges_with_release_and_keeps_offline_summary(self):
+        root = Path(self.temporary.name)
+        bundle = root / "cached.zip"
+        with zipfile.ZipFile(bundle, "w") as archive:
+            archive.writestr("patch.json", json.dumps({"schema_version": 1, "patch_id": "scratch-rules",
+                "summary": "Keep agent artifacts out of the project.", "base_version": "3.2.1", "target_version": "3.3.0"}))
+        item = PublishedPatch("playbook-patch-test", bundle.name, "Scratch workspaces", "a" * 64)
+        with patch("repository_builder.patch_ui.cached_patches", return_value=[bundle]), \
+             patch("repository_builder.patch_ui.cached_checksum", return_value="a" * 64), \
+             patch("repository_builder.patch_ui.available_patches", return_value=[item]):
+            self.app.open_patch_view(None)
+            view = self.app.patch_view
+            view.bundle.value = str(bundle)
+            view.changed()
+            self.assertEqual("Keep agent artifacts out of the project.", view.description.value)
+            self.assertFalse(view.notes.visible)
+            await view.check_online(None)
+            self.assertEqual(str(bundle), view.bundle.value)  # Never switch an explicit choice.
+            view.bundle.value = item.key
+            view.refresh()
+            self.assertEqual([item.key], [o.key for o in view.bundle.options])
+            self.assertIn("Available offline", view.bundle_path.value)
+            replacement = PublishedPatch(item.tag, item.name, item.title, "b" * 64)
+            with patch("repository_builder.patch_ui.available_patches", return_value=[replacement]):
+                await view.check_online(None)
+            self.assertNotIn(item.key, view.downloaded)  # A changed release cannot reuse old bytes.
+            await view.check_online(None)
+            with patch("repository_builder.patch_ui.available_patches", return_value=[]):
+                await view.check_online(None)
+            self.assertEqual(str(bundle), view.bundle.value)
+            self.assertEqual("Keep agent artifacts out of the project.", view.description.value)
 
     async def test_catalog_disables_unsupported_virtual_environment(self):
         await self.app.advance(None)

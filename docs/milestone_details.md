@@ -216,3 +216,33 @@ Closure evidence: implementation commit
 and the implementation checkpoint working tree was clean. This documentation-only
 record follows on that branch; existing PR #1 remains the review vehicle. No new
 PR was created and no additional implementation milestone is accepted.
+
+## GOV-009 — Unified patch selection and readable patch information, 2026-10-19
+
+Accepted under Eric's request to remove the confusing published/local selector
+split and manual hash field, and use the screen to explain patch purpose. One
+selector now supports published and local patches. Published names omit the generic
+prefix and asset filename; bounded release notes supply an introductory overview
+and expandable original notes as inert text. Local patches show their manifest
+summary. Preview downloads and verifies as needed, with separate Apply pinned to
+the exact reviewed file/digest. Cache reuse is offline and checked against pinned
+identity; changing releases or selections cannot reuse stale review. Local checksum
+sidecars are used automatically, invalid sidecars rejected and absent ones optional.
+
+Verification: all 40 working-checkout tests passed in 135.868 seconds; the final
+cache-identity regression assertion also passed. Focused coverage protects selection,
+notes, automatic download, errors, cache deduplication, stale identity invalidation,
+sidecar validation and explicit apply gating. Live desktop verification used the
+published scratch-workspace patch and a disposable old-generator repository: release
+purpose/notes rendered, Preview downloaded automatically without project writes,
+cached preview worked offline and Apply preserved project content. Screenshots and
+one-off diagnostics remain in external task scratch. All 81 checksums refreshed.
+Final clean tracked-file export: all 40 tests passed in 139.575 seconds, including
+actual all-profile PowerShell generation, UI plan round-trip, patch preservation
+and relocated packaged resources. Framework snapshot/checksum validation and staged
+whitespace checks passed. Delivery: IMPLEMENTED; commit/push closure follows.
+
+Updated guides, status, roadmap, current milestone and unreleased notes. No new ADR;
+GOV-005/GOV-008 ownership and trust boundaries are unchanged. No published asset,
+real consumer repository, packaged binary or PR merge changed. No next accepted
+implementation milestone remains.

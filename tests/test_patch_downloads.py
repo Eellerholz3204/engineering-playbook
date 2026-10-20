@@ -45,7 +45,7 @@ class PatchDownloadTests(unittest.TestCase):
         self.sidecar = f"{self.sha}  test.zip\n".encode()
 
     def test_catalog_filters_pairs_and_paginates_without_trusting_urls(self):
-        good = {"draft": False, "prerelease": False, "tag_name": self.item.tag, "name": "Test",
+        good = {"draft": False, "prerelease": False, "tag_name": self.item.tag, "name": "Test", "body": "Patch purpose and release instructions.",
             "assets": [{"name": "test.zip", "size": len(self.data), "state": "uploaded",
                         "digest": "sha256:" + self.sha, "browser_download_url": "https://evil.invalid/file"},
                        {"name": "test.zip.sha256", "size": len(self.sidecar), "state": "uploaded"}]}
@@ -57,10 +57,29 @@ class PatchDownloadTests(unittest.TestCase):
             found = downloads.available_patches()
         self.assertEqual(1, len(found))
         self.assertEqual(self.item.url, found[0].url)
+        self.assertEqual(good["body"], found[0].notes)
         self.assertEqual(2, fetch.call_count)
         self.assertIn("page=2", fetch.call_args.args[0])
         with patch.object(downloads, "fetch", return_value=b"[]"):
             self.assertEqual([], downloads.available_patches())
+        with patch.object(downloads, "fetch", return_value=json_bytes([{**good, "body": None}])):
+            self.assertEqual("", downloads.available_patches()[0].notes)
+        with patch.object(downloads, "fetch", return_value=json_bytes([{**good, "body": "x" * 40000}])):
+            self.assertEqual(32000, len(downloads.available_patches()[0].notes))
+
+    def test_local_sidecar_is_automatic_bounded_and_optional(self):
+        bundle = self.root / "test.zip"
+        bundle.write_bytes(self.data)
+        self.assertIsNone(downloads.local_checksum(bundle))
+        sidecar = bundle.with_suffix(".zip.sha256")
+        sidecar.write_bytes(self.sidecar)
+        self.assertEqual(self.sha, downloads.local_checksum(bundle))
+        sidecar.write_text(f"{self.sha}  other.zip")
+        with self.assertRaisesRegex(ValueError, "filename"):
+            downloads.local_checksum(bundle)
+        sidecar.write_bytes(b"x" * 4097)
+        with self.assertRaisesRegex(ValueError, "size limit"):
+            downloads.local_checksum(bundle)
 
     def test_network_limits_redirects_and_error_messages(self):
         for url in ("http://github.com/x", "https://evil.invalid/x", "https://github.com@evil.invalid/x",
