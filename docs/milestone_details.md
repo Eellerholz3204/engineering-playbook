@@ -160,3 +160,24 @@ and credential-pattern audit passed. One-release diagnostics stayed in scratch.
 
 Release notes are in `docs/releases/scratch-workspace-2026-10.md`. No architecture
 decision changed. Publication and remote verification are pending at this checkpoint.
+
+Publication closure: [release](https://github.com/Eellerholz3204/engineering-playbook/releases/tag/playbook-patch-scratch-workspace-2026-10)
+published at 2026-10-20 00:45:14 UTC (2026-10-19 local). Published as a framework
+patch, not a desktop app update; no Latest designation was requested. Release notes
+match the committed document. Assets were uploaded in draft, downloaded/verified,
+then published and downloaded again over unauthenticated public HTTPS URLs.
+
+- ZIP: `scratch-workspace-2026-10.zip`, 163185 bytes, asset ID `657849251`;
+  SHA-256 `02953297c36b7d0da5398b182e0efebe8d8f08a4abb66170ccdb3059ccc2c253`.
+- Sidecar: `scratch-workspace-2026-10.zip.sha256`, 96 bytes, asset ID `657849257`;
+  SHA-256 `352bfaf6d3d65ebfa2936d33c4b4d001f51fbce7bbf6db1693e5ddd521152ec4`.
+- Annotated tag: `playbook-patch-scratch-workspace-2026-10`, object
+  `5f1caf73ca4a97f44ba820ffcfb1d3ea98187292`, peeled commit
+  `dae80da38d4adb9b6db700fef16e45e5afa140e3`; local and remote identities matched.
+
+Preparation commit `76a7eb24d251a2898496a29b9c1f6742a48b5a47` was pushed to
+`origin/codex/governance-context-loading` and matched the remote branch. The
+publication checkpoint working tree was clean. This documentation-only closure
+follows on that branch; existing PR #1 remains the review vehicle. No new PR,
+consumer changes, binary rebuild or merge occurred. Delivery: IMPLEMENTED.
+No next accepted implementation milestone remains; downstream adoption is separate.

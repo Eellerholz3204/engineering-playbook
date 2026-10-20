@@ -1,5 +1,11 @@
 # Unreleased
 
+Publication accounting: the framework snapshot through `dae80da` is now distributed
+as [scratch-workspace-2026-10](scratch-workspace-2026-10.md), the first 3.2.1-to-3.3.0
+patch. The source implementation history below also covers Builder features awaiting
+a separate packaged app release. The later dropdown changes are not in this patch;
+no new desktop installer has been published.
+
 ## Added
 
 - Searchable existing-repository and patch dropdowns with bounded local discovery,

@@ -1,6 +1,6 @@
 # Current milestone
 
-GOV-007: publish the first framework patch. ACCEPTED, CURRENT under Eric's explicit
+GOV-007: publish the first framework patch. ACCEPTED, IMPLEMENTED under Eric's explicit
 2026-10-19 approval to publish the prepared first patch release.
 
 Scope: verify the existing candidate unchanged, retain exact baseline/target source
@@ -15,6 +15,14 @@ preservation, reapply and governance reconciliation; release asset and tag verif
 Checkpoint: commit/push release documentation on the existing tracked branch,
 publish only after checks pass, then record publication evidence and final Git state.
 Report in this chat. No new ADR or next implementation milestone is required.
+
+Delivery: published `playbook-patch-scratch-workspace-2026-10` at
+2026-10-20 00:45:14 UTC (2026-10-19 local). All 30 target-snapshot tests passed;
+exact source/candidate checks and a disposable old-generator upgrade passed.
+Both public downloads matched their expected checksums and published notes matched
+the committed instructions. The annotated remote tag resolves to `dae80da`.
+No downstream repositories were changed. See the release notes and ledger for
+asset URLs, complete identities and publication evidence.
 
 ## Previous milestone: GOV-006
 
