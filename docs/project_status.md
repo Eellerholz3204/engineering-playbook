@@ -19,7 +19,9 @@ Screenshots were inspected and retained in external scratch. All 81 framework
 checksums passed. The final clean tracked-file export passed all 40 tests in
 139.575 seconds, including all-profile PowerShell generation, UI plan round-trip
 and relocated packaged resources. Staged whitespace checks passed. Delivery:
-IMPLEMENTED; commit/push closure follows on the same tracked branch.
+IMPLEMENTED. Implementation commit `f76734eeac4606ee6f8997b2531723eb0692c93f`
+was pushed to the tracked branch; remote HEAD matched and the implementation
+checkpoint working tree was clean. This documentation-only closure follows there.
 
 Updated patch and Builder guides, milestone, roadmap and unreleased notes. Existing
 ADRs GOV-005/GOV-008 remain unchanged; this is a UI orchestration refinement, not a

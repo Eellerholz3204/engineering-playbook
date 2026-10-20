@@ -246,3 +246,10 @@ Updated guides, status, roadmap, current milestone and unreleased notes. No new 
 GOV-005/GOV-008 ownership and trust boundaries are unchanged. No published asset,
 real consumer repository, packaged binary or PR merge changed. No next accepted
 implementation milestone remains.
+
+Closure evidence: implementation commit
+`f76734eeac4606ee6f8997b2531723eb0692c93f` was pushed to
+`origin/codex/governance-context-loading`. `git ls-remote` matched that exact HEAD
+and the implementation checkpoint working tree was clean. This documentation-only
+record follows on the same branch. Existing PR #1 remains the review vehicle;
+no new PR was created and no next implementation milestone is accepted.
