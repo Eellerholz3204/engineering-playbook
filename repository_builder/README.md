@@ -88,8 +88,9 @@ The framework version, workflows, checksums, project configuration and documents
 stay unchanged. Modified feature files or blocks require explicit reconciliation;
 unrelated framework customizations do not block adoption. Review for semantic rule
 conflicts even when structurally Compatible. Current source/CLI is required; old
-patch readers reject this new format. Publication of the portable candidate is
-separate from implementing this source change.
+patch readers reject this new format. The
+[portable patch](../docs/releases/agent-scratch-workspaces-portable-v1.md) is now
+published and available directly through **Check for patches**.
 
 Click **Check for patches**, choose the repository and a patch in the single **Patch**
 selector, then **Preview patch**. Builder downloads published patches directly from
@@ -129,13 +130,11 @@ current files and remains a separate prerequisite for Apply.
 
 Choose a matching patch or reconcile the differences explicitly, then Refresh and
 preview again. A conflict can mean another framework revision, not a damaged repo.
-Early 3.3.0 repositories matching `7dc6467` use the patch named
-**agent scratch workspaces (early 3.3.0 repositories)**, not the original 3.2.1 patch.
-
-The older, separately governed `metis-engineering-playbook` installation uses
-**agent scratch workspaces (legacy Metis 3.2.1 to 3.3.1)**. This is an exact-baseline
-migration, not a general force upgrade. Access/identity requirements are retained;
-local project documents and AGENTS.md remain untouched and may need reconciliation.
+The portable scratch patch replaces the three older exact-baseline choices,
+including early 3.3.0 and legacy Metis. Those releases are recoverable drafts and
+their local cached copies were archived outside discovery. Restart Builder to clear
+old session choices. Already-applied patches and the desktop application release
+are unchanged. Review custom rules even when the portable patch is Compatible.
 
 The patch engine is shared with `scripts/playbook_patch.py`; it never executes bundle
 code or creates consumer commits/PRs. See [patch delivery](../PATCH_RELEASES.md) for

@@ -1,5 +1,9 @@
 # Agent scratch workspaces for legacy Metis repositories
 
+Retired 2026-10-20: this release is a recoverable draft. These are historical
+instructions; use the [portable feature](agent-scratch-workspaces-portable-v1.md)
+for new scratch adoption. Existing applied changes are not undone.
+
 This patch adds external agent scratch workspaces to the older Metis framework,
 keeps temporary diagnostics and tooling work out of project history, and preserves
 the access/identity requirements already adopted by metis-engineering-playbook.

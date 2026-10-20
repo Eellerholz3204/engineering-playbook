@@ -539,3 +539,33 @@ The exact source export passed all 57 tests in 180.910 seconds with no skips,
 including actual PowerShell generation, UI round-trips and packaging.
 Publication/download-back, retirement and final delivery closure follow.
 No real consumer application, new PR, merge or desktop binary release is authorized.
+
+GOV-014 publication complete: release `418019771` was published at
+`2026-10-20T05:04:20Z`, tag
+`playbook-patch-agent-scratch-workspaces-portable-v1`. Annotated tag object
+`e504e95543bb33e99660bb188b2b093d99e4c998` peels to the exact source above.
+Preparation record `88d74151262095591eeceb288881818ff2c2da57` was pushed and
+remote-verified before publication. ZIP asset `658322763` and sidecar `658322764`
+have the exact sizes/hashes recorded above. Draft download-back and public Builder
+download-back both matched. The public feed briefly retained its prepublication
+response; a subsequent normal check discovered the new release without code changes.
+
+The three old release IDs above are now drafts. Verified unchanged titles, notes,
+tags, asset IDs/sizes/digests and source refs. Their exact three content-addressed
+cache directories were moved, not deleted, to:
+`C:\Users\ellerhol\AppData\Local\AgentWorkspaces\engineering-playbook-33a769c3303a9df1\portable-patch-publication\retired-cache`.
+Original metadata and refs are in the adjacent `retirement-before.json`.
+Recovery can republish a selected draft and restore its exact hash directory to
+the external RepositoryBuilder patch cache; do so only on explicit request.
+The desktop app release `390950418` and its three asset digests remain unchanged.
+
+Fresh Builder live discovery returned only the portable patch. Its real download
+adapter verified/cached it; local discovery likewise found one choice. The actual
+UI controller's Check for patches -> Compatible -> Preview -> Apply-ready path
+passed with a disposable custom 3.2.0 project and byte-identical files after preview.
+No real consumer apply occurred. Diagnostics remain in external task scratch.
+Current guides now recommend the portable patch; historical release documents are
+marked retired. All 82 refreshed documentation/framework checksums validate and
+whitespace checks pass. Delivery is IMPLEMENTED; this final record is committed
+and pushed on the existing tracked branch, with remote HEAD/clean-tree verification.
+No next milestone is accepted.

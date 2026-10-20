@@ -1,5 +1,24 @@
 # Project status
 
+## GOV-014 — 2026-10-20, portable patch published; older choices retired
+
+The [portable scratch feature](releases/agent-scratch-workspaces-portable-v1.md)
+is published from exact source `9ef4b37`. All 57 tests passed from that clean export
+in 180.910 seconds. Published ZIP and sidecar match the verified candidate and GitHub
+digests. Builder's live Check for patches, automatic verified download and preview
+passed on a disposable custom 3.2.0 project with one compatible choice and no writes.
+
+The original, early-330 and legacy-Metis releases are recoverable drafts; their
+tags, asset identities and notes are unchanged. Their exact local cache entries
+were moved to external `portable-patch-publication/retired-cache/` scratch.
+Restart source-launched Builder, select the repository, Check for patches and
+Preview the portable choice. Applying still requires the user's separate action.
+Existing consumer installations and the packaged app release are unchanged.
+Versions remain framework 3.3.1 / Builder 0.1.0; this installs only scratch feature v1.
+Final publication records and refreshed documentation checksums are complete;
+all 82 checksums and whitespace checks pass. This closure uses the same tracked
+branch. No new PR, merge or next implementation milestone is authorized.
+
 ## GOV-013 — 2026-10-20, portable scratch feature implemented
 
 Implemented a fixed schema-2 additive recipe alongside unchanged schema-1 snapshot

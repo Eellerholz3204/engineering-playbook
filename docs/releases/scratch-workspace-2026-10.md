@@ -1,5 +1,9 @@
 # First playbook patch: agent scratch workspaces
 
+Retired 2026-10-20: this release is a recoverable draft. These are historical
+instructions; use the [portable feature](agent-scratch-workspaces-portable-v1.md)
+for new scratch adoption. Existing applied changes are not undone.
+
 Patch ID: `scratch-workspace-2026-10`
 
 Framework version: **3.2.1 → 3.3.0**

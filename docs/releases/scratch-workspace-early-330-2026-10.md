@@ -1,5 +1,9 @@
 # Agent scratch workspaces for early 3.3.0 repositories
 
+Retired 2026-10-20: this release is a recoverable draft. These are historical
+instructions; use the [portable feature](agent-scratch-workspaces-portable-v1.md)
+for new scratch adoption. Existing applied changes are not undone.
+
 Patch ID: `scratch-workspace-early-330-2026-10`
 
 Framework version: **early 3.3.0 to scratch-enabled 3.3.0**

@@ -66,8 +66,13 @@ normal verification/review process. Reapplying a complete feature is a no-op.
 Already scratch-enabled full-snapshot installations may still add this dedicated
 feature policy/receipt/section; the existing helper and prior instructions remain.
 
-The portable patch is an unreleased candidate until separately published. The three
-historical exact-baseline releases remain unchanged; they do not acquire this behavior.
+The [portable feature release](https://github.com/Eellerholz3204/engineering-playbook/releases/tag/playbook-patch-agent-scratch-workspaces-portable-v1)
+is published and available through Builder's **Check for patches**. The three older
+exact-baseline releases are retired to recoverable drafts; their tags/assets are
+retained, but they no longer appear in the public feed. Their locally cached copies
+were archived outside Builder discovery. Restart Builder to clear session choices.
+Already-applied patches are not undone. See the
+[release notes](docs/releases/agent-scratch-workspaces-portable-v1.md).
 
 ## Prepare an exact snapshot patch release
 
@@ -121,13 +126,14 @@ The resulting ZIP uses the existing version-1 format and works with existing
 patch-capable Builders. Review policy differences before building; exact pins do
 not establish that replacing a local policy is appropriate.
 
-For the reviewed legacy installation in **metis-engineering-playbook**, choose
-**agent scratch workspaces (legacy Metis 3.2.1 to 3.3.1)**. It preserves the reusable
+Historically, the reviewed **metis-engineering-playbook** installation used
+**agent scratch workspaces (legacy Metis 3.2.1 to 3.3.1)**. That retired patch preserved the reusable
 access/identity requirements in the new framework and leaves project documents,
 AGENTS.md and unknown files untouched. This baseline includes 51 catalog files plus
 five adopted governance files, with their historical BOM/line-ending bytes. Other
 3.2.1 installations are not automatically compatible. See the
-[legacy migration notes](https://github.com/Eellerholz3204/engineering-playbook/releases/tag/playbook-patch-scratch-workspace-legacy-metis-2026-10).
+[historical migration notes](docs/releases/scratch-workspace-legacy-metis-2026-10.md).
+For new scratch adoption, select the portable feature instead.
 
 ### Select and review a patch
 
@@ -213,12 +219,13 @@ explicit reconciliation outside Builder, use **Refresh lists** and preview again
 There is no force-apply option. Source-launched Builder needs a restart to load
 this status UI; it is not an update to previously packaged desktop binaries.
 
-For early 3.3.0 installations matching source revision `7dc6467`, use
-**agent scratch workspaces (early 3.3.0 repositories)**, not the original 3.2.1 patch.
-See its [compatibility and release notes](https://github.com/Eellerholz3204/engineering-playbook/releases/tag/playbook-patch-scratch-workspace-early-330-2026-10).
+Historically, early 3.3.0 installations matching source revision `7dc6467` used
+**agent scratch workspaces (early 3.3.0 repositories)**.
+See its [historical notes](docs/releases/scratch-workspace-early-330-2026-10.md).
 Both snapshots use the historical 3.3.0 version label; exact content checks, not
-that label alone, determine compatibility. The new bundle has the same verified
+that label alone, determine compatibility. That retired bundle has the same verified
 target framework as the first patch and a different reviewed starting snapshot.
+Use the portable feature for new scratch adoption.
 
 This UI is available in the source-based Builder after restart; older packaged
 Builder downloads require a separately built app update. They can be bootstrapped

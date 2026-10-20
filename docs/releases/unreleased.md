@@ -1,5 +1,14 @@
 # Unreleased
 
+GOV-014 publication accounting: the
+[portable scratch feature v1](agent-scratch-workspaces-portable-v1.md) is published
+from exact source `9ef4b37` and verified through Builder's live discovery/download/
+preview flow. It ships only the additive feature, not a framework or desktop upgrade.
+The three prior patch releases below are now recoverable drafts, with historical
+tags/assets preserved. Their cached copies were archived outside Builder discovery.
+Already-applied consumer changes remain untouched. Earlier accounting below is
+historical; current scratch adoption uses the portable patch.
+
 GOV-011 publication accounting: the framework through `f6013bc` is published as
 [scratch-workspace-legacy-metis-2026-10](scratch-workspace-legacy-metis-2026-10.md),
 the exact-baseline legacy Metis 3.2.1-to-3.3.1 migration. It includes the current
@@ -27,8 +36,8 @@ new target snapshot or desktop release. The original 3.2.1 patch remains unchang
   read-only. Framework versions/manifests/configuration stay unchanged.
 - Builder labels additive features distinctly, shows the appended instructions and
   pins inspected inputs through Apply. Existing snapshot releases/readers retain
-  their format; old readers safely reject schema 2. This is unreleased source and
-  a local candidate, not publication or application to real consumers.
+  their format; old readers safely reject schema 2. The feature artifact is published;
+  a packaged Builder update and application to real consumers remain separate.
 
 - Repository-aware patch compatibility labels, compatible-first ordering and Show all
   filtering. Repository selection and explicit discovery/refresh check actual files,

@@ -1,7 +1,16 @@
 # Current milestone
 
 GOV-014: publish the portable scratch patch and retire the three older patch choices.
-ACCEPTED, CURRENT under Eric's explicit 2026-10-20 publication/discard request.
+ACCEPTED, IMPLEMENTED under Eric's explicit 2026-10-20 publication/discard request.
+
+Published release `418019771` at 2026-10-20T05:04:20Z from exact source `9ef4b37`.
+All 57 source tests passed in 180.910 seconds. Draft/public download-back matched;
+live Builder discovery/download/preview shows one compatible portable choice and
+changes no project files. The three older releases are drafts with unchanged
+tags/assets/notes, and their three cache entries were archived externally.
+The app release and all real consumers are unchanged. Current documentation
+checksums were refreshed; all 82 validate and whitespace checks pass.
+This is the final delivery record for the tracked branch. No next milestone is accepted.
 
 Scope: publish the exact GOV-013 candidate bytes with the portable filename and
 sidecar, annotated tag at `9ef4b37`, readable release notes and stable feed entry.

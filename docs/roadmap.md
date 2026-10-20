@@ -37,5 +37,5 @@
   across supported catalog families, retained custom instructions, feature-local
   conflict detection and previewable append. No real consumer apply or publication.
 - GOV-014: publish portable scratch patch and discard superseded choices - ACCEPTED,
-  CURRENT. Publish the verified feature artifact; retire three exact-baseline releases
+  IMPLEMENTED. Published the verified feature artifact; retired three exact-baseline releases
   and their local cache entries recoverably. No consumer apply or desktop release.
