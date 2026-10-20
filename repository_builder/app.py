@@ -34,7 +34,7 @@ class RepositoryBuilder:
         self.picker = ft.FilePicker()
         self.clipboard = ft.Clipboard()
         page.services.extend([self.picker, self.clipboard])
-        page.title = "Repository Builder · Engineering Playbook"
+        page.title = "Repository Builder Â· Engineering Playbook"
         page.window.icon = str(ROOT / "repository_builder" / "assets" / "repository-builder.ico")
         page.theme_mode = ft.ThemeMode.LIGHT
         page.theme = ft.Theme(color_scheme_seed=BLUE, font_family="Segoe UI", use_material3=True)
@@ -202,7 +202,16 @@ class RepositoryBuilder:
                 ft.Text("Version control", size=17, weight=ft.FontWeight.W_600), self.git,
                 ft.Text("Creates a local Git repository. You can connect it to GitHub later.", size=13, color=MUTED),
             ]),
+            ft.TextButton("Patch existing repository", icon=ft.Icons.SYSTEM_UPDATE_ALT,
+                          on_click=self.open_patch_view),
         ]
+
+    def open_patch_view(self, _):
+        if self.busy:
+            return
+        from .patch_ui import PatchView
+        self.patch_view = PatchView(self)
+        self.patch_view.show()
 
     def choose_profile(self, key: str):
         self.selected_profile = key
@@ -237,6 +246,8 @@ class RepositoryBuilder:
         for key, capability in self.catalog["capability_packs"].items():
             extra = {entry["target"] for entry in capability["templates"]} - base
             note = f"Adds {len(extra)} document{'s' if len(extra) != 1 else ''}" if extra else "Documents already included by this type"
+            if capability.get("agent_instruction_templates"):
+                note = "Adds organizational instructions to AGENTS.md"
             capability_rows.append(ft.Column([
                 ft.Checkbox(label=capability.get("label", key), value=key in self.selected_capabilities,
                             on_change=lambda e, k=key: self.toggle_capability(k, e.control.value)),
@@ -266,7 +277,7 @@ class RepositoryBuilder:
                 ft.Divider(color=LINE),
                 ft.Text(f"Type: {self.catalog['repository_profiles'][plan.project_type].get('label', plan.project_type)}", size=14),
                 ft.Text(f"Capabilities: {capabilities}", size=14),
-                ft.Text(f"Git: {'Yes' if plan.initialize_git else 'No'}    ·    Virtual environment: {'Yes' if plan.create_venv else 'No'}", size=13, color=MUTED),
+                ft.Text(f"Git: {'Yes' if plan.initialize_git else 'No'}    Â·    Virtual environment: {'Yes' if plan.create_venv else 'No'}", size=13, color=MUTED),
             ]),
             self.card([
                 ft.Text(f"{len(documents)} project documents", size=17, weight=ft.FontWeight.W_600),
@@ -275,6 +286,11 @@ class RepositoryBuilder:
                     ft.Container(ft.Column([ft.Text(path, size=12, selectable=True) for path in files + documents], spacing=7), padding=16)
                 ]),
                 ft.Text("The engineering-playbook folder contains the versioned framework. Project-owned documents live in docs/.", size=12, color=MUTED),
+            ]),
+            self.card([
+                ft.Text("Agent scratch space", size=17, weight=ft.FontWeight.W_600),
+                ft.Text("Included for every repository: a local folder outside your project for agent experiments, diagnostics and working notes.", size=13, color=MUTED),
+                ft.Text("Each checkout and task has its own space. Scratch files stay out of project commits, tests and packages. The creation output shows the folder location.", size=12, color=MUTED),
             ]),
             ft.Row([ft.TextButton("Save configuration", icon=ft.Icons.SAVE_OUTLINED, on_click=self.save_configuration),
                     ft.TextButton("Copy PowerShell", icon=ft.Icons.CONTENT_COPY, on_click=self.copy_command)], wrap=True),
@@ -352,7 +368,7 @@ class RepositoryBuilder:
         self.output.visible = True
         self.output.value = ""
         self.error.visible = False
-        self.status.value = "Creating your repository… This may take a few minutes with a virtual environment."
+        self.status.value = "Creating your repositoryâ€¦ This may take a few minutes with a virtual environment."
         self.page.window.prevent_close = True
         self.page.update()
         await self.body.scroll_to(offset=-1)

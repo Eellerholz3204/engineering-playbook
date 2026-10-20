@@ -130,6 +130,26 @@ foreach ($entry in $selectedTemplates) {
     }
 }
 
+# AGENTS.md is project-owned: compose new entry points, preserve existing rules.
+$agentTemplates = @($manifest.agent_instruction_templates)
+foreach ($capability in @($Capabilities)) {
+    $pack = $manifest.capability_packs.PSObject.Properties[$capability].Value
+    if ($pack.PSObject.Properties['agent_instruction_templates']) {
+        $agentTemplates += @($pack.agent_instruction_templates)
+    }
+}
+$agentTarget = Join-Path $repositoryRoot 'AGENTS.md'
+if (Test-Path -LiteralPath $agentTarget) {
+    $preserved += $agentTarget
+    $review += "$agentTarget (preserved; reconcile governance blocks from $($agentTemplates -join ', '))"
+} elseif ($PSCmdlet.ShouldProcess($agentTarget, 'Install governance startup instructions')) {
+    $agentContent = (@($agentTemplates | ForEach-Object {
+        Get-Content -LiteralPath (Join-Path $sourceRoot $_) -Raw -Encoding UTF8
+    }) -join "`n")
+    [System.IO.File]::WriteAllText($agentTarget, $agentContent, [System.Text.UTF8Encoding]::new($false))
+    $installed += $agentTarget
+}
+
 Write-Host ''
 Write-Host "Engineering Playbook $($manifest.playbook_version) reconciliation summary" -ForegroundColor Cyan
 Write-Host "Profile: $ProjectType; Capabilities: $(if (@($Capabilities).Length -gt 0) { @($Capabilities) -join ', ' } else { 'none' })" -ForegroundColor Cyan

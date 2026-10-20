@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "sha256": {
+    "GOVERNANCE_CONTEXT.md": "dfa8ddea3cfa462b4e659dfcd75650bb3ea8f5f3b04f13a5c1a2d2bef1073b4a",
+    "templates/agents.md": "6a271ecef9e120791f35da6dfcfc4409e15ef91dfd6b16f998cbde36913f5a2e",
+    "templates/metis_agents.md": "fd758532c4bff9deb68ce093960372a041f2d645df67734d04ff1310b799773a",
+    "scripts/verify_governance_context.py": "bdadda099dbeaea6848d03394c64abde938fa3f8697d48a715db76ead6fb5e91",
+    "scripts/initialize_agent_workspace.ps1": "939ef127df95753249739a58c0f01a920259c884786e7c5074acc12ea98e90e5"
+  }
+}

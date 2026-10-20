@@ -4,6 +4,13 @@
 
 Files under `engineering-playbook/` define reusable rules and patterns. Files under `docs/` describe the actual project. Do not copy project facts into framework files or treat generic templates as verified project state.
 
+Keep temporary investigation notes, diagnostic outputs and agent execution logs in
+the external task workspace. Record durable decisions, project impacts, unresolved
+dependencies and concise verification outcomes in existing owning documents. Do not
+create a project document or milestone for every environment/tooling blocker. Retain
+required evidence in an approved project or artifact store before cleaning scratch;
+scratch notes are neither project authority nor required release evidence.
+
 ## Required project architecture documents
 
 ### `docs/product_vision.md`
@@ -24,6 +31,15 @@ security, and privacy.
 Capability packs may add operator-console, workspace, document-processing, service-
 operations, or AI-governance documents. Do not install or maintain a capability document
 for a repository that does not implement that capability.
+
+### `docs/access_and_identity.md` when applicable
+
+A project that uses external identities, credentials, cloud roles, or workload identity
+must maintain a project-specific access and identity document. Record the authority
+boundary, named identity types, canonical infrastructure and workflow definitions,
+verification evidence, operating constraints, and rollback path. Link the exact additional
+artifacts that must be read before an agent changes or uses those identities. Keep account-
+and repository-specific facts in the project document, not in the reusable framework.
 
 ## Decision and delivery terminology
 

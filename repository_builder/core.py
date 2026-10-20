@@ -91,7 +91,7 @@ def document_paths(catalog: dict, profile: str, capabilities=()) -> list[str]:
     entries += catalog["repository_profiles"][profile]["templates"]
     for capability in capabilities:
         entries += catalog["capability_packs"][capability]["templates"]
-    return sorted({entry["target"] for entry in entries})
+    return sorted({"AGENTS.md", *(entry["target"] for entry in entries)})
 
 
 def scaffold_paths(plan: CreationPlan) -> list[str]:

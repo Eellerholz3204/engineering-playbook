@@ -23,3 +23,13 @@ When explicitly authorized:
 9. Confirm the final working tree is clean.
 
 A release is incomplete until all intended remote operations are verified.
+
+## Framework patch releases
+
+Use `PATCH_RELEASES.md` to build an offline patch ZIP and checksum from reviewed
+base/target framework snapshots, and exercise it on a disposable existing repo.
+The `Build playbook patch` workflow prepares downloadable review artifacts only.
+Publish the approved ZIP/checksum and base/target commit identities with release
+notes after release authorization. Patch packaging itself does not authorize a tag,
+publication or rollout. Project owners preview and apply the patch explicitly;
+preserved instruction/document changes can require manual reconciliation.

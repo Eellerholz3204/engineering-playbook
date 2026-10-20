@@ -77,6 +77,98 @@ If creation fails after writing files, the app preserves those files and shows t
 failure. Inspect the destination before retrying; it does not automatically erase
 partial output.
 
+## Patch an existing repository
+
+For scratch support across custom installations, use the **additive scratch**
+feature patch with the current Builder. It supports installed playbook 3.0.1,
+3.2.0, 3.2.1, 3.3.0 and 3.3.1 catalog families without a whole-framework upgrade.
+Preview lists the helper/policy/receipt additions and displays the marked AGENTS.md
+section. Apply appends that section while retaining every existing instruction byte.
+The framework version, workflows, checksums, project configuration and documents
+stay unchanged. Modified feature files or blocks require explicit reconciliation;
+unrelated framework customizations do not block adoption. Review for semantic rule
+conflicts even when structurally Compatible. Current source/CLI is required; old
+patch readers reject this new format. The
+[portable patch](../docs/releases/agent-scratch-workspaces-portable-v1.md) is now
+published and available directly through **Check for patches**.
+
+Click **Check for patches**, choose the repository and a patch in the single **Patch**
+selector, then **Preview patch**. Builder downloads published patches directly from
+this project's public GitHub releases and verifies the checksum automatically;
+there is no hash to type or separate download step. Readable patch names, a purpose
+description and expandable release notes explain the change before preview. Verified
+downloads persist in an external local-app-data cache for offline use. No sign-in,
+startup polling or automatic application occurs; connection failures leave local
+Browse available. Preview never applies a patch; **Apply patch** remains a separate action.
+
+Choose **Patch existing repository** on the Project screen, select a trusted patch
+ZIP and repository from searchable dropdowns, and preview before applying. Lists
+discover installed projects in the parent folder and `~/source/repos`, plus patch
+ZIPs in Downloads, Builder's `dist` and folders browsed this session. Published and
+local patches use the same selector. Byte-identical copies appear once, even under
+different filenames. A matching published release supplies the displayed name and
+notes; an explicitly selected local source stays selected and works offline.
+Different contents or unreadable/checksum-mismatched copies are not merged.
+This display grouping does not replace full Preview/Apply validation.
+Browse handles other locations; Refresh rescans
+without selecting a target or applying anything. Local previews automatically read
+the cache's checksum or an adjacent `.zip.sha256` file when present. Only use local
+ZIPs from a trusted publisher. A sole patch is selected after checking online;
+explicit selections and the repository choice are never switched automatically.
+The review shows changes, local conflicts and manual instruction/document reconciliation. Applying
+rechecks the internally captured digest and installed files and backs up changed
+files outside the project. Snapshot patches leave AGENTS.md untouched and record
+the new version/receipt in existing project config. Additive scratch patches append
+only their reviewed AGENTS.md section and leave project config untouched. Both
+preserve existing instructions, project documents, source and tests.
+
+Conflicts show **Patch blocked**, an explanation and a disabled primary action.
+Choosing a repository checks local and discovered published patches against its
+actual files. **Check for patches** also checks newly discovered releases for the
+selected repository. Checks download verified ZIPs to the external cache, never
+write project files, and label choices **Compatible**, **Already applied**,
+**Not compatible** or **Unable to check**. Compatible choices sort first; **Show all
+patches** reveals incompatible ones. An explicit selection stays visible even when
+incompatible. Errors remain visible with their reason. **Stop checking** stops after
+the current patch; **Refresh lists** retries/rechecks. Preview always revalidates
+current files and remains a separate prerequisite for Apply.
+
+Choose a matching patch or reconcile the differences explicitly, then Refresh and
+preview again. A conflict can mean another framework revision, not a damaged repo.
+The portable scratch patch replaces the three older exact-baseline choices,
+including early 3.3.0 and legacy Metis. Those releases are recoverable drafts and
+their local cached copies were archived outside discovery. Restart Builder to clear
+old session choices. Already-applied patches and the desktop application release
+are unchanged. Review custom rules even when the portable patch is Compatible.
+
+The patch engine is shared with `scripts/playbook_patch.py`; it never executes bundle
+code or creates consumer commits/PRs. See [patch delivery](../PATCH_RELEASES.md) for
+building/publishing bundles, CLI bootstrapping, trust, backup and recovery details.
+
+## Agent scratch space
+
+All profiles automatically create an external local workspace and install the
+agent ownership rules. Review explains this behavior; creation output prints the
+exact folder. On Windows the default is
+`%LOCALAPPDATA%\AgentWorkspaces\<checkout-name>-<path-hash>\default`.
+Agents use the installed `scripts/initialize_agent_workspace.ps1` to create or
+resume separate task folders. The workspace is not a project file and is excluded
+from project commits, test discovery and packaging by residing outside the checkout.
+
+Scratch holds temporary scripts, diagnostics and notes. Permanent artifacts must
+support maintained project behavior or workflows; reusable tooling fixes and their
+tests belong in their owning repository. Project verification must be reproducible
+without scratch dependencies. See `GOVERNANCE_CONTEXT.md` for the full rules.
+
+An external `ENGINEERING_PLAYBOOK_SCRATCH_ROOT` environment override supports local
+preferences and isolated tests. The location is resolved on the creating machine;
+saved configurations and copied commands do not capture it. Existing configuration
+fields are unchanged. Fresh clones initialize scratch when the helper is first run.
+Existing projects receive the helper during framework reconciliation, while their
+AGENTS.md and project documents remain preserved for manual rule reconciliation.
+Scratch folders are retained until explicitly cleaned up; moving or deleting a
+checkout does not remove its old scratch folder.
+
 ## Reuse a configuration
 
 **Save configuration** writes a JSON document containing the selections and exact
@@ -128,3 +220,14 @@ The UI lives in `app.py`; catalog, validation, preview, and execution logic live
 `core.py`. Add catalog descriptions in `playbook.json`, and implement any new
 technical scaffolding in the PowerShell generator. The desktop interface and a
 future public catalog can share that catalog without duplicating it.
+
+## Governance startup
+
+Every new repository receives AGENTS.md and the installed GOVERNANCE_CONTEXT.md
+procedure. Select **Metis governance** under Optional capabilities for Metis repos.
+This adds the central Metis procedure and affected-repository reading requirements
+to AGENTS.md; it does not copy enterprise decisions into the generic framework.
+Saved configurations and copied PowerShell commands retain that selection.
+Existing AGENTS.md files are preserved, even with -Reconcile; merge the reported
+governance blocks into them explicitly. Run the installed
+`scripts/verify_governance_context.py` as described in GOVERNANCE_CONTEXT.md.

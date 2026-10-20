@@ -18,6 +18,12 @@ docs/
 
 The framework governs the project but does not describe it.
 
+Agent experiments, diagnostic scripts and working notes live in an external local
+task workspace, separate from the versioned project. `GOVERNANCE_CONTEXT.md` defines
+workspace creation, blocker ownership and criteria for promoting artifacts. Only
+supported project behavior, contracts and maintained development workflows justify
+permanent project code, tests or tooling. A clean checkout must not depend on scratch.
+
 ## Required project documents
 
 - `docs/product_vision.md`

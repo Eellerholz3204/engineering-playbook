@@ -11,7 +11,7 @@ param(
     [string]$ProjectType = 'generic',
 
     [Parameter()]
-    [ValidateSet('ai-governance','service-operations','operator-application','document-processing')]
+    [ValidateSet('ai-governance','service-operations','operator-application','document-processing','metis-governance')]
     [string[]]$Capabilities = @(),
 
     [Parameter()]
@@ -38,6 +38,9 @@ if (-not $NoGit -and -not (Get-Command git -ErrorAction SilentlyContinue)) { thr
 if ([string]::IsNullOrWhiteSpace($PlaybookSourcePath)) { $PlaybookSourcePath = Split-Path -Parent $PSScriptRoot }
 $root = [System.IO.Path]::GetFullPath($RepositoryPath)
 if ([System.IO.Path]::GetPathRoot($root) -eq $root) { throw 'Choose a project folder, not a drive root.' }
+$workspaceScript = Join-Path $PSScriptRoot 'initialize_agent_workspace.ps1'
+# Validate the external location before writing any project files.
+$agentWorkspace = & $workspaceScript -RepositoryPath $root -ResolveOnly
 if (-not (Test-Path -LiteralPath $root)) {
     if ($PSCmdlet.ShouldProcess($root, 'Create repository directory')) {
         New-Item -ItemType Directory -Path $root -Force | Out-Null
@@ -125,6 +128,8 @@ if ($CreateVenv) {
         if ($LASTEXITCODE -ne 0) { throw "Virtual environment creation failed with exit code $LASTEXITCODE." }
     }
 }
+$agentWorkspace = & $workspaceScript -RepositoryPath $root
 Write-Host "Created repository scaffold for $ProjectName at $root" -ForegroundColor Green
+Write-Host "Agent scratch space (outside repository): $agentWorkspace" -ForegroundColor Cyan
 Write-Host "Profile: $ProjectType; Capabilities: $(if (@($Capabilities).Count) { $Capabilities -join ', ' } else { 'none' })" -ForegroundColor Cyan
 Write-Host 'Review and replace project-document template placeholders before implementation.' -ForegroundColor Yellow

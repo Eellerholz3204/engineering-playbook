@@ -12,6 +12,9 @@ This playbook defines a reusable architecture and engineering framework for soft
 4. Verified repository and runtime state override stale documentation.
 5. Project documentation must be corrected when verified state and documentation diverge.
 
+Model and reasoning-effort routing is governed by the installed `GOVERNANCE_CONTEXT.md`,
+which is included in every framework installation.
+
 ## Core architectural laws
 
 - AI assists; humans decide.

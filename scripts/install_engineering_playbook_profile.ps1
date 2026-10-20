@@ -38,7 +38,7 @@ function Install-EngineeringPlaybook {
     param(
         [Parameter(Mandatory=`$true)][string]`$RepositoryPath,
         [ValidateSet('generic','dbt','python','dbt-python','powershell','dotnet','node')][string]`$ProjectType,
-        [ValidateSet('ai-governance','service-operations','operator-application','document-processing')][string[]]`$Capabilities,
+        [ValidateSet('ai-governance','service-operations','operator-application','document-processing','metis-governance')][string[]]`$Capabilities,
         [switch]`$Reconcile
     )
     `$parameters = @{
@@ -57,7 +57,7 @@ function New-EngineeringRepository {
         [Parameter(Mandatory=`$true)][string]`$ProjectName,
         [Parameter(Mandatory=`$true)][string]`$RepositoryPath,
         [ValidateSet('generic','dbt','python','dbt-python','powershell','dotnet','node')][string]`$ProjectType = 'generic',
-        [ValidateSet('ai-governance','service-operations','operator-application','document-processing')][string[]]`$Capabilities = @(),
+        [ValidateSet('ai-governance','service-operations','operator-application','document-processing','metis-governance')][string[]]`$Capabilities = @(),
         [switch]`$CreateVenv,
         [switch]`$NoGit
     )

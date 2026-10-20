@@ -12,6 +12,16 @@
 
 ## Verification Requirements
 
+- Required project checks and supported behaviors:
+- Separate scratch diagnostics, if needed:
+- Verify a clean checkout with declared dependencies and no scratch files:
+
+## Supporting Artifact Ownership
+
+- Maintained requirement or workflow justifying each new helper, test or document:
+- Tooling dependencies and owning repositories:
+- Keep temporary work in the external task workspace; review staged files before closure.
+
 ## Documentation Updates
 
 ## Checkpoint Boundary

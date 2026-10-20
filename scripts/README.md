@@ -17,6 +17,12 @@ This installs two reusable PowerShell commands in your profile. It does not chan
 
 ## Existing repository
 
+For releaseable offline patches, use `playbook_patch.py build`, `preview` and `apply`.
+The build command emits a ZIP/checksum from explicit base and target snapshots.
+Preview writes nothing; apply requires the reviewed ZIP digest, refuses framework
+conflicts and keeps backups outside the repository. See
+[`PATCH_RELEASES.md`](../PATCH_RELEASES.md) for complete commands and recovery.
+
 Preview:
 
 ```powershell
@@ -61,6 +67,36 @@ New-EngineeringRepository `
 ```
 
 There is no broad `-Force` mode for existing repositories.
+
+## Agent scratch space
+
+New repository creation initializes an external workspace and prints its path.
+From a generated repository, create/resume a task folder with:
+
+```powershell
+$agentScratch = & ./engineering-playbook/scripts/initialize_agent_workspace.ps1 `
+  -RepositoryPath (Get-Location).Path -TaskId 'task-123'
+```
+
+From this source repository, use `./scripts/initialize_agent_workspace.ps1`.
+The helper outputs the path; `-ResolveOnly` resolves and validates without writing,
+and `-WhatIf` previews creation. Repeated calls preserve existing contents. The
+default TaskId is `default`; choose separate IDs for concurrent tasks. IDs accept
+letters, numbers, hyphens and underscores, at most 80 characters, excluding Windows
+reserved names.
+
+Windows defaults to `%LOCALAPPDATA%\AgentWorkspaces\<checkout-name>-<path-hash>\<task-id>`.
+`ENGINEERING_PLAYBOOK_SCRATCH_ROOT` may override the base with an external absolute
+directory. Overlapping checkout locations and directory links in the scratch path
+are rejected. No path is stored in the repository or saved Builder configuration.
+Fresh clones can invoke the helper directly. Moving a checkout gives it a new
+workspace; old scratch is preserved. There is no automatic deletion.
+
+Existing-repository installation installs the helper but preserves AGENTS.md and
+project documents. Reconcile the reported instruction block, then initialize scratch
+when needed. Ownership, promotion and retention rules live in `GOVERNANCE_CONTEXT.md`.
+
+## Additional creation examples
 
 ```powershell
 New-EngineeringRepository `

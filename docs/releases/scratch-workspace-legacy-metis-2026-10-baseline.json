@@ -1,0 +1,7 @@
+{
+  "GOVERNANCE_CONTEXT.md": "40aa2e4f26a8ee996dab8b6e210c5d4a93b4fe1d85971c6b8852231c0a5497a8",
+  "governance-context.json": "594a38493bbc08f4d3dc8286006437d6bbb0b8429aabb5ce0308273729a24657",
+  "scripts/verify_governance_context.py": "569886420e54b641f162485ee45c81777d559bb24b8d2c3beae6f2b3c9809f70",
+  "templates/agents.md": "ecf31edeaa98937054938e52a106319cfab87e260160eab3c1577007d286358e",
+  "templates/metis_agents.md": "7e8e5f185265c636c0cb2ff1af724cce6473df355940e60a0f36c69c9446df16"
+}
