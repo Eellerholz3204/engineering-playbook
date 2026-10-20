@@ -9,6 +9,7 @@ import flet as ft
 
 from .patching import apply_patch, inspect_patch
 from .core import ROOT
+from .patch_downloads import available_patches, cached_checksum, cached_patches, download_patch
 
 
 def children(folder):
@@ -45,6 +46,14 @@ class PatchView:
         self.report = None
         self.reviewed_inputs = None
         self.completed = False
+        self.published = {}
+        self.remote = ft.Dropdown(label="Published patches", on_select=self.remote_changed,
+            expand=True, expanded_insets=0, hint_text="Check for patches to load releases",
+            **builder.field_style())
+        self.check_button = ft.TextButton("Check for patches", icon=ft.Icons.CLOUD_DOWNLOAD_OUTLINED,
+            on_click=self.check_online)
+        self.download_button = ft.TextButton("Download selected patch", disabled=True, on_click=self.download)
+        self.online_status = ft.Text("Checks this project's public GitHub releases only when requested. No sign-in needed.", size=12)
         self.repository = ft.Dropdown(label="Existing repository", on_select=self.changed,
             expand=True, expanded_insets=0,
             editable=True, enable_filter=True, on_text_change=self.search_changed,
@@ -71,9 +80,13 @@ class PatchView:
         self.title = builder.heading("Update an existing repository.",
             "Preview a playbook patch before applying it to this project.")
         self.inputs = builder.card([
+            ft.Row([self.check_button, self.download_button]),
+            self.remote, self.online_status,
+            ft.Text("Source: Eellerholz3204/engineering-playbook on GitHub · Published stable patches only.", size=12),
+            ft.Divider(),
             ft.Row([self.repository, self.pick_repository]), self.repository_path,
             ft.Row([self.bundle, self.pick_bundle]), self.bundle_path, self.refresh_button,
-            ft.Text("Lists include installed projects in your parent folder and ~/source/repos; patches in Downloads, Builder dist, and folders browsed this session.", size=12),
+            ft.Text("Local patches include verified downloads, Downloads, Builder dist, and folders browsed this session.", size=12),
             self.checksum,
             ft.Text("Use a trusted release and compare its published checksum. Preview does not change files.", size=12),
             ft.Text("Project documents and AGENTS.md are preserved. Local framework edits block the patch; backups are stored outside the project.", size=12),
@@ -93,6 +106,10 @@ class PatchView:
                         if (p / "engineering-playbook" / "playbook.json").is_file()}
         repositories.update(Path(p) for p in self.choices["repositories"])
         bundles = {p for folder in patches for p in children(folder) if p.suffix.lower() == ".zip"}
+        try:
+            bundles.update(cached_patches())
+        except (OSError, ValueError) as exc:
+            self.online_status.value = f"Patch cache unavailable: {exc}. Local Browse is still available."
         bundles.update(Path(p) for p in self.choices["bundles"])
         # Preserve explicit selections so refresh never silently switches targets.
         if self.repository.value:
@@ -116,7 +133,68 @@ class PatchView:
 
     def bundle_changed(self, _=None):
         self.checksum.value = ""
+        if self.bundle.value:
+            try:
+                self.checksum.value = cached_checksum(Path(self.bundle.value)) or ""
+            except (OSError, ValueError):
+                # Preview will report linked/unavailable files. Never trust a different digest.
+                pass
         self.changed()
+
+    def remote_changed(self, _=None):
+        self.bundle.value = None
+        self.checksum.value = ""
+        self.download_button.disabled = self.remote.value not in self.published
+        self.changed()
+
+    async def check_online(self, _):
+        if self.builder.busy:
+            return
+        self.published = {}
+        self.remote.options = []
+        self.remote.value = None
+        self.online_status.value = "Checking published GitHub patches…"
+        self.changed()
+        self.busy(True)
+        try:
+            patches = await asyncio.to_thread(available_patches)
+            self.published = {p.key: p for p in patches}
+            self.remote.options = [ft.DropdownOption(key=p.key, text=f"{p.title} · {p.name}") for p in patches]
+            self.online_status.value = (f"Found {len(patches)} published patch(es). Select one, then Download. Compatibility is checked during preview."
+                if patches else "No published patch ZIP/checksum pairs found. Local patches remain available.")
+            self.show()
+        except Exception as exc:
+            self.online_status.value = "Couldn't check online patches. Local patches remain available; try again later."
+            self.show()
+            self.builder.show_error(str(exc))
+        finally:
+            self.busy(False)
+
+    async def download(self, _):
+        if self.builder.busy:
+            return
+        item = self.published.get(self.remote.value)
+        if item is None:
+            self.builder.show_error("Check for patches and select a published patch first.")
+            return
+        self.online_status.value = "Downloading and validating ZIP and checksum…"
+        self.changed()
+        self.busy(True)
+        try:
+            repo = Path(self.repository.value) if self.repository.value else None
+            path, checksum = await asyncio.to_thread(download_patch, item, repo)
+            self.choices["bundles"].add(str(path))
+            self.bundle.value = str(path)
+            self.populate()
+            self.checksum.value = checksum
+            self.online_status.value = "Download verified and selected. Choose the repository, then Preview patch. No project files were changed."
+            self.changed()
+        except Exception as exc:
+            self.online_status.value = "Download failed. No patch was applied. Retry or use a local ZIP."
+            self.show()
+            self.builder.show_error(str(exc))
+        finally:
+            self.busy(False)
 
     def search_changed(self, event):
         control = event.control
@@ -179,7 +257,7 @@ class PatchView:
             "No installed repositories found. Browse to a repository containing engineering-playbook/."
             if not self.repository.options else "Choose the project you want to update.")
         self.bundle_path.value = self.bundle.value or (
-            "No patches found. Download a released patch ZIP, then Refresh or Browse."
+            "No patches found. Check for patches above, or Browse to a local ZIP."
             if not self.bundle.options else "Choose a patch, then preview its compatibility with the selected repository.")
         app.body.controls = [self.title, self.inputs]
         if self.report:
@@ -208,8 +286,9 @@ class PatchView:
         app.page.window.prevent_close = value
         app.back.disabled = app.next.disabled = value
         for control in (self.repository, self.bundle, self.checksum, self.pick_repository,
-                        self.pick_bundle, self.refresh_button):
+                        self.pick_bundle, self.refresh_button, self.remote, self.check_button):
             control.disabled = value
+        self.download_button.disabled = value or self.remote.value not in self.published
         app.page.update()
 
     async def preview(self, _):

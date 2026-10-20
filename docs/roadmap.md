@@ -20,3 +20,5 @@
 - GOV-007: publish the first framework patch - ACCEPTED, IMPLEMENTED. Existing verified
   3.2.1-to-3.3.0 candidate, annotated source tag and ZIP/checksum release assets;
   no downstream application or Builder binary release.
+- GOV-008: in-app published patch discovery and downloads - ACCEPTED, IMPLEMENTED.
+  Fixed public release source, external validated cache and explicit preview/apply.

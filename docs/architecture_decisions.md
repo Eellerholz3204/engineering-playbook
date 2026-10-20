@@ -70,3 +70,37 @@ publication and downstream application remain explicit. A changed instruction bl
 can leave governance verification pending manual reconciliation even after a clean
 framework apply. Existing packaged Builder binaries need a later rebuild to expose
 the new UI; the CLI supports bootstrapping from the current trusted source checkout.
+
+## GOV-008 — Explicit public patch discovery and validated local cache
+
+Status: ACCEPTED under Eric's 2026-10-19 in-app patch download request.
+
+Context: local-only selectors still require users to find and download the correct
+release assets manually. The existing public patch publisher and verification engine
+provide a bounded source and validation contract.
+
+Decision: add a read-only standard-library HTTP adapter for the fixed public
+Eellerholz3204/engineering-playbook repository. Check only on user action; list stable
+published `playbook-patch-*` releases containing a ZIP and matching `.zip.sha256`.
+Construct canonical publisher asset URLs rather than trusting arbitrary response URLs.
+Require HTTPS and allowlisted GitHub/CDN redirects, size limits, bounded pagination
+and request timeouts. Do not acquire or send credentials. Rate limits and offline
+errors leave the manual/local workflow available.
+
+Verify the release checksum, GitHub asset digest when supplied, and the complete
+patch archive before exposing a download. Publish the verified ZIP/checksum pair
+atomically in a content-addressed cache under local application data, outside the
+checkout and selected consumer repository. Retain downloads for offline use, pin
+preview to the cached content hash and reject damaged entries without overwriting
+them. No automatic cache cleanup runs. Partial staging is temporary and discarded.
+
+Rationale: users can obtain official patches without command-line tools, credentials,
+or manual file management, while downloads remain separate from application. TLS
+and the configured publisher establish source trust; checksums detect corruption,
+not an independently signed publisher identity. A compromised publisher remains a
+trust boundary. Version labels are not sufficient for consumer compatibility.
+
+Consequences: browsing/downloading does not apply patches or execute payload code.
+Existing preview, baseline checks, explicit Apply and backup/recovery remain required.
+No automatic update scheduler, arbitrary feed URLs, private releases, prereleases,
+desktop self-update or publication changes are included.

@@ -1,5 +1,31 @@
 # Current milestone
 
+GOV-008: check for and download published patches in Repository Builder. ACCEPTED,
+IMPLEMENTED under Eric's 2026-10-19 request to eliminate manual GitHub downloads.
+
+Scope: explicit online check, published stable ZIP/checksum pair selection,
+validated downloads to an external persistent cache, offline cached selection,
+network/empty/error states, and unchanged explicit preview/apply. Use the fixed
+public source Eellerholz3204/engineering-playbook without credentials or startup
+network requests. No consumer application, published-asset changes, PR merge,
+binary rebuild or new release is included. ADR GOV-008 records trust/cache boundaries.
+
+Verification: focused network/discovery/cache/UI contracts, real release download,
+desktop render/preview with a disposable old-baseline repo, complete generation,
+UI plan round-trip and packaging suite from a clean export, and updated checksums.
+Checkpoint: update project records, stage only owned changes, commit/push current
+tracked branch and verify remote state. Report in this chat. No next milestone
+or human decision beyond this scope is pending; downstream apply remains explicit.
+
+Delivery: all 38 tests passed locally and in the final clean tracked-file export
+(136.717 seconds). Live public release discovery/download, checksum selection,
+desktop rendering, preview and disposable apply passed. All 81 framework checksums
+and staged whitespace checks passed. No real downstream repository or published
+release changed. Source-launched Builder users restart to load this feature;
+packaged binaries still need a separate build/release.
+
+## Previous milestone: GOV-007
+
 GOV-007: publish the first framework patch. ACCEPTED, IMPLEMENTED under Eric's explicit
 2026-10-19 approval to publish the prepared first patch release.
 

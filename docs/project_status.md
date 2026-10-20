@@ -1,5 +1,37 @@
 # Project status
 
+## GOV-008 — 2026-10-19
+
+Builder now checks the fixed public playbook GitHub repository on explicit user
+action and downloads selected stable patch ZIP/checksum pairs. HTTPS host limits,
+bounded requests, checksum/digest comparison and full archive validation protect
+downloads. A complete pair is exposed atomically in the external content-addressed
+cache; later launches support offline selection with the expected hash restored.
+Errors retain the manual/local workflow. Preview and Apply remain separate actions.
+No credentials, startup polling, arbitrary feed URLs or consumer writes are added
+to the downloader. ADR GOV-008 records source trust and cache ownership.
+
+Versions remain playbook 3.3.0 and Builder 0.1.0. Branch:
+`codex/governance-context-loading`; starting HEAD:
+`a9033b9dd0786fdbf379f56d12d2fc6719df107e`. Only milestone-owned source, product
+tests, allowlist/checksums and project documentation changed; delivery identity
+will follow after commit/push verification.
+
+Verification: all 38 tests passed locally and in the final clean tracked-file
+export (136.717 seconds), including actual all-profile PowerShell generation,
+UI configuration round-trip and relocated packaged resources. Five download
+contract tests and a UI flow test cover filtering/pagination, network restrictions,
+errors, interrupted/invalid downloads, cache reuse/tampering and preview gating.
+The actual published scratch-workspace patch passed live discovery, download and
+checksum selection, desktop rendering, preview and apply in a disposable repository
+generated from the old release. All 81 framework checksums and diff checks passed.
+Temporary QA scripts/screenshots remained outside the checkout.
+
+Source-launched Builder users restart to load the change. No packaged binary,
+published patch/tag, real consumer repository or PR merge changed. Cached downloads
+are local and not automatically cleaned; private/prerelease feeds and automatic
+application remain out of scope. No next implementation milestone is accepted.
+
 ## GOV-007 — 2026-10-19
 
 The first framework patch is published. The existing

@@ -19,3 +19,9 @@ and recovery. `scripts/playbook_patch.py` and `repository_builder/patch_ui.py` a
 CLI/UI adapters. `.github/workflows/playbook-patch.yml` prepares artifacts for review;
 it owns no publication or downstream Git authority. Patch baselines are content
 hashes of reviewed framework snapshots, not inferred from a version label alone.
+
+`repository_builder/patch_downloads.py` owns the read-only GitHub release adapter
+and external content-addressed download cache. It retrieves only published stable
+patch ZIP/checksum pairs from this project's fixed public repository, then delegates
+archive validation to `patching.py`. It has no consumer-write or publication authority.
+The UI invokes it explicitly and still requires a separate preview/apply transaction.

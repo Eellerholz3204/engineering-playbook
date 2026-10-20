@@ -8,6 +8,10 @@ no new desktop installer has been published.
 
 ## Added
 
+- Explicit in-app checking and downloading of published stable playbook patches,
+  with checksum/archive validation, an external persistent cache, offline selection
+  and clear network failure states. Preview/apply remain separate user actions.
+
 - Searchable existing-repository and patch dropdowns with bounded local discovery,
   Browse fallback, session choices, full paths and Refresh. Changing inputs clears
   prior preview state; changing patches clears the old expected checksum.

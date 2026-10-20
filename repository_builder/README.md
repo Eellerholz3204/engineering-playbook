@@ -79,6 +79,13 @@ partial output.
 
 ## Patch an existing repository
 
+Click **Check for patches**, select a published patch, then **Download selected
+patch** to get the ZIP/checksum directly from this project's public GitHub releases.
+Builder validates the download, selects it and fills the expected checksum. Verified
+downloads persist in an external local-app-data cache for offline use. No sign-in,
+startup polling or automatic application occurs; connection failures leave local
+Browse available. A download still requires repository selection, Preview and Apply.
+
 Choose **Patch existing repository** on the Project screen, select a trusted patch
 ZIP and repository from searchable dropdowns, and preview before applying. Lists
 discover installed projects in the parent folder and `~/source/repos`, plus patch

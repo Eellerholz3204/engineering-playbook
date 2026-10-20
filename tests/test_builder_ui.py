@@ -11,6 +11,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 from repository_builder.app import RepositoryBuilder
 from repository_builder.core import CreationPlan, create_repository
 from repository_builder.patch_ui import PatchView
+from repository_builder.patch_downloads import PublishedPatch
 
 
 class BuilderUITests(unittest.IsolatedAsyncioTestCase):
@@ -23,6 +24,9 @@ class BuilderUITests(unittest.IsolatedAsyncioTestCase):
         environment = patch.dict(os.environ, {"ENGINEERING_PLAYBOOK_SCRATCH_ROOT": str(Path(self.temporary.name) / "scratch")})
         environment.start()
         self.addCleanup(environment.stop)
+        cache = patch("repository_builder.patch_ui.cached_patches", return_value=[])
+        cache.start()
+        self.addCleanup(cache.stop)
         self.app.name.value = "example-project"
         self.app.parent.value = self.temporary.name
 
@@ -130,6 +134,50 @@ class BuilderUITests(unittest.IsolatedAsyncioTestCase):
         self.assertIn(root, parents)
         self.assertIn(root, patches)
         self.assertIn(Path.home() / "Downloads", patches)
+
+    async def test_online_patch_check_download_and_errors_preserve_preview_gate(self):
+        item = PublishedPatch("playbook-patch-test", "test.zip", "Published test")
+        with patch("repository_builder.patch_ui.available_patches", return_value=[item]) as check:
+            self.app.open_patch_view(None)
+            view = self.app.patch_view
+            check.assert_not_called()  # Opening the screen is offline.
+            await view.check_online(None)
+        self.assertEqual([item.key], [o.key for o in view.remote.options])
+        self.assertTrue(view.download_button.disabled)
+        view.remote.value = item.key
+        view.report = {"previous": "review"}
+        view.remote_changed()
+        self.assertIsNone(view.report)
+        self.assertFalse(view.download_button.disabled)
+        path = Path(self.temporary.name) / "downloaded.zip"
+        with patch("repository_builder.patch_ui.download_patch", return_value=(path, "a" * 64)) as download:
+            await view.download(None)
+        download.assert_called_once_with(item, None)
+        self.assertEqual(str(path), view.bundle.value)
+        self.assertEqual("a" * 64, view.checksum.value)
+        self.assertEqual("Preview patch", self.app.next.content)
+        self.assertIsNone(view.report)
+        self.assertFalse(view.completed)
+        with patch("repository_builder.patch_ui.cached_checksum", return_value="a" * 64):
+            view.checksum.value = ""
+            view.bundle_changed()
+            self.assertEqual("a" * 64, view.checksum.value)
+        with patch("repository_builder.patch_ui.download_patch", side_effect=ValueError("checksum mismatch")):
+            await view.download(None)
+        self.assertIn("checksum mismatch", self.app.error.value)
+        self.assertFalse(self.app.busy)
+        self.assertIsNone(view.report)
+        self.assertFalse(view.completed)
+        with patch("repository_builder.patch_ui.available_patches", side_effect=ValueError("offline")):
+            await view.check_online(None)
+        self.assertEqual(str(path), view.bundle.value)
+        self.assertTrue(self.app.error.visible)
+        self.assertFalse(self.app.busy)
+        self.assertEqual([], view.remote.options)
+        self.assertTrue(view.download_button.disabled)
+        with patch("repository_builder.patch_ui.available_patches", return_value=[]):
+            await view.check_online(None)
+        self.assertIn("No published", view.online_status.value)
 
     async def test_catalog_disables_unsupported_virtual_environment(self):
         await self.app.advance(None)

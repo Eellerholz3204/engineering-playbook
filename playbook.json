@@ -47,6 +47,7 @@
     "repository_builder/core.py",
     "repository_builder/patching.py",
     "repository_builder/patch_ui.py",
+    "repository_builder/patch_downloads.py",
     "repository_builder/runtime.py",
     "repository_builder/startup.py",
     "repository_builder/version.py",

@@ -46,6 +46,26 @@ requires its own tested bundle; a matching version label alone is insufficient.
 
 ## Preview and apply in Repository Builder
 
+To obtain a patch directly, choose **Patch existing repository**, then **Check for
+patches**. Select a **Published patches** entry and click **Download selected patch**.
+Builder checks the public `Eellerholz3204/engineering-playbook` GitHub releases,
+excluding drafts, prereleases and releases without a patch ZIP/checksum pair.
+No sign-in is required and no network check runs just from opening Builder.
+
+The downloaded checksum and full archive are validated before the ZIP is selected.
+The expected SHA-256 is filled automatically. Downloads are retained outside projects
+under `%LOCALAPPDATA%\RepositoryBuilder\patches\<sha256>\` (or `~/.cache` when local
+application data is unavailable). Completed downloads appear in the local patch list
+on later launches and can be previewed offline. Selecting a cached ZIP restores its
+pinned expected hash; preview still verifies the file. Damaged cache entries are
+reported, not silently overwritten. No automatic cache cleanup runs.
+
+Network requests use HTTPS, GitHub/CDN redirect restrictions, size limits, 30-second
+request timeouts and a maximum of five 100-release pages. Connection failures, rate
+limits or oversized catalogs leave Browse/local preview available. Only the fixed
+publisher is supported; checksums protect integrity, not independent publisher
+authenticity. Downloading never applies a patch or determines project compatibility.
+
 Open the current Builder and choose **Patch existing repository** on the Project
 screen. Use the searchable **Existing repository** and **Available patch** dropdowns.
 Repository discovery checks immediate children of the creation screen's parent

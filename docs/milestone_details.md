@@ -181,3 +181,31 @@ publication checkpoint working tree was clean. This documentation-only closure
 follows on that branch; existing PR #1 remains the review vehicle. No new PR,
 consumer changes, binary rebuild or merge occurred. Delivery: IMPLEMENTED.
 No next accepted implementation milestone remains; downstream adoption is separate.
+
+## GOV-008 — In-app patch discovery and downloads, 2026-10-19
+
+Implemented explicit Check for patches and Download selected patch actions using
+the fixed public GitHub publisher. Published stable ZIP/checksum pairs are listed;
+drafts, prereleases, unsafe names and incomplete pairs are excluded. Requests use
+HTTPS redirect restrictions, limits/timeouts, no credentials and no startup polling.
+Downloads compare publisher checksum and optional GitHub digest, validate the full
+archive and expose a complete pair atomically in the external content-addressed
+cache. Offline selection restores the pinned digest. Corrupt entries are retained
+for review, not overwritten. Consumer compatibility remains the existing preview
+engine's responsibility; nothing downloads or applies automatically.
+
+Verification: all 38 tests passed locally and from the final clean tracked-file
+export in 136.717 seconds. Five maintained download tests and one additional UI
+flow test cover the public feed, error/bounds contracts, invalid/interrupted
+downloads, safe cache placement/reuse/tampering, offline digest and preview gating.
+Existing actual PowerShell generation across all profiles, UI save/import round-trip,
+patch preservation/recovery and relocated package generation passed. All 81 framework
+checksums and staged whitespace checks passed. Live GitHub discovery/download of
+the published first patch, desktop screenshots, checksum autofill, preview and
+disposable old-baseline application passed. No permanent tests require network.
+
+Updated public patch guide, Builder guide, catalog/checksums, domain map, status,
+roadmap, milestone and unreleased notes. ADR GOV-008 records accepted trust/cache
+boundaries. One-off verification scripts/screenshots remain external. Delivery:
+IMPLEMENTED. No published release/tag, real consumer repository or packaged binary
+changed. No next implementation milestone is accepted.
