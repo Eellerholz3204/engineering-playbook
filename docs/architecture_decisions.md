@@ -1,5 +1,45 @@
 # Architecture decisions
 
+## GOV-013 — Portable, additive scratch feature migration
+
+Status: ACCEPTED under Eric's 2026-10-20 redesign implementation request.
+
+Context: three exact-snapshot releases cover three baselines, not the wider set
+of installed repositories. Whole-framework equality makes unrelated customizations
+and encoding differences block adoption of one feature. Repository-aware selection
+reports that limitation but does not address it.
+
+Decision: retain schema-1 snapshot patches unchanged. Introduce a fixed schema-2
+agent-scratch-workspace v1 recipe, not arbitrary executable migrations. It installs
+the existing helper, a standalone copy of the canonical scratch policy, and a feature
+receipt under a namespaced framework directory. Append a fixed marked AGENTS.md
+section while retaining every existing byte. The preview shows that section.
+Existing project/organizational instructions retain authority; semantic conflicts
+require explicit reconciliation, not automated interpretation or replacement.
+
+Support explicit catalog/version pairs (schema 1 / 3.0.1; schema 2 / 3.2.0, 3.2.1,
+3.3.0, 3.3.1) and matching VERSION. Do not require unrelated framework hashes.
+Missing feature files may be added; equivalent UTF-8 BOM/CRLF content is retained
+without rewriting. Different existing helper/policy/receipt or modified, duplicate
+or incomplete marked blocks block application. Never replace an existing feature
+file, normalize a consumer file in place or pretend the entire framework upgraded.
+Keep VERSION, catalog, installed checksums and project configuration unchanged.
+
+Use the same archive integrity, publisher trust, external backup/journal, rollback,
+link rejection and explicit Preview/Apply boundaries. Pin observed inputs in Builder
+through Apply so changed instructions require a fresh preview. Feature receipts
+describe normalized component hashes; the AGENTS component is only the marked
+section. Existing manifests continue to describe the original framework snapshot.
+No consumer Git actions or automatic cleanup. The installed helper runs only when
+the user/agent invokes it; the updater executes only its own trusted backup helper.
+
+Consequences: one reviewed artifact supports custom installations in the tested
+families; it is not a universal framework upgrade. Old readers reject schema 2 and
+require current trusted Builder/source CLI. Existing snapshot releases stay immutable.
+This narrowly extends GOV-005's write boundary to append-only AGENTS instructions
+for the named feature, superseding its all-file matching requirement only for schema 2.
+Publication and real repository application require separate authority.
+
 ## GOV-001 — Governed startup entry points
 
 Accepted by Eric's 2026-09-26 implementation request. Generate concise AGENTS.md

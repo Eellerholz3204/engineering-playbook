@@ -79,6 +79,18 @@ partial output.
 
 ## Patch an existing repository
 
+For scratch support across custom installations, use the **additive scratch**
+feature patch with the current Builder. It supports installed playbook 3.0.1,
+3.2.0, 3.2.1, 3.3.0 and 3.3.1 catalog families without a whole-framework upgrade.
+Preview lists the helper/policy/receipt additions and displays the marked AGENTS.md
+section. Apply appends that section while retaining every existing instruction byte.
+The framework version, workflows, checksums, project configuration and documents
+stay unchanged. Modified feature files or blocks require explicit reconciliation;
+unrelated framework customizations do not block adoption. Review for semantic rule
+conflicts even when structurally Compatible. Current source/CLI is required; old
+patch readers reject this new format. Publication of the portable candidate is
+separate from implementing this source change.
+
 Click **Check for patches**, choose the repository and a patch in the single **Patch**
 selector, then **Preview patch**. Builder downloads published patches directly from
 this project's public GitHub releases and verifies the checksum automatically;
@@ -98,9 +110,11 @@ the cache's checksum or an adjacent `.zip.sha256` file when present. Only use lo
 ZIPs from a trusted publisher. A sole patch is selected after checking online;
 explicit selections and the repository choice are never switched automatically.
 The review shows changes, local conflicts and manual instruction/document reconciliation. Applying
-rechecks the internally captured digest and installed files, backs up changed files outside the
-project, and preserves AGENTS.md, project documents, source and tests. Existing
-project config retains its fields while recording the installed version and patch.
+rechecks the internally captured digest and installed files and backs up changed
+files outside the project. Snapshot patches leave AGENTS.md untouched and record
+the new version/receipt in existing project config. Additive scratch patches append
+only their reviewed AGENTS.md section and leave project config untouched. Both
+preserve existing instructions, project documents, source and tests.
 
 Conflicts show **Patch blocked**, an explanation and a disabled primary action.
 Choosing a repository checks local and discovered published patches against its

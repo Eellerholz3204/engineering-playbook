@@ -7,6 +7,7 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from repository_builder.patching import apply_patch, build_patch, inspect_patch
+from repository_builder.scratch_patch import build as build_scratch_patch
 
 
 def main() -> int:
@@ -20,6 +21,11 @@ def main() -> int:
     build.add_argument("--summary", required=True)
     build.add_argument("--base-additions", type=Path,
                        help="Reviewed JSON path/SHA-256 map of legacy framework additions outside the base catalog")
+    scratch = commands.add_parser("build-scratch", help="Create one additive scratch feature ZIP for supported installations")
+    scratch.add_argument("--target", type=Path, default=Path(__file__).resolve().parents[1])
+    scratch.add_argument("--output", type=Path, required=True)
+    scratch.add_argument("--patch-id", required=True)
+    scratch.add_argument("--summary", required=True)
     for name in ("preview", "apply"):
         command = commands.add_parser(name)
         command.add_argument("--bundle", type=Path, required=True)
@@ -29,11 +35,13 @@ def main() -> int:
     try:
         if args.command == "build":
             report = build_patch(args.base, args.target, args.output, args.patch_id, args.summary, args.base_additions)
+        elif args.command == "build-scratch":
+            report = build_scratch_patch(args.target, args.output, args.patch_id, args.summary)
         elif args.command == "preview":
             report = inspect_patch(args.bundle, args.repo, args.sha256)
         else:
             report = apply_patch(args.bundle, args.repo, args.sha256)
-        public = {k: v for k, v in report.items() if k not in {"observed", "updated_config", "config_sha256", "agent_blocks"}}
+        public = {k: v for k, v in report.items() if k not in {"observed", "updated_config", "config_sha256", "_writes"}}
         print(json.dumps(public, indent=2))
         return 2 if report.get("conflicts") else 0
     except Exception as exc:

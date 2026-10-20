@@ -436,3 +436,62 @@ matched and the checkpoint working tree was clean. This documentation-only closu
 follows there. Existing PR #1 remains the review vehicle; no new PR or merge was
 performed. No next accepted milestone remains. Restart the source-launched Builder,
 choose a repository and Check for patches; matching is automatic, Apply is not.
+
+## GOV-013 — Portable additive scratch migration — 2026-10-20
+
+ACCEPTED, CURRENT under Eric's request to redesign patching so one scratch feature
+works across remaining repositories without overwriting custom instructions.
+Replaced the need for bespoke snapshot baselines with a separate, fixed schema-2
+feature recipe; historical schema-1 readers/releases and matching stay unchanged.
+The recipe installs only the workspace helper, namespaced canonical policy/feature
+receipt and a marked append-only AGENTS.md section. It does not modify framework
+version/catalog/checksum files, workflow rules, configuration or project documents.
+Unknown versions and modified feature destinations block without forced overwrite;
+BOM/CRLF-equivalent files are retained, not rewritten. Custom rule authority remains
+intact and semantic contradictions require explicit review.
+
+Added CLI `build-scratch`, artifact-only workflow choice, additive Builder labels,
+expanded instruction preview and observed-input pinning through Apply. Reused
+archive integrity, external cache, trusted backup helper, journal and rollback.
+ADR GOV-013 records the narrow extension to the write/compatibility boundary.
+No dependency, consumer diagnostic test suite or automatic cleanup was introduced.
+
+Read-only audit: all 15 normal installed repositories were compatible with the same
+candidate, spanning 3.0.1, 3.2.0, 3.2.1, 3.3.0 and 3.3.1. Excluded athena_dbt and
+hidden historical checkouts were not included. Isolated copies passed apply,
+byte-preservation and no-op reapply: all original instructions remained an exact
+prefix and every other sampled framework/configuration/project-document file was
+identical. Real consumer files stayed unchanged. This is not semantic rule approval
+or a run of every consumer's product test suite.
+
+Ten focused maintained contracts passed (24.918 seconds), including actual helper
+execution across five version families, CLI/UI round-trip, schema-2 download/cache,
+encoding preservation, archive/recipe restrictions, edited blocks, unsupported
+catalogs, stale preview, rollback and real Windows junction refusal. The initial
+56-test suite passed with one unavailable file-symlink case; that case now uses a
+working directory-junction check, and download/cache coverage adds one test.
+Final clean-export full-suite results follow.
+
+App-owned Flet desktop rendering/preview/apply passed on a disposable custom 3.2.0
+project; inspected screenshots show the exact expandable instruction section and
+"Playbook 3.2.0 unchanged" after success. Native Windows input control lost its
+window; the existing application render-harness pattern provided independent
+desktop verification without touching a real repository. All one-off scripts,
+screenshots, candidate ZIP/sidecar and disposable fixtures remain in external scratch.
+
+Candidate patch ID: `agent-scratch-workspaces-portable-v1`. SHA-256:
+`8ec723e90b79e792bb6e7ba0afa1d5ec7087e7305931484d7b3a9f0bbbb48b3e`.
+This is a local unreleased artifact, not a published release or desktop update.
+Final source/payload consistency, clean-export tests and commit/push closure follow.
+No next milestone is accepted. Publication, real consumer application and PR merge
+remain separate decisions.
+
+GOV-013 final verification: all 57 tests passed from the final clean tracked-file
+export in 243.062 seconds, with no skips. This includes actual PowerShell generation,
+UI plan/patch round-trips, existing schema-1 behavior, new feature contracts and
+relocated packaging. All 82 framework checksums and staged whitespace checks pass.
+The exported framework is byte-identical to the implementation; rebuilding the
+recipe from it produces the candidate's exact manifest and payload. The candidate
+ZIP/sidecar retain the SHA above. The final real-repository read-only audit and
+disposable-copy preservation/reapply again passed for all 15 installations.
+Delivery: IMPLEMENTED. Commit/push closure follows on the existing tracked branch.

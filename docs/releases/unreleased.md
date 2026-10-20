@@ -19,6 +19,17 @@ new target snapshot or desktop release. The original 3.2.1 patch remains unchang
 
 ## Added
 
+- Portable schema-2 scratch feature patches and `build-scratch` CLI/workflow support.
+  One additive recipe supports reviewed 3.0.1/3.2.0/3.2.1/3.3.0/3.3.1 catalog families,
+  installs the helper/policy/feature receipt and appends a previewable marked AGENTS.md
+  section. Existing bytes and custom authority are preserved. Modified feature
+  destinations block; unrelated framework edits do not. BOM/CRLF equivalence is
+  read-only. Framework versions/manifests/configuration stay unchanged.
+- Builder labels additive features distinctly, shows the appended instructions and
+  pins inspected inputs through Apply. Existing snapshot releases/readers retain
+  their format; old readers safely reject schema 2. This is unreleased source and
+  a local candidate, not publication or application to real consumers.
+
 - Repository-aware patch compatibility labels, compatible-first ordering and Show all
   filtering. Repository selection and explicit discovery/refresh check actual files,
   with verified external downloads, progress and stop/retry. Failed checks remain

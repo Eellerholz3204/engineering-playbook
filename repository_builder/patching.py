@@ -1,4 +1,4 @@
-"""Build and apply reviewed framework snapshots without executing bundle code."""
+"""Validate and apply reviewed snapshots or fixed features without executing bundle code."""
 
 from __future__ import annotations
 
@@ -185,14 +185,16 @@ def load_patch(bundle: Path, expected_sha256: str | None = None) -> tuple[dict, 
         if any(stat.S_ISLNK(e.external_attr >> 16) or e.is_dir() for e in entries):
             raise ValueError("ZIP links and directory entries are not allowed.")
         manifest = read_json(archive.read("patch.json"))
-        if (type(manifest.get("schema_version")) is not int or manifest["schema_version"] != 1 or
+        if (not isinstance(manifest, dict) or
+            type(manifest.get("schema_version")) is not int or manifest["schema_version"] not in (1, 2) or
             not isinstance(manifest.get("patch_id"), str) or
             not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,79}", manifest["patch_id"]) or
             not isinstance(manifest.get("summary"), str)):
             raise ValueError("Invalid patch manifest.")
-        for field in ("before", "after"):
+        feature = manifest["schema_version"] == 2
+        for field in (("after",) if feature else ("before", "after")):
             hashes = manifest.get(field)
-            if not isinstance(hashes, dict) or not REQUIRED <= hashes.keys():
+            if not isinstance(hashes, dict) or (not feature and not REQUIRED <= hashes.keys()):
                 raise ValueError("Patch manifest has an incomplete snapshot.")
             for name, value in hashes.items():
                 valid_path(name)
@@ -200,13 +202,17 @@ def load_patch(bundle: Path, expected_sha256: str | None = None) -> tuple[dict, 
                     raise ValueError("Invalid patch file checksum.")
             if len({n.casefold() for n in hashes}) != len(hashes):
                 raise ValueError("Duplicate framework paths in patch manifest.")
-        if set(manifest["before"]) - set(manifest["after"]):
+        if not feature and set(manifest["before"]) - set(manifest["after"]):
             raise ValueError("Patch file removals are not supported.")
         if set(names) != {"patch.json", *("payload/" + n for n in manifest["after"])}:
             raise ValueError("ZIP contents do not match the patch manifest.")
         payload = {n: archive.read("payload/" + n) for n in manifest["after"]}
     if any(digest(payload[n]) != h for n, h in manifest["after"].items()):
         raise ValueError("Patch payload checksum mismatch.")
+    if feature:
+        from .scratch_patch import validate
+        validate(manifest, payload)
+        return manifest, payload, sha256
     catalog = validate_snapshot(payload)
     if catalog["playbook_version"] != manifest.get("target_version"):
         raise ValueError("Patch target version disagrees with its payload.")
@@ -221,6 +227,9 @@ def inspect_patch(bundle: Path, repository: Path, expected_sha256: str | None = 
     ordinary_path(framework)
     if not framework.is_dir() or not (framework / "playbook.json").is_file():
         raise ValueError("Choose an existing repository with an installed engineering-playbook.")
+    if manifest["schema_version"] == 2:
+        from .scratch_patch import inspect
+        return inspect(manifest, payload, sha256, repo)
     config_file = destination(repo, ".engineering-playbook.json")
     config = read_json(config_file.read_bytes()) if config_file.exists() else None
     if config is not None and not isinstance(config, dict):
@@ -285,17 +294,22 @@ def atomic_write(path: Path, content: bytes) -> None:
             temporary.unlink(missing_ok=True)
 
 
-def apply_patch(bundle: Path, repository: Path, expected_sha256: str) -> dict:
+def apply_patch(bundle: Path, repository: Path, expected_sha256: str,
+                reviewed_observed: dict | None = None) -> dict:
     if not expected_sha256:
         raise ValueError("Apply requires the SHA-256 of the reviewed patch ZIP.")
     report = inspect_patch(bundle, repository, expected_sha256)
+    if reviewed_observed is not None and report["observed"] != reviewed_observed:
+        raise ValueError("Repository changed after preview; preview again before applying. No files changed.")
     if report["conflicts"]:
         raise ValueError("Local edits or incompatible baseline; no files changed: " + ", ".join(report["conflicts"]))
     if report["already_applied"]:
         return {**report, "status": "already_applied", "backup": None}
     _, payload, _ = load_patch(bundle, expected_sha256)
     repo = Path(report["repository"])
-    writes = {"engineering-playbook/" + item["path"]: payload[item["path"]] for item in report["changes"]}
+    writes = report.get("_writes")
+    if writes is None:
+        writes = {"engineering-playbook/" + item["path"]: payload[item["path"]] for item in report["changes"]}
     if report["configuration_update"]:
         writes[".engineering-playbook.json"] = json_bytes(report["updated_config"])
     task = "patch-" + uuid.uuid4().hex

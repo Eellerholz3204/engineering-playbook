@@ -31,8 +31,10 @@ def patch_metadata(path):
             if entry.file_size > 1024 * 1024:
                 return None
             data = json.loads(archive.read(entry))
-        if not isinstance(data, dict) or data.get("schema_version") != 1:
+        if not isinstance(data, dict) or data.get("schema_version") not in (1, 2):
             return None
+        if data.get("schema_version") == 2:
+            return data if data.get("kind") == "agent-scratch-workspace" and isinstance(data.get("patch_id"), str) else None
         if not all(isinstance(data.get(k), str) and data[k] for k in
                    ("patch_id", "base_version", "target_version")):
             return None
@@ -44,6 +46,8 @@ def patch_metadata(path):
 def patch_label(path):
     data = patch_metadata(path)
     if data:
+        if data.get("schema_version") == 2:
+            return "Agent scratch workspaces (additive; preserves custom instructions)"
         return f"{data['patch_id'].replace('-', ' ')} ({data['base_version']} to {data['target_version']})"
     return None
 
@@ -125,7 +129,7 @@ class PatchView:
             self.description, self.notes,
             self.online_status,
             ft.Text("Compatibility checks download and verify published patches as needed, outside your project. Preview and Apply remain separate; checking never changes project files.", size=12),
-            ft.Text("Project documents and AGENTS.md are preserved. Local framework edits block the patch; backups are stored outside the project.", size=12),
+            ft.Text("Project documents and existing instructions are preserved. Additive feature patches may append a reviewed AGENTS.md section; backups are stored outside the project.", size=12),
         ])
 
     def discovery_locations(self):
@@ -227,6 +231,12 @@ class PatchView:
 
     @staticmethod
     def compatibility_result(report):
+        if report.get("kind") == "agent-scratch-workspace":
+            if not report["can_apply"]:
+                return ("Not compatible", "Scratch support needs review: " + "; ".join(report.get("conflict_reasons", {}).values()))
+            if report["already_applied"]:
+                return ("Already applied", "The scratch feature and instruction section are present. The framework version is unchanged.")
+            return ("Compatible", "Scratch support can be added without replacing custom instructions or upgrading the framework. Preview the appended section.")
         if not report["can_apply"]:
             return ("Not compatible", f"{len(report['conflicts'])} framework file(s) differ from this patch's starting or target snapshot. Preview for details.")
         if not report["changes"]:
@@ -421,23 +431,31 @@ class PatchView:
                     if not self.bundle.options else "Choose a patch, then preview its compatibility with the selected repository."))
         app.body.controls = [self.title, self.inputs]
         if blocked:
-            self.blocked_reason.value = (f"{len(self.report['conflicts'])} framework file(s) do not match "
+            self.blocked_reason.value = (
+                "Scratch feature needs explicit reconciliation: " + "; ".join(self.report["conflict_reasons"].values())
+                if self.report.get("kind") else
+                f"{len(self.report['conflicts'])} framework file(s) do not match "
                 f"this patch's supported starting snapshot or target ({self.report['base_version']} to {self.report['target_version']}).")
             app.body.controls.insert(1, self.blocked_notice)
         if self.report:
             report = self.report
             details = [ft.Text(report["patch_id"], size=18, weight=ft.FontWeight.W_600),
                        ft.Text(report["summary"]),
-                       ft.Text(f"Playbook {report['base_version']} → {report['target_version']}", size=13)]
+                       ft.Text(f"Additive scratch feature v1 · Playbook {report['base_version']} unchanged"
+                               if report.get("kind") else
+                               f"Playbook {report['base_version']} → {report['target_version']}", size=13)]
             if self.completed:
-                details.append(ft.Text("Framework patch applied. Complete any instruction/document review listed below."))
+                details.append(ft.Text("Patch applied. Complete any instruction/document review listed below."))
             elif report["already_applied"]:
-                details.append(ft.Text("The framework is already at this patch's target state."))
+                details.append(ft.Text("This patch's target state is already present."))
             details += [ft.Text(f"{item['action'].upper()}  {item['path']}", size=12) for item in report["changes"]]
             details += [ft.Text("CONFLICT  " + name, size=12, color="#B42318") for name in report["conflicts"]]
             if report["configuration_update"]:
                 details.append(ft.Text("UPDATE  Installed version and last-patch receipt in .engineering-playbook.json", size=12))
             details += [ft.Text("REVIEW  " + item, size=12) for item in report["review_required"]]
+            if report.get("kind"):
+                details.append(ft.ExpansionTile(title=ft.Text("AGENTS.md section — existing text is retained"),
+                    controls=[ft.Text(report["agent_blocks"], selectable=True, size=12)]))
             if report.get("backup"):
                 details.append(ft.Text("Backups and suggested AGENTS.md blocks: " + report["backup"], size=12, selectable=True))
             app.body.controls.append(app.card(details))
@@ -505,7 +523,8 @@ class PatchView:
         self.busy(True)
         try:
             repo, _ = self.reviewed_inputs
-            self.report = await asyncio.to_thread(apply_patch, self.reviewed_bundle, Path(repo), self.report["sha256"])
+            self.report = await asyncio.to_thread(apply_patch, self.reviewed_bundle, Path(repo),
+                self.report["sha256"], reviewed_observed=self.report["observed"])
             self.compatibility.clear()
             self.compatibility[self.bundle.value] = self.compatibility_result(self.report)
             self.compatibility_status.value = "Patch applied. Refresh lists to recheck other patches against the updated framework."

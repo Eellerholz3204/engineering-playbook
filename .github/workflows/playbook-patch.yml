@@ -3,9 +3,17 @@ name: Build playbook patch
 on:
   workflow_dispatch:
     inputs:
-      base_ref:
-        description: Previously released playbook commit or tag
+      patch_kind:
+        description: Additive scratch feature or exact framework snapshot upgrade
         required: true
+        default: scratch-feature
+        type: choice
+        options:
+          - scratch-feature
+          - snapshot
+      base_ref:
+        description: Previously released playbook commit or tag (snapshot only)
+        required: false
         type: string
       patch_id:
         description: Unique release patch ID (letters, numbers, hyphens, underscores)
@@ -28,6 +36,7 @@ jobs:
         with:
           path: target
       - uses: actions/checkout@v6
+        if: inputs.patch_kind == 'snapshot'
         with:
           ref: ${{ inputs.base_ref }}
           path: base
@@ -40,13 +49,20 @@ jobs:
       - name: Verify patch tooling and repository generator
         working-directory: target
         run: python -m unittest discover -s tests -v
-      - name: Package reviewed framework snapshots
+      - name: Package reviewed patch
         env:
           PATCH_ID: ${{ inputs.patch_id }}
           PATCH_SUMMARY: ${{ inputs.summary }}
+          PATCH_KIND: ${{ inputs.patch_kind }}
+          BASE_REF: ${{ inputs.base_ref }}
         shell: pwsh
         run: |
-          python target/scripts/playbook_patch.py build --base base --target target --output artifacts/playbook-patch.zip --patch-id "$env:PATCH_ID" --summary "$env:PATCH_SUMMARY"
+          if ($env:PATCH_KIND -eq 'scratch-feature') {
+            python target/scripts/playbook_patch.py build-scratch --target target --output artifacts/agent-scratch-workspaces.zip --patch-id "$env:PATCH_ID" --summary "$env:PATCH_SUMMARY"
+          } else {
+            if ([string]::IsNullOrWhiteSpace($env:BASE_REF)) { throw 'Snapshot patches require base_ref.' }
+            python target/scripts/playbook_patch.py build --base base --target target --output artifacts/playbook-patch.zip --patch-id "$env:PATCH_ID" --summary "$env:PATCH_SUMMARY"
+          }
           if ($LASTEXITCODE -ne 0) { throw 'Patch packaging failed.' }
       - uses: actions/upload-artifact@v7
         with:

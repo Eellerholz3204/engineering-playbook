@@ -20,6 +20,13 @@ CLI/UI adapters. `.github/workflows/playbook-patch.yml` prepares artifacts for r
 it owns no publication or downstream Git authority. Patch baselines are content
 hashes of reviewed framework snapshots, not inferred from a version label alone.
 
+`repository_builder/scratch_patch.py` owns the fixed schema-2 additive scratch
+recipe. It derives its policy from `GOVERNANCE_CONTEXT.md`, installs only feature
+assets and appends a marked instruction section without replacing custom text.
+Supported catalog/version pairs and feature-local compatibility do not assert a
+whole-framework upgrade or semantic approval of local instructions. It reuses
+`patching.py` for archive integrity, explicit apply, external backups and recovery.
+
 `repository_builder/patch_downloads.py` owns the read-only GitHub release adapter
 and external content-addressed download cache. It retrieves only published stable
 patch ZIP/checksum pairs from this project's fixed public repository, then delegates

@@ -1,5 +1,36 @@
 # Current milestone
 
+GOV-013: portable additive scratch-workspace migration. ACCEPTED, IMPLEMENTED under
+Eric's 2026-10-20 request to support remaining repositories without overwriting
+their custom instructions.
+
+Scope: a fixed schema-2 feature recipe, one helper/policy bundle across supported
+installed catalog families, append-only marked AGENTS.md section, component receipt,
+read-only compatibility and detailed preview in CLI/Builder, explicit apply with
+external backup/rollback. Preserve framework version, catalogs/checksums, custom
+instructions and unrelated files. Existing schema-1 releases remain unchanged.
+No real consumer apply, release publication, desktop binary rebuild or PR merge.
+
+Verification: supported-version and customized/encoding variants; no-write preview;
+append preservation/idempotency; edited-block/helper conflicts; archive/path checks;
+stale-preview and rollback; CLI/UI round-trips and external helper execution;
+read-only installed-repository inventory and disposable-copy application; full
+clean-export suite including PowerShell generation and packaging. Update checksums,
+owning docs and ADR GOV-013, commit/push current tracked branch and verify remote.
+Publication/application remain separate decisions; no next milestone is accepted.
+
+Verification completed: all 57 tests passed from the final clean tracked-file
+export in 243.062 seconds with no skips, including actual PowerShell generation,
+UI round-trips, both patch formats and relocated packaging. All 82 checksums passed;
+exported framework bytes match the working implementation. Candidate manifest and
+payload match the final source recipe exactly. All 15 audited installations passed
+read-only compatibility plus disposable-copy apply/preservation/reapply, including
+the final Markdown guards. Desktop rendered instruction preview and success state
+were inspected. No real consumer, published release or binary changed.
+Implementation commit/push closure follows in the ledger.
+
+## Previous milestone: GOV-012
+
 GOV-012: repository-aware patch compatibility. ACCEPTED, IMPLEMENTED under Eric's
 2026-10-20 approval to identify compatible patches for the selected repository.
 

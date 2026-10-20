@@ -1,5 +1,42 @@
 # Project status
 
+## GOV-013 — 2026-10-20, portable scratch feature implemented
+
+Implemented a fixed schema-2 additive recipe alongside unchanged schema-1 snapshot
+patches. One bundle covers catalog schema 1 / 3.0.1 and schema 2 / 3.2.0, 3.2.1,
+3.3.0, 3.3.1. Only the helper, namespaced policy/feature receipt and an append-only
+marked AGENTS.md section are installed. Custom instructions retain every original
+byte and their authority; semantic conflicts still need explicit reconciliation.
+Framework VERSION, manifests, project configuration, workflows and documents stay
+unchanged. Feature-local conflicts block; unrelated framework changes do not.
+
+Read-only inspection of 15 normal installed repositories found all compatible.
+Application, byte-preservation and repeat-application checks passed on disposable
+copies of those installations, including all nine primary Metis checkouts and
+older 3.0.1/3.2.0 consumers. Hidden historical checkouts and excluded athena_dbt were
+not audited. No real consumer was changed. These are migration contract checks,
+not execution of each consumer's entire product suite or semantic approval of rules.
+
+Ten focused contracts passed, including CLI/Builder round-trip, verified download
+cache, supported families, missing AGENTS/config, encoding preservation, modified
+feature/block refusal, archive scope, stale preview, rollback and Windows junctions.
+Actual Flet desktop rendering/preview/apply through the app-owned test harness passed;
+expanded instruction preview and unchanged-version success screenshots were inspected.
+Native Windows input automation lost its target window; no delivery depends on it.
+All diagnostics/screenshots/candidate assets remain outside the source checkout.
+All 57 tests passed from the final clean tracked-file export in 243.062 seconds,
+without skips. Actual PowerShell generation, UI round-trips, both patch formats and
+relocated packaging passed. All 82 checksums passed; exported framework bytes equal
+the working source, and the candidate manifest/payload match the final recipe.
+The final read-only/disposable-copy audit again passed for all 15 installations.
+Tracked-branch commit/push closure follows in the ledger.
+
+Branch remains `codex/governance-context-loading`; versions remain framework 3.3.1 /
+Builder 0.1.0. ADR GOV-013 records the additive write boundary. The candidate is local
+and unreleased; existing releases and app binaries are unchanged. Restart the current
+source Builder and Browse to the local ZIP to preview. Publication, consumer apply
+and PR merge remain separate decisions; no next milestone is accepted.
+
 ## GOV-012 — 2026-10-20, compatibility selection implemented
 
 Builder now classifies patches for the selected repository using existing full

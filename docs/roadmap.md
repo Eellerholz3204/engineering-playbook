@@ -33,3 +33,6 @@
   compatible patch. No real consumer application or desktop binary release.
 - GOV-012: repository-aware patch compatibility - ACCEPTED, IMPLEMENTED. Classify actual
   installed files, rank/filter options and explain failures; keep Preview/Apply separate.
+- GOV-013: portable additive scratch migration - ACCEPTED, IMPLEMENTED. One feature recipe
+  across supported catalog families, retained custom instructions, feature-local
+  conflict detection and previewable append. No real consumer apply or publication.

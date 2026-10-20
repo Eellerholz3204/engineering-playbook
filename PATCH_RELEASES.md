@@ -1,12 +1,75 @@
 # Playbook patches for existing repositories
 
-A patch is a reviewed ZIP containing an allowlisted target framework snapshot,
-the exact base/target file hashes, a unique patch ID and a release summary. It can
-deliver scratch-space rules and future framework improvements to repositories that
-already contain `engineering-playbook/`. It does not update the installed Builder
-application, publish releases, create PRs or change project source/tests.
+A patch is a reviewed ZIP with a unique patch ID, integrity hashes and release
+summary. Two formats are supported: a portable additive scratch feature (schema 2)
+and an exact framework snapshot upgrade (schema 1). Neither updates the installed
+Builder application, publishes releases, creates PRs or changes project source/tests.
 
-## Prepare a patch release
+## Portable scratch-workspace feature
+
+Use this instead of preparing a different full-framework upgrade for each repository.
+One ZIP supports catalog schema 1 / playbook 3.0.1 and schema 2 / playbook 3.2.0,
+3.2.1, 3.3.0 and 3.3.1. VERSION must agree with the catalog. Compatibility checks
+the feature's destinations, not unrelated framework files or the repository name.
+Unknown catalog/version combinations still require review before support is added.
+
+The fixed recipe:
+
+- Adds `engineering-playbook/scripts/initialize_agent_workspace.ps1` if absent.
+  Reuses an equivalent installed helper without rewriting it.
+- Adds `engineering-playbook/features/agent-scratch-workspace/POLICY.md` from the
+  source's canonical scratch policy, plus `feature.json` describing this feature.
+- Appends one marked scratch section to root `AGENTS.md` (or creates that file
+  when absent). Every existing byte, including custom instructions and encoding,
+  is retained. Preview displays the section before Apply.
+- Leaves VERSION, playbook.json, SHA256SUMS.txt, governance asset pins, project
+  configuration, workflows, project documents, source and tests unchanged.
+
+This is **scratch support, not a framework version upgrade**. The feature receipt
+uses normalized UTF-8 component hashes (BOM removed, CRLF converted to LF); its
+AGENTS.md hash covers only the marked section. Original framework manifests retain
+their original meaning. No copied updater or tooling tests are installed.
+
+Existing feature files must be absent or equivalent in content. UTF-8 BOM and CRLF
+differences alone are harmless and are not rewritten. A different existing helper,
+policy, receipt or edited/duplicate/incomplete marked section blocks application.
+Unrecognized instruction encoding or an unclosed fenced block requires explicit
+reconciliation. There is no force option. Custom instructions elsewhere do not
+block the mechanical append, but **Compatible is not semantic approval**: review
+the new section against local rules. Conflicting instructions remain a human/project
+owner decision. The new section expressly retains existing organizational authority.
+
+Build from the trusted current source with refreshed checksums:
+
+```powershell
+python scripts/update_checksums.py
+python -m unittest discover -s tests -v
+python scripts/playbook_patch.py build-scratch `
+  --target . `
+  --output C:\releases\agent-scratch-workspaces.zip `
+  --patch-id agent-scratch-workspaces-portable-v1 `
+  --summary 'Add external agent scratch workspaces while preserving custom instructions and the installed framework version.'
+```
+
+The ZIP and sidecar must be outside the source snapshot; existing artifacts are
+never overwritten. The artifact-only workflow defaults to `scratch-feature` and
+needs no base_ref. For a full snapshot upgrade choose `snapshot` and supply base_ref.
+Review and test disposable copies before separate release authorization. Published
+assets use the existing fixed feed and checksum/download trust rules.
+
+Use current source-launched Builder (restart it) or current trusted CLI: old
+schema-1 readers reject this format safely. Select the additive scratch patch,
+Preview, expand the AGENTS.md section and review changes, then separately Apply.
+Builder pins the inspected inputs; if they change before Apply, preview again.
+Afterward invoke the installed helper for each task and follow the repository's
+normal verification/review process. Reapplying a complete feature is a no-op.
+Already scratch-enabled full-snapshot installations may still add this dedicated
+feature policy/receipt/section; the existing helper and prior instructions remain.
+
+The portable patch is an unreleased candidate until separately published. The three
+historical exact-baseline releases remain unchanged; they do not acquire this behavior.
+
+## Prepare an exact snapshot patch release
 
 Use the trusted current source checkout with Python 3.11 or newer. Choose a reviewed
 base snapshot that matches the repositories being updated and a tested target
@@ -184,14 +247,14 @@ In an installed copy the entry point is
 the reviewed ZIP checksum. Hashes detect corruption and content changes; obtain the
 bundle and expected checksum from a trusted publisher because hashes are not signatures.
 
-Every managed file must match the declared base or already match the target. A local
+For schema-1 snapshot patches, every managed file must match the declared base or already match the target. A local
 edit, missing base file, incompatible snapshot or unexpected file at an added path
 blocks replacement. There is no force option. Preserve the local change and resolve
 its ownership before retrying, or use a separately reviewed migration. Unknown files
 outside the framework allowlist are preserved. File deletion, catalog schema changes
 and removal of profiles/capabilities are not supported patch operations.
 
-## What changes and what remains for review
+## Snapshot patches: what changes and what remains for review
 
 The updater writes only changed files under `engineering-playbook/` and, when an
 existing `.engineering-playbook.json` is present, its `playbook_version` and
