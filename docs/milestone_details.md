@@ -133,3 +133,10 @@ unreleased notes. No lasting architecture change or new ADR. Delivery: IMPLEMENT
 No real downstream repository, prior candidate ZIP or packaged Builder binary was
 changed; no patch publication or automatic network discovery is included. Source
 launcher users restart Builder. No next implementation milestone is accepted.
+
+Closure evidence: implementation commit
+`3c63f68833df17c3a10b06cbe18b9f9cc60aa572` was pushed to
+`origin/codex/governance-context-loading`. `git ls-remote` matched that exact HEAD
+and the implementation checkpoint working tree was clean. This documentation-only
+record follows on the same branch. Existing PR #1 remains the review vehicle;
+no new PR was created.

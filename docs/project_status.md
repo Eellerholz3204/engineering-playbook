@@ -11,9 +11,10 @@ Searching, selection changes and Refresh invalidate preview; patch changes clear
 the expected checksum. The input controls remain stable while filtering.
 
 Versions remain playbook 3.3.0 and Builder 0.1.0. Branch:
-`codex/governance-context-loading`; the implementation starts from committed HEAD
-`c27ebf47b05b9f97a3dd8f3e6608d2281ba4f065`. Only GOV-006 files changed at this
-checkpoint; delivery identity will be recorded after commit/push verification.
+`codex/governance-context-loading`; implementation commit
+`3c63f68833df17c3a10b06cbe18b9f9cc60aa572`. The implementation checkpoint HEAD
+and remote branch matched that commit, with a clean working tree. This delivery
+record is a documentation-only follow-up on the same branch.
 All 32 tests passed, including the final code in a fresh tracked-file export with
 declared dependencies and no ignored source artifacts. Actual desktop rendering,
 discovered choices, preview and disposable apply passed. Existing PowerShell
