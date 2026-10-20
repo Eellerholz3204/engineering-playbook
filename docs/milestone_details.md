@@ -351,3 +351,30 @@ reader compatibility passed again; no real consumer apply occurred.
 - Sidecar: 110 bytes; SHA-256 `c9ec25c91a01ce980152f354ac139e66e54c93fa880473773fac2866ae31ee99`.
 - Target: framework 3.3.1, 82 files; baseline: 56 files (51 catalog + five explicit pins).
 - Published asset/tag identities will be recorded after download-back verification.
+
+GOV-011 publication closure: [release](https://github.com/Eellerholz3204/engineering-playbook/releases/tag/playbook-patch-scratch-workspace-legacy-metis-2026-10)
+published at 2026-10-20 03:41:43 UTC (2026-10-19 local), stable and not a draft.
+Draft assets were downloaded and byte/digest-verified before publication. Public
+assets were then discovered/downloaded through Builder's unauthenticated adapter;
+both bytes and GitHub digests matched the exact artifact above, and published notes
+matched the committed document. Live Builder selected the friendly legacy Metis
+title and previewed the real repository with zero conflicts and 61 changes. No
+application occurred. Consumer Git status/diffs stayed unchanged, including its
+pre-existing access/identity and CDM project work. Both prior releases retained
+their original notes and asset digests.
+
+- ZIP asset node ID `RA_kwDOUfKg684nOva4`, 174097 bytes; sidecar node ID
+  `RA_kwDOUfKg684nOva5`, 110 bytes. Hashes are recorded above.
+- Annotated tag `playbook-patch-scratch-workspace-legacy-metis-2026-10`, object
+  `36d6f7620fe8e9eaebb5435a079f1c48ac64b55f`, peeled target
+  `f6013bc5ce4b0df0103847f8d7b63ecdd5c233de`; remote identities matched.
+- Implementation `f6013bc5ce4b0df0103847f8d7b63ecdd5c233de` and release notes
+  `bc757d7aa6bf834f92cf74404b2f3889229ed8a7` were pushed to the tracked branch.
+  Their checkpoint working trees were clean; this documentation-only closure follows.
+
+Delivery: IMPLEMENTED. ADR GOV-011 and patch/Builder guides document the narrow
+publisher extension. Temporary diagnostics stayed in external scratch; maintained
+tests protect product baseline/ownership behavior. Existing PR #1 remains the review
+vehicle. No real consumer write, new PR, merge, desktop release or cleanup occurred.
+No next implementation milestone is accepted. Real apply and AGENTS.md/template
+reconciliation remain explicit user/project-owner actions.

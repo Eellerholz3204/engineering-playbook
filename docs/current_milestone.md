@@ -1,6 +1,6 @@
 # Current milestone
 
-GOV-011: legacy Metis scratch migration. ACCEPTED, CURRENT under Eric's approval
+GOV-011: legacy Metis scratch migration. ACCEPTED, IMPLEMENTED under Eric's approval
 to implement and publish a compatible migration for metis-engineering-playbook.
 
 Scope: reviewed publisher-only baseline additions, unchanged version-1 patch
@@ -23,7 +23,15 @@ Prepublication verification passed: all 43 tests from the final clean export
 All 81 framework checksums passed. The final artifact passed exact baseline/payload
 audit, old-reader compatibility and desktop disposable apply/preservation/reapply/
 governance reconciliation. Read-only preview against the named consumer has zero
-conflicts and 61 changes. No real consumer apply occurred. Publication is pending.
+conflicts and 61 changes. No real consumer apply occurred.
+
+Published `playbook-patch-scratch-workspace-legacy-metis-2026-10` at 2026-10-20
+03:41:43 UTC (2026-10-19 local). Draft/public download bytes, notes and GitHub
+digests matched the candidate. Live Builder discovery/download/read-only preview
+passed with zero conflicts; both previous releases and consumer work are unchanged.
+Annotated tag resolves to implementation `f6013bc`; release notes commit `bc757d7`
+was pushed and verified. This documentation-only closure follows on the same branch.
+No real apply, PR merge or desktop binary release occurred. No next scope remains.
 
 ## Previous milestone: GOV-010
 

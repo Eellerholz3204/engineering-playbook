@@ -1,5 +1,11 @@
 # Unreleased
 
+GOV-011 publication accounting: the framework through `f6013bc` is published as
+[scratch-workspace-legacy-metis-2026-10](scratch-workspace-legacy-metis-2026-10.md),
+the exact-baseline legacy Metis 3.2.1-to-3.3.1 migration. It includes the current
+framework/Builder source, but does not update installed desktop binaries. Both
+previous patch releases remain unchanged; their historical accounting follows.
+
 Publication accounting: the framework snapshot through `dae80da` is now distributed
 as [scratch-workspace-2026-10](scratch-workspace-2026-10.md), the first 3.2.1-to-3.3.0
 patch. The source implementation history below also covers Builder features awaiting
@@ -17,7 +23,7 @@ new target snapshot or desktop release. The original 3.2.1 patch remains unchang
   files; emitted patches retain exact version-1 matching and all preservation rules.
 - Framework 3.3.1 retains the access/identity startup and documentation requirements
   from the reviewed legacy Metis installation. No project identity facts are bundled.
-  The dedicated legacy patch is pending verification/publication; prior releases
+  The dedicated legacy patch is published and download-back verified; prior releases
   and packaged Builder binaries remain unchanged.
 
 - Explicit **Patch blocked** explanation and disabled primary action for conflicting

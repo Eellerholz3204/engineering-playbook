@@ -28,6 +28,6 @@
 - GOV-010: explicit blocked patch state and early-3.3.0-compatible patch publication -
   ACCEPTED, IMPLEMENTED. New alternate-baseline release to the existing verified target;
   no forced overwrite, first-release changes, real consumer apply or binary rebuild.
-- GOV-011: legacy Metis scratch migration - ACCEPTED, CURRENT. Review supplemental
-  baseline pins, preserve access/identity requirements in 3.3.1 and publish a separate
+- GOV-011: legacy Metis scratch migration - ACCEPTED, IMPLEMENTED. Reviewed supplemental
+  baseline pins, preserved access/identity requirements in 3.3.1 and published a separate
   compatible patch. No real consumer application or desktop binary release.

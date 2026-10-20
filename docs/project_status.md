@@ -1,8 +1,8 @@
 # Project status
 
-## GOV-011 — legacy migration in progress
+## GOV-011 — 2026-10-19, legacy migration published and verified
 
-Preparing a separately approved release for metis-engineering-playbook's older
+Published a separately approved release for metis-engineering-playbook's older
 3.2.1 installation: 51 checksummed files plus five later governance assets. The
 baseline content matches committed framework at `1dfdd6c3b22dea347284c7e4ec757d89d5233429`
 after read-only BOM/line-ending comparison; release pins retain exact installed
@@ -13,7 +13,14 @@ remains 0.1.0. All 43 tests passed from the final clean export in 194.280 second
 including PowerShell generation, UI plan round-trip and packaging. All 81 checksums,
 old-reader compatibility and final-artifact desktop/disposable preservation checks
 passed. Real consumer read-only preview has zero conflicts and 61 changes.
-Publication remains pending. Branch remains
+The [legacy release](https://github.com/Eellerholz3204/engineering-playbook/releases/tag/playbook-patch-scratch-workspace-legacy-metis-2026-10)
+was published at 2026-10-20 03:41:43 UTC (2026-10-19 local). Draft/public download-back,
+notes/digests and live Builder discovery/download/read-only preview passed. Both
+previous releases are unchanged. Implementation `f6013bc5ce4b0df0103847f8d7b63ecdd5c233de`
+and release notes `bc757d7aa6bf834f92cf74404b2f3889229ed8a7` were pushed and verified;
+the annotated remote tag resolves to the implementation. This documentation-only
+closure follows. Delivery: IMPLEMENTED. No real consumer apply, binary release or
+PR merge occurred; no next accepted milestone remains. Branch remains
 `codex/governance-context-loading`; existing PR #1 remains the review vehicle.
 
 ## GOV-010 — 2026-10-19, published and verified
