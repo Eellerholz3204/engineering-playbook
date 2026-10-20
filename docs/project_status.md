@@ -12,10 +12,10 @@ No credentials, startup polling, arbitrary feed URLs or consumer writes are adde
 to the downloader. ADR GOV-008 records source trust and cache ownership.
 
 Versions remain playbook 3.3.0 and Builder 0.1.0. Branch:
-`codex/governance-context-loading`; starting HEAD:
-`a9033b9dd0786fdbf379f56d12d2fc6719df107e`. Only milestone-owned source, product
-tests, allowlist/checksums and project documentation changed; delivery identity
-will follow after commit/push verification.
+`codex/governance-context-loading`; implementation commit:
+`33c3e547ba79a58c8c69b57e6471fc4b39a7d099`. The implementation checkpoint
+HEAD and remote branch matched that commit and the working tree was clean. This
+documentation-only delivery record follows on the same branch.
 
 Verification: all 38 tests passed locally and in the final clean tracked-file
 export (136.717 seconds), including actual all-profile PowerShell generation,

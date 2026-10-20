@@ -209,3 +209,10 @@ roadmap, milestone and unreleased notes. ADR GOV-008 records accepted trust/cach
 boundaries. One-off verification scripts/screenshots remain external. Delivery:
 IMPLEMENTED. No published release/tag, real consumer repository or packaged binary
 changed. No next implementation milestone is accepted.
+
+Closure evidence: implementation commit
+`33c3e547ba79a58c8c69b57e6471fc4b39a7d099` was pushed to
+`origin/codex/governance-context-loading`. `git ls-remote` matched the exact HEAD
+and the implementation checkpoint working tree was clean. This documentation-only
+record follows on that branch; existing PR #1 remains the review vehicle. No new
+PR was created and no additional implementation milestone is accepted.
