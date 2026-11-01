@@ -98,6 +98,26 @@ Record only durable project impact and unresolved dependencies in project docs.
 
 ### Promoting artifacts and tests
 
+Solving a task blocker does not establish a product requirement. Before promotion,
+name the lasting requirement and its owner independently of the experiment or
+incident. A useful trial, passing diagnostic, or successful one-time recovery is
+evidence; none alone authorizes a new policy, contract, runtime control or CI gate.
+
+Use scratch for focused implementations and trials while the approach is being
+evaluated. Promote only the general solution and regression coverage needed for
+an accepted maintained requirement. Check that it still applies to other valid
+inputs, model inventories and runs within the supported scope. Do not turn an
+observed object count, temporary allowlist, timestamp or failure-specific exception
+into a permanent prerequisite. Exact release pins and approved run configurations
+can remain scoped operational records; they must not redefine product semantics.
+
+Preserve the accepted runtime owner. Agent or operator steps used during development
+do not establish a need for runtime buttons, command switches, approval loops or
+another orchestrator. When deployed infrastructure or a native framework owns
+execution, keep routine sequencing there. Build, deployment and incident-response
+tools may remain where they serve an explicit maintained requirement; scratch
+placement does not grant permission to execute them against a live system.
+
 Before staging a helper, test, fixture, report or document, identify the maintained
 project requirement, supported contract or development workflow it protects, and
 its owning repository. Keep the smallest useful artifact and regression coverage.
@@ -117,6 +137,10 @@ Scratch notes may contain task state and reproduction commands, but are not an
 authority for project decisions or required evidence. Promote durable decisions
 to existing owning documents and required retained evidence to an approved project
 or artifact store. Do not retain secrets or sensitive copied data in scratch.
+Record each durable finding once in its owning evidence or decision record and
+link it from concise current-state documents. Synchronizing documents does not
+require copying experiment logs, launch approvals or incident narratives into
+every document. A retained incident record is not standing execution authority.
 No automatic cleanup runs: review task folders for needed evidence, then remove
 only explicitly selected completed task folders under normal deletion authority.
 

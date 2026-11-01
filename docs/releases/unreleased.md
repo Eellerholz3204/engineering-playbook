@@ -28,6 +28,10 @@ new target snapshot or desktop release. The original 3.2.1 patch remains unchang
 
 ## Fixed
 
+- Clarified promotion criteria: a task workaround does not establish a lasting
+  requirement, runtime control or contract. Preserve the native execution owner
+  and record current conclusions without duplicating execution diaries.
+
 - Builder groups byte-identical local/cached/published patches into one choice,
   including renamed copies and explicitly selected local ZIPs. Published names
   and notes remain visible; selection and preview/apply bindings are preserved.

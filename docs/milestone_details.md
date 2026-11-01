@@ -606,3 +606,11 @@ GOV-015 delivery closure: implementation
 `origin/codex/governance-context-loading`; remote HEAD matched and the checkpoint
 working tree was clean. This documentation-only closure follows on the same branch.
 Existing review remains the vehicle; no new PR, merge or release occurred.
+
+## GOV-016 - Scratch promotion clarification - 2026-11-01
+
+Eric requested the change in the source playbook before control-plane cleanup.
+Updated canonical scratch guidance, documentation rules and workflow wording.
+The generated portable policy derives the same content. This clarifies GOV-004;
+no ADR, release, installer behavior or automatic consumer rollout changed.
+All 59 clean-export tests passed in 134.113 seconds, including actual PowerShell generation, patch application and packaging. All 82 framework checksums validate. The portable candidate contains the clarified canonical policy; no artifact was published. Unrelated AGENTS.md remains excluded.
