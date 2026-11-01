@@ -5,10 +5,13 @@ Scratch promotion clarification is implemented for review on
 The canonical policy now distinguishes temporary trials, retained operational
 evidence and maintained requirements, including native runtime ownership.
 Framework version remains 3.3.1; this is an unreleased content revision.
-The unrelated local AGENTS.md edit is preserved and excluded. Verification: all 59 clean-export tests passed in 134.113 seconds.
+The unrelated local AGENTS.md edit is preserved and excluded. Verification: all 59 clean-export tests passed in 134.776 seconds.
 
 
 Historical implementation/release outcomes remain in [the milestone ledger](milestone_details.md)
 and published-release documents. Duplicate task narratives were migrated to external
 agent scratch under the owner's physical-migration instruction. No framework behavior,
 release identity or consumer installation changes in this documentation cleanup.
+The manual desktop trial script and its generated QA directory are now external
+scratch artifacts. Maintained product code, automated tests and release definitions
+remain; framework/package checksums are unchanged.

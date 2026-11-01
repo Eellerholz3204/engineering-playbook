@@ -625,3 +625,10 @@ current documents link them. No framework behavior, generated asset, release bas
 or installed consumer changed. The unrelated AGENTS.md edit remains excluded.
 Verification: all 82 framework checksum entries remain valid; this documentation-only
 change does not alter the source covered by the 59-test GOV-016 verification.
+
+The follow-up code/artifact audit moved `tests/render_builder.py` and all 100 files
+from its generated QA directory into external scratch after byte/hash verification.
+Maintained Builder/generator/installer/patch code, automated tests and release
+definitions remain. All 59 tests pass from a clean tracked-source export (134.776
+seconds), and all 82 framework checksums validate. The unrelated AGENTS.md edit
+remains byte-for-byte unchanged and excluded. No publication or consumer rollout.
