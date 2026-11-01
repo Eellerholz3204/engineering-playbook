@@ -11,6 +11,14 @@ create a project document or milestone for every environment/tooling blocker. Re
 required evidence in an approved project or artifact store before cleaning scratch;
 scratch notes are neither project authority nor required release evidence.
 
+Document synchronization means updating the relevant current conclusions and links,
+not duplicating an execution diary across status, roadmap, operations and release
+notes. Keep required run evidence and exact approvals in their owning records.
+Individual trials, start times and temporary recovery conditions are not product
+releases or standing policy. Describe a lasting implemented change in release notes;
+link supporting evidence once where it is needed. Follow the promotion criteria in
+`GOVERNANCE_CONTEXT.md` before moving experimental behavior into maintained artifacts.
+
 ## Required project architecture documents
 
 ### `docs/product_vision.md`

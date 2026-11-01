@@ -606,3 +606,29 @@ GOV-015 delivery closure: implementation
 `origin/codex/governance-context-loading`; remote HEAD matched and the checkpoint
 working tree was clean. This documentation-only closure follows on the same branch.
 Existing review remains the vehicle; no new PR, merge or release occurred.
+
+## GOV-016 - Scratch promotion clarification - 2026-11-01
+
+Eric requested the change in the source playbook before control-plane cleanup.
+Updated canonical scratch guidance, documentation rules and workflow wording.
+The generated portable policy derives the same content. This clarifies GOV-004;
+no ADR, release, installer behavior or automatic consumer rollout changed.
+All 59 clean-export tests passed in 134.113 seconds, including actual PowerShell generation, patch application and packaging. All 82 framework checksums validate. The portable candidate contains the clarified canonical policy; no artifact was published. Unrelated AGENTS.md remains excluded.
+
+
+## GOV-016 follow-up - physical scratch migration
+
+At Eric's request, duplicate task-history sections were physically removed from
+current_milestone.md and project_status.md after byte-verified migration to external
+agent scratch. Maintained outcomes remain in this ledger and exact release records;
+current documents link them. No framework behavior, generated asset, release baseline
+or installed consumer changed. The unrelated AGENTS.md edit remains excluded.
+Verification: all 82 framework checksum entries remain valid; this documentation-only
+change does not alter the source covered by the 59-test GOV-016 verification.
+
+The follow-up code/artifact audit moved `tests/render_builder.py` and all 100 files
+from its generated QA directory into external scratch after byte/hash verification.
+Maintained Builder/generator/installer/patch code, automated tests and release
+definitions remain. All 59 tests pass from a clean tracked-source export (134.776
+seconds), and all 82 framework checksums validate. The unrelated AGENTS.md edit
+remains byte-for-byte unchanged and excluded. No publication or consumer rollout.

@@ -41,3 +41,6 @@
   and their local cache entries recoverably. No consumer apply or desktop release.
 - GOV-015: deduplicate local/published patch choices - ACCEPTED, IMPLEMENTED. Group
   identical content while preserving selection, release information and review gates.
+
+- GOV-016: scratch promotion and concise documentation clarification - ACCEPTED,
+  implemented for review; all 59 clean-export tests passed. No automatic all-repository rollout.

@@ -38,6 +38,9 @@ Before changing anything:
   project milestones or tooling-only PRs in a consumer repository.
 - Promote supporting code, tests and documents only when they protect maintained
   project behavior, contracts or development workflows. Keep tool fixes with their owner.
+- Identify the lasting requirement independently of the trial before promotion.
+  Incident-specific counts, allowlists and operator steps must not become product
+  policy, runtime controls or CI gates merely because they unblocked a task.
 - Tagging, releases, publishing, destructive cleanup, external-system mutation, and consequential business decisions require explicit authorization.
 
 ## Milestone continuation
@@ -48,7 +51,8 @@ end of an agent work session.
 After completing a milestone, the agent must:
 
 1. Run the required focused and full verification.
-2. Synchronize status, roadmap, milestone ledger, decisions, and unreleased notes.
+2. Synchronize relevant current conclusions and evidence links in status, roadmap,
+   milestone ledger, decisions and unreleased notes; do not duplicate execution diaries.
 3. Record the completed milestone outcome and final repository state.
 4. Read the next milestone from the repository's current documentation.
 5. Evaluate the human-review and authorization gates before continuing.
